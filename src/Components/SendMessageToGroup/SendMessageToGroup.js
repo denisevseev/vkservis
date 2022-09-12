@@ -9,7 +9,7 @@ const SendMessageToGroup = () => {
         <div>
             {search.map((k) => {
                 return <div>
-                    <a href={`https://vk.com/club${k}`}>{`https://vk.com/club${k}`}</a>отправлено!
+                    <a target="_blank" href={`https://vk.com/club${k}`}>{`https://vk.com/club${k}`}</a>отправлено!
                 </div>
             })}
         </div>
