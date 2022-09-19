@@ -7,7 +7,7 @@ const InputMessageToSend = () => {
         Search.maessageForSend(value.current.value)
     }
     return (
-        <div  style={{ marginTop: "1em" }}>
+        <div  style={{ marginTop: "2em" }}>
             <input ref={value} onChange={()=>val()}  style={{ textAlign: "center" }}
                 placeholder="сообщение для рассылки"
                 type="text" className="form-control inputControl" aria-label="Default"

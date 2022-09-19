@@ -1,14 +1,15 @@
-import { autorun, extendObservable, makeAutoObservable, makeObservable, observable } from "mobx";
+﻿import { autorun, extendObservable, makeAutoObservable, makeObservable, observable } from "mobx";
 import { configure } from "mobx";
 import axios from "axios";
 
 class Search {
-    Group = '1'
+    Group = null
     Loader = false
     inputValue = ''
     sendMessage = ''
     SendDone = []
     i = 0
+    token = null
 
     constructor() {
         configure({
@@ -23,61 +24,75 @@ class Search {
         })
     }
 
-    changeInput(data) { //ключ для поиска групп
+    changeInput(data) { //ключевое слово для поиска групп
         this.inputValue = data
     }
+
 
     maessageForSend(mess) { // сообщение для рассылки
         this.sendMessage = mess
     }
 
-    token(dataToken) {
-        JSON.stringify(localStorage.setItem('token', dataToken))
-        if (2>1) {
-
+    checkToken(dataToken) {
+        if (dataToken.indexOf('vk1.a') > -1) {
+            JSON.stringify(localStorage.setItem('token', dataToken))
+            this.token = dataToken
+            return 'token'
         } else {
-            axios.post(`http://localhost:3002/token`, { data: '' })
-                .then(() => console.log('token send success'))
-                .catch(err => alert(err.message))
+            this.token = null
         }
     }
+changeSendDone(data){
+
+}
+    getResponse() {
+        const connect = ()=>{
+            var ws = new WebSocket('ws://localhost:3001/get');
+            console.log('i make connect')
+            ws.onopen = function () {
+                let data = JSON.stringify('getres')
+                ws.send(data);
+            };
+
+            ws.onmessage = (event)=> {
+                    let dataEvetn = JSON.parse(event.data)
+                    let result = dataEvetn.concat(this.SendDone)
+                    let finalresult = [...new Set(result)]
+                    this.SendDone = finalresult
+
+                console.log('this.SendDone:', this.SendDone);
+            };
+
+
+            ws.onclose = function (e) {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+                setTimeout(function () {
+                    connect();
+                }, 1000);
+            };
+
+            ws.onerror = function (err) {
+                console.error('Socket encountered error: ', err.message, 'Closing socket');
+                ws.close();
+            };
+        }
+
+        connect();
+
+    }
+
 
     ResultGroup() {
+        const client = new WebSocket(`ws://localhost:3001/token`)
         this.Loader = true;
-        const posts = async () => {
-            function delay(ms) {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve()
-                    }, ms);
-
-                })
-            }
-
-            let res = await axios.post(`http://localhost:3002`, { data: this.inputValue })
-            const axdata = await res.data.items
-            this.Group = axdata
-            let group = this.Group
-            console.log(group)
-            await delay(1000)
-            console.log('delay')
-            console.log(res, 'postmassage')
-            await delay(2000)
-            const repeatReq = async () => {
-                await axios.post(`http://localhost:3002/postMessage`, { id: group[this.i].id, message: this.sendMessage })
-                await delay(2000)
-                this.SendDone.push(group[this.i].id)
-                console.log('post client', this.SendDone)
-                console.log('done')
-                this.i++
-                console.log(this.i, 'this.i')
-                if (this.i < 5) await repeatReq()
-            }
-            await repeatReq()
-
+        client.onopen = () => {
+            console.log('client open')
+            let data = JSON.stringify({ data: this.inputValue, token: this.token, messForSend: '' })
+            client.send(data)
+            client.close()
         }
-        posts()
+        this.getResponse()
     }
 }
-
+// const search = new Search()
 export default new Search

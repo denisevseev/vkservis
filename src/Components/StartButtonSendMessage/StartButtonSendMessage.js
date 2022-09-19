@@ -8,10 +8,12 @@ const StartButtonSendMessage = () => {
     const search = toJS(Search.Group)
 
     function ResultGroup() {
-        if (search.length <= 3) {
-            show(true)
+            if (Search.token != null) {
+                show(true)
+            } else {
+                alert('вставьте токен')
+            }
             Search.ResultGroup()
-        }
     }
 
     return (

@@ -8,11 +8,12 @@ const InputWordsToSearch = () => {
         Search.changeInput(value.current.value)
     }
     return (
-        <div>
+        <div style={{ marginTop: "1.4em" }}>
             <input ref={value} onChange={() => val()} style={{textAlign: "center"}}
-                   placeholder=" ключевые слова для поиска групп" type="text"
+                   placeholder=" ключевое слово для поиска групп" type="text"
                    className="form-control inputControl" aria-label="Default"
-                   aria-describedby="inputGroup-sizing-default"></input>
+                   aria-describedby="inputGroup-sizing-default">
+            </input>
         </div>
     );
 };
