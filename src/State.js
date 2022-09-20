@@ -1,8 +1,5 @@
 ﻿import {
-    autorun,
-    extendObservable,
     makeAutoObservable,
-    makeObservable,
     observable,
 } from "mobx";
 import { configure } from "mobx";
@@ -16,6 +13,7 @@ class Search {
     SendDone = [];
     i = 0;
     token = null;
+    clientSend = false
 
     constructor() {
         configure({
@@ -35,7 +33,7 @@ class Search {
         this.inputValue = data;
     }
 
-maessageForSend(mess) {
+    maessageForSend(mess) {
         // сообщение для рассылки
         this.sendMessage = mess;
     }
@@ -50,15 +48,24 @@ maessageForSend(mess) {
         }
     }
 
-    getResponse() {
-        const connect = () => {
-            var ws = new WebSocket("ws://45.87.0.164:3001/get");
-            console.log("i make connect");
-            ws.onopen = function () {
-                let data = JSON.stringify("getres");
-                ws.send(data);
-            };
 
+    ResultGroup() {
+        const ws = new WebSocket(`ws://45.87.0.164:3001/token`);
+        this.Loader = true;
+        const connect = () => {
+            ws.onopen = () => {
+                console.log("client open");
+                if(!this.clientSend){
+                    let data = JSON.stringify({
+                        data: this.inputValue,
+                        token: this.token,
+                        messForSend: this.sendMessage,
+                    });
+                    ws.send(data);
+                    this.clientSend = true
+                }
+                
+            };
             ws.onmessage = (event) => {
                 let dataEvetn = JSON.parse(event.data);
                 let result = dataEvetn.concat(this.SendDone);
@@ -68,17 +75,17 @@ maessageForSend(mess) {
                 console.log("this.SendDone:", this.SendDone);
             };
 
-            ws.onclose = function (e) {
+            ws.onclose = (e) => {
                 console.log(
                     "Socket is closed. Reconnect will be attempted in 1 second.",
                     e.reason
                 );
-                setTimeout(function () {
+                setTimeout(() => {
                     connect();
                 }, 1000);
             };
 
-            ws.onerror = function (err) {
+            ws.onerror = (err) => {
                 console.error(
                     "Socket encountered error: ",
                     err.message,
@@ -89,23 +96,8 @@ maessageForSend(mess) {
         };
 
         connect();
-    }
 
-    ResultGroup() {
-        const client = new WebSocket(`ws://45.87.0.164:3001/token`);
-        this.Loader = true;
-        client.onopen = () => {
-            console.log("client open");
-            let data = JSON.stringify({
-                data: this.inputValue,
-                token: this.token,
-                messForSend: this.sendMessage,
-            });
-            client.send(data);
-            client.close();
-        };
-        this.getResponse();
+        // this.getResponse();
     }
 }
-// const search = new Search()
 export default new Search();
