@@ -28,7 +28,7 @@ class Group_post {
             );
             console.log("https://vk.com/club" + this.arr[this.i], "this.arr[this.i]");
             this.i++;
-            await delay(20000);
+            await delay(5000);
             this.arrForsend.push(this.arr[this.i]);
         };
         await send();

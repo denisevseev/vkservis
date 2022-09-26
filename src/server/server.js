@@ -9,8 +9,8 @@ const WebSocket = require("ws");
 const groups_search = require("./post");
 const Group_post = require("./posts");
 const token = require("./token");
-const SendMessage_class =require('./sendMessage')
 const { removeConsoleHandler } = require("selenium-webdriver/lib/logging");
+const autorize_class = require('./autorize')
 app.use(cors());
 app.use(
     express.urlencoded({
@@ -28,6 +28,8 @@ class searchGroup {
         this.arrForsend = [];
         this.d = null;
         this.wsOnMessage = false
+        this.login = null
+        this.pass = null
     }
 
 
@@ -35,13 +37,19 @@ class searchGroup {
     searchGroupMethod() {
         app.ws("/token", (ws) => {
             ws.on("message", async (mess) => {
-                if(!this.wsOnMessage){
+                if(this.wsOnMessage==false){
+                    this.wsOnMessage = true
+                    console.log(this.wsOnMessag, "this.wsOnMessag")
                     let data = JSON.parse(mess);
                     this.message = data.messForSend;
+                    this.login = data.login
+                    this.pass = data.pass
 
-                    const gettoken = new token(data.token);
-                    this.token = gettoken.splitToken();
-                    console.log(this.token);
+                    const autorizeconst = new autorize_class(this.login, this.pass)
+                    const gettoken  = await autorizeconst.autorizeMethod()
+
+                    const token2 = new token(gettoken);
+                    this.token = await token2.splitToken();
 
                     const post = new groups_search(data, this.token, this.arr);
                     await post.post(); //other file
@@ -59,15 +67,18 @@ class searchGroup {
                         this.i = postsForposts.returnArrForsend().i; //other file
                         this.arrForsend = postsForposts.returnArrForsend().arrForsend;
                     };
-                    while (this.i < 70) {
-                        await startposts();
-                        if (this.arrForsend.length > 0) {
-                            let data = JSON.stringify(this.arrForsend);
-                            // let send = new SendMessage_class(data)
-                            await ws.send(data)
-                        }
+                    const while_i = async ()=>{
+                        console.log('62!!!')
+                            await startposts();
+                            if (this.arrForsend.length > 0) {
+                                let data = JSON.stringify(this.arrForsend);
+                                await ws.send(data)
+                            }
+
                     }
-                    this.wsOnMessage = true
+                    while(this.i<70){
+                        await while_i()
+                    }
                 }
 
             });

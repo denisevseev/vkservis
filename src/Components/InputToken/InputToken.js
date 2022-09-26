@@ -3,6 +3,8 @@ import './Module.InputToken.scss'
 import {observer} from "mobx-react";
 import Search from '../../State'
 import {useState} from "react";
+import Login from "../autorize/Login";
+import Pass from "../autorize/Pass";
 
 const InputToken = () => {
     const value = useRef()
@@ -14,19 +16,16 @@ const InputToken = () => {
             show(true)
         }
     })
-    const token = () => {
-        Search.checkToken(value.current.value)
-    }
-    return (
-        <div style={{marginTop: "1em"}}>
-            {hide === false ?
-                <input style={{textAlign: "center"}} onChange={() => token()}
-                       ref={value} placeholder="вставьте токен" type="text"
-                       className="form-control inputControl" aria-label="Default"
-                       aria-describedby="inputGroup-sizing-default"></input> : ''}
 
-        </div>
-    );
+   if(hide===false){
+       return (
+           <div>
+               <Login/>
+               <Pass/>
+           </div>
+
+       )
+   }
 };
 
 export default observer(InputToken);

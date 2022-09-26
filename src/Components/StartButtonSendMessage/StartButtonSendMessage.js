@@ -10,8 +10,6 @@ const StartButtonSendMessage = () => {
     function ResultGroup() {
         if (Search.token != null) {
             show(true);
-        } else {
-            alert("вставьте токен");
         }
         Search.ResultGroup();
     }

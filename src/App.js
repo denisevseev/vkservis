@@ -12,6 +12,8 @@ import GetToken from "./Components/GetToken/GetToken";
 import Instruction from "./Components/Instruction/Instruction";
 import RemoveToken from "./Components/RemoveToken/RemoveToken";
 import Search from './State'
+import Login from "./Components/autorize/Login";
+import Pass from "./Components/autorize/Pass";
 
 
 function App() {
@@ -20,10 +22,12 @@ function App() {
     return (
         <div className="App">
             {/*<div>{search}</div>*/}
-            <RemoveToken/>
+            {/*<RemoveToken/>*/}
             <Instruction/>
-            <GetToken/>
+            {/*<GetToken/>*/}
              <InputToken/>
+            {/*<Login/>*/}
+            {/*<Pass/>*/}
             <InputWordsToSearch />
             <InputMessageToSend />
              <SearchGroup/>

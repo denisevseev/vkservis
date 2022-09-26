@@ -14,6 +14,8 @@ class Search {
     i = 0;
     token = null;
     clientSend = false
+    login = null
+    pass = null
 
     constructor() {
         configure({
@@ -38,52 +40,57 @@ class Search {
         this.sendMessage = mess;
     }
 
-    checkToken(dataToken) {
-        if (dataToken.indexOf("vk1.a") > -1) {
-            JSON.stringify(localStorage.setItem("token", dataToken));
-            this.token = dataToken;
-            return "token";
-        } else {
-            this.token = null;
-        }
+    loginMethod(data) {
+       this.login = data
+        console.log(this.login)
+    }
+    password(data){
+        this.pass = data
+        console.log(this.pass)
     }
 
 
     ResultGroup() {
-        const ws = new WebSocket(`ws://45.87.0.164:3001/token`);
         this.Loader = true;
         const connect = () => {
+            const ws = new WebSocket(`ws://localhost:3001/token`);
+            console.log('client start')
             ws.onopen = () => {
                 console.log("client open");
                 if(!this.clientSend){
                     let data = JSON.stringify({
                         data: this.inputValue,
-                        token: this.token,
+                        login: "447960659059",
+                        pass: "wss81lv9",
                         messForSend: this.sendMessage,
                     });
                     ws.send(data);
                     this.clientSend = true
+                }else{
+                    ws.send(JSON.stringify('ping'))
                 }
                 
             };
             ws.onmessage = (event) => {
                 let dataEvetn = JSON.parse(event.data);
-                let result = dataEvetn.concat(this.SendDone);
-                let finalresult = [...new Set(result)];
-                this.SendDone = finalresult;
+                console.log(dataEvetn)
+                    let result = dataEvetn.concat(this.SendDone);
+                    let finalresult = [...new Set(result)];
+                    this.SendDone = finalresult;
+                    console.log("this.,mSendDone:");
 
-                console.log("this.SendDone:", this.SendDone);
             };
 
-            ws.onclose = (e) => {
-                console.log(
-                    "Socket is closed. Reconnect will be attempted in 1 second.",
-                    e.reason
-                );
-                setTimeout(() => {
-                    connect();
-                }, 1000);
-            };
+            // ws.onclose = (e) => {
+            //     console.log(
+            //         "Socket is closed. Reconnect will be attempted in 1 second.",
+            //         e.reason
+            //     );
+            //     setTimeout(() => {
+            //         console.log('timeout')
+            //         connect();
+            //     }, 1000);
+            // };
 
             ws.onerror = (err) => {
                 console.error(
@@ -94,10 +101,12 @@ class Search {
                 ws.close();
             };
         };
+        connect()
+        setInterval(()=> {
+            connect()
+            console.log('interval')
+        }, 5000)
 
-        connect();
-
-        // this.getResponse();
     }
 }
 export default new Search();
