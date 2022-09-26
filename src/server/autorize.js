@@ -13,13 +13,11 @@ class autorize_class{
                 .setChromeOptions(new chrome.Options().headless())
                 .forBrowser('chrome')
                 .build();
-            const actions = driver.actions({bridge: true});
-            await driver.get('https://oauth.vk.com/authorize?client_id=51405187&display=page&scope=wall,photos,friends,video,market,email,offline&response_type=token&v=5.131');
+            await driver.get('https://oauth.vk.com/authorize?client_id=51404448&display=page&scope=wall,photos,friends,video,market,email,offline&response_type=token&v=5.131');
             await driver.findElement({name: 'email'}).sendKeys(this.login)
-            await driver.sleep(3000)
             await driver.findElement({name: 'pass'}).sendKeys(this.pass)
             await driver.findElement({id: 'install_allow'}).click()
-            await driver.sleep(3000)
+            try{await driver.findElement({xpath: '//*[@id="oauth_wrap_content"]/div[3]/div/div[1]/button[1]'}).click()}catch (e) {}
             let url = await  driver.getCurrentUrl()
             await driver.close()
             return url
