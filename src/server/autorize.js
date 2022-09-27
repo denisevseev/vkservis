@@ -21,7 +21,6 @@ class autorize_class{
             let url = await  driver.getCurrentUrl()
             await driver.close()
             return url
-
     }
 
 }

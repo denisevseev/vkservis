@@ -7,25 +7,16 @@ import Login from "../autorize/Login";
 import Pass from "../autorize/Pass";
 
 const InputToken = () => {
-    const value = useRef()
-    const [hide, show] = useState(false)
-    useEffect(() => {
-        let tokenVK = localStorage.getItem('token')
-        if (tokenVK) {
-            Search.token = tokenVK
-            show(true)
-        }
-    })
+    let search  = Search.istoken()
+       if(search===null){
+           return(
+               <div>
+                   <Login/>
+                   <Pass/>
+               </div>
+           )
+       }
 
-   if(hide===false){
-       return (
-           <div>
-               <Login/>
-               <Pass/>
-           </div>
-
-       )
-   }
 };
 
 export default observer(InputToken);

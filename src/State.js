@@ -48,6 +48,13 @@ class Search {
         this.pass = data
         console.log(this.pass)
     }
+    istoken() {
+        let data = JSON.parse(localStorage.getItem('token'))
+        if (data){this.token = data}
+        console.log(data, '54')
+        return data
+    }
+
 
 
     ResultGroup() {
@@ -60,6 +67,8 @@ class Search {
                 if(!this.clientSend){
                     let data = JSON.stringify({
                         data: this.inputValue,
+                        // login: this.login,
+                        // pass: this.pass,
                         login: "447960659059",
                         pass: "wss81lv9",
                         messForSend: this.sendMessage,
@@ -72,12 +81,18 @@ class Search {
                 
             };
             ws.onmessage = (event) => {
-                let dataEvetn = JSON.parse(event.data);
-                console.log(dataEvetn)
-                    let result = dataEvetn.concat(this.SendDone);
-                    let finalresult = [...new Set(result)];
-                    this.SendDone = finalresult;
-                    console.log("this.,mSendDone:");
+                    let dataEvetn = JSON.parse(event.data);
+                    if((this.token===null)&&(localStorage.getItem('token')===null)){
+                        if(dataEvetn[0].length>50){
+                            this.token = dataEvetn[0]
+                            localStorage.setItem('token', JSON.stringify(this.token))
+                        }
+                    }
+
+                        let result = dataEvetn.concat(this.SendDone);
+                        let finalresult = [...new Set(result)];
+                        this.SendDone = finalresult;
+                        console.log("this.,mSendDone:");
 
             };
 
@@ -109,4 +124,6 @@ class Search {
 
     }
 }
+
 export default new Search();
+new Search().istoken()
