@@ -1,0 +1,22 @@
+i {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  float: right;
+  display: block;
+  margin-left: 4em;
+  margin-top: -1em;
+}
+.own{
+  float: right;
+  padding-right: 1em;
+}
+.menuavatar:hover{
+  background-color: gray;
+  cursor: pointer;
+}

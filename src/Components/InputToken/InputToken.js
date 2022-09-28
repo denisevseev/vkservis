@@ -19,4 +19,4 @@ const InputToken = () => {
 
 };
 
-export default observer(InputToken);
+export default observer(InputToken)

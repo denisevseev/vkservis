@@ -17,7 +17,7 @@ const StartButtonSendMessage = () => {
     return (
         <div style={{ marginTop: "1em" }}>
             {hide === false ? (
-                <button onClick={() => ResultGroup()}>Начать рассылку</button>
+                <button type="button"  onClick={()=>ResultGroup()} className="btn btn-outline-primary">Начать рассылку</button>
             ) : (
                 ""
             )}

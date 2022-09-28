@@ -12,6 +12,7 @@ const token = require("./token");
 const { removeConsoleHandler } = require("selenium-webdriver/lib/logging");
 const autorize_class = require('./autorize')
 const wssend = require('./wsSendData')
+const getUserInfo = require('./getUserInfo')
 app.use(cors());
 app.use(
     express.urlencoded({
@@ -45,12 +46,21 @@ class searchGroup {
                     this.message = data.messForSend;
                     this.login = data.login
                     this.pass = data.pass
+                    this.token = data.token
 
-                    const autorizeconst = new autorize_class(this.login, this.pass)
-                    const gettoken  = await autorizeconst.autorizeMethod()
-                    const token2 = new token(gettoken);
-                    this.token = await token2.splitToken();
-                    await wssend(ws, this.token)
+
+                    if(!this.token){
+                        const autorizeconst = new autorize_class(this.login, this.pass)
+                        const gettoken  = await autorizeconst.autorizeMethod()
+                        const token2 = new token(gettoken);
+                        this.token = await token2.splitToken();
+
+                        const userInfo = new getUserInfo(this.token[0])
+                        await userInfo.getUser()
+                        const user = await userInfo.returnUserinfo()
+                        await wssend(ws, this.token, JSON.stringify(user))
+                    }
+
 
                     const post = new groups_search(data, this.token, this.arr);
                     await post.post(); //other file
