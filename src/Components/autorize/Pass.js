@@ -9,7 +9,7 @@ const Pass = () => {
     }
     return (
         <div style={{marginTop: "1em"}}>
-            <input  ref={value} style={{textAlign: "center"}}
+            <input type="password" ref={value} style={{textAlign: "center"}}
                    onChange={()=>change()}
                    placeholder="ваш пароль вк" type="text"
                    className="form-control inputControl" aria-label="Default"

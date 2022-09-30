@@ -39,14 +39,14 @@ class searchGroup {
     searchGroupMethod() {
         app.ws("/token", (ws) => {
             ws.on("message", async (mess) => {
-                if(this.wsOnMessage==false){
-                    this.wsOnMessage = true
-                    console.log(this.wsOnMessag, "this.wsOnMessag")
+                    // this.wsOnMessage = true
+                    // console.log(this.wsOnMessag, "this.wsOnMessag")
                     let data = JSON.parse(mess);
-                    this.message = data.messForSend;
-                    this.login = data.login
-                    this.pass = data.pass
-                    this.token = data.token
+                    if(data.token){
+                        this.message = data.messForSend;
+                        this.login = data.login
+                        this.pass = data.pass
+                        this.token = data.token
 
 
                     if(!this.token){
@@ -59,6 +59,7 @@ class searchGroup {
                         await userInfo.getUser()
                         const user = await userInfo.returnUserinfo()
                         await wssend(ws, this.token, JSON.stringify(user))
+                        return await ws.close()
                     }
 
 

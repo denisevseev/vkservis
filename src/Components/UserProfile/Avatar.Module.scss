@@ -8,15 +8,23 @@ i {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   float: right;
-  display: block;
-  margin-left: 4em;
+  //display: block;
+  margin-left: 3.5em;
   margin-top: -1em;
 }
 .own{
   float: right;
   padding-right: 1em;
-}
-.menuavatar:hover{
-  background-color: gray;
   cursor: pointer;
+  :hover{
+    background-color: lightgray;
+    border-radius: 0.3em;
+  }
+}
+  .menuavatar:hover{
+    background-color: gray;
+    cursor: pointer;
+  }
+.out{
+  //display: none;
 }

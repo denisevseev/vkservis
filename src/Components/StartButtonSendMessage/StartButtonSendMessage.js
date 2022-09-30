@@ -4,19 +4,20 @@ import { observer } from "mobx-react";
 import Search from "../../State";
 
 const StartButtonSendMessage = () => {
-    const [hide, show] = useState(false);
+    const [state, setState] = useState(false);
     const search = toJS(Search.Group);
 
-    function ResultGroup() {
+    const  ResultGroup=()=> {
+        Search.startSend()
         if (Search.token != null) {
-            show(true);
+            setState(true);
         }
         Search.ResultGroup();
     }
 
     return (
         <div style={{ marginTop: "1em" }}>
-            {hide === false ? (
+            {state === false ? (
                 <button type="button"  onClick={()=>ResultGroup()} className="btn btn-outline-primary">Начать рассылку</button>
             ) : (
                 ""

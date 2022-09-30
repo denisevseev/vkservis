@@ -29,7 +29,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=80 && react-scripts start",
     "dev:api": "node src/server/server.js",
     "dev:client": "npm start",
     "dev": "npm run dev:api&&npm run dev:client",
