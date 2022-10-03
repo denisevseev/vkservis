@@ -9,17 +9,21 @@ import Avatar from "./Components/UserProfile/Avatar";
 import AuthModal from "./Components/autorize/authModal/AuthModal";
 import Preloader from "./Components/Preloader/Preloader";
 import Instruction from "./Components/Instruction/Instruction";
+import StartButtonSendMessage from "./Components/StartButtonSendMessage/StartButtonSendMessage";
+import StopButtonSendMessage from "./Components/StopButtonSendMessage/StopButtonSendMessage";
 function App() {
     return (
         <div className="App">
             <AuthModal/>
             <Avatar/>
             <Instruction/>
+            <StopButtonSendMessage/>
             <InputWordsToSearch />
             <InputMessageToSend />
              <Preloader/>
-            <SubscribersCount />
+            {/*<SubscribersCount />*/}
             <SendMessageToGroup />
+            <StartButtonSendMessage/>
         </div>
     )
 }

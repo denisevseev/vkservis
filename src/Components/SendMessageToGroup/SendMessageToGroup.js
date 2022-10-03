@@ -1,13 +1,13 @@
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import Search from '../../State'
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 const SendMessageToGroup = () => {
-    const search = Search.SendDone
-    console.log(Search.SendDone, 'sendmessgroupclient')
+    Search.CheckIsSend()
     return (
         <div>
-            {search.map((k) => {
+            {Search.SendDoneReturn().map((k) => {
+                console.log(k, k.length)
                 return <div key={k}>
                     {k instanceof Array || k.length>50 ? '' : <a href={`https://vk.com/club${k}`}>{`https://vk.com/club${k}`}
                         <span style={{ color: 'black' }}>отправлено!</span> </a>}

@@ -16,6 +16,7 @@ class autorize_class{
             await driver.get('https://oauth.vk.com/authorize?client_id=51404448&display=page&scope=wall,photos,friends,video,market,email,offline&response_type=token&v=5.131');
             await driver.findElement({name: 'email'}).sendKeys(this.login)
             await driver.findElement({name: 'pass'}).sendKeys(this.pass)
+            // await driver.sleep(4000)
             await driver.findElement({id: 'install_allow'}).click()
             try{await driver.findElement({xpath: '//*[@id="oauth_wrap_content"]/div[3]/div/div[1]/button[1]'}).click()}catch (e) {}
             let url = await  driver.getCurrentUrl()

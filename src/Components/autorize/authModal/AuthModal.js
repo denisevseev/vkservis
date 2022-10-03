@@ -42,8 +42,7 @@ const AuthModal = () => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button style={{width: "10em"}} onClick={()=> {
-                        // handleClose()
-                        Search.ResultGroup()
+                        Search.AutorizeOwnMethod()
                         setPreload(preloader)
                     }} className="btn btn-outline-primary">
                         {preload}

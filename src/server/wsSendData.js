@@ -4,6 +4,7 @@ const wssend = (ws, arr, userData)=>{
         arr: arr,
         userData: userData
     });
+    console.log(data)
      ws.send(data)
 }
 module.exports = wssend

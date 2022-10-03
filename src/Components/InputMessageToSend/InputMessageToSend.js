@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 const InputMessageToSend = () => {
     const value = useRef()
     const val = () => {
-        Search.maessageForSend(value.current.value)
+        Search.MessageForSend(value.current.value)
     }
     return (
         <div  style={{ marginTop: "2em" }}>
