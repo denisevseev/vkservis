@@ -18,7 +18,7 @@ class Search {
     start = false;
     avatar = null;
     startSend = null
-    ws = new WebSocket(`ws://localhost:3001/token`);
+    Search_CheckIsSend = false
 
     constructor() {
         configure({
@@ -38,7 +38,8 @@ class Search {
             pass: observable,
             start: observable,
             avatar: observable,
-            token:observable
+            token:observable,
+            Search_CheckIsSend:observable
         });
     }
 
@@ -81,9 +82,14 @@ class Search {
         this.startSend = false
         let ws  = new WebSocket(`ws://localhost:3001/stopsend`);
         ws.onopen = ()=>{
-            ws.send("70")
+            ws.send(this.token)
             this.SendDone = []
             ws.close()
+            setTimeout(()=>{
+                this.startSend = false
+                this.start = false
+            },4000)
+
         }
     }
     istoken() {
@@ -104,11 +110,11 @@ class Search {
         let ws = new WebSocket(`ws://localhost:3001/autorize`)
         ws.onopen = ()=>{
             let data = JSON.stringify({
-                // login: this.login,
-                // pass: this.pass,
+                login: this.login,
+                pass: this.pass,
                 // 45.87.0.164
-                login: "447960659059",
-                pass: "wss81lv9",
+                // login: "79082480296",
+                // pass: "Ptiza1010dff",
                 // token: this.token,
                 // messForSend: this.sendMessage
             });
@@ -130,10 +136,9 @@ class Search {
                         first_name: this.first_name,
                         last_name: this.last_name,
                         photo: this.photo,
+
                     };
                     localStorage.setItem("user", JSON.stringify(user));
-                    // closews(ws)
-                    // clearInterval(interval)
                 }
             }
             ws.close()
@@ -143,19 +148,27 @@ class Search {
     }
 
     CheckIsSend(){
-        const ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
-        ws.onopen = ()=>{
-            ws.send('CheckIsSend')
+        let  ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
+
+        ws.onopen = (e)=>{
+            console.log(this.token)
+            ws.send(this.token)
+        }
+        ws.onerror = (e)=>{
+            console.log(ws.readyState)
         }
         ws.onmessage = (event)=>{
-            // console.log(event.data)
-           this.WsOnMessage(ws, event)
+            this.WsOnMessage(ws, event)
         }
     }
 
     WsOnMessage(ws , event){
         // console.log(event.data)
             let dataEvetn = JSON.parse(event.data);
+            if(dataEvetn){
+                this.start = true
+                this.startSend = true
+            }
             let result = dataEvetn.arr.concat(this.SendDone);
             let finalresult = [...new Set(result)];
             this.SendDone = toJS(finalresult)
@@ -168,18 +181,13 @@ class Search {
 
     ResultGroup() {
         const connect = () => {
-            const ws = new WebSocket(`ws://localhost:3001/token`);
+            const ws = new WebSocket(`ws://localhost:3001/startSend`);
             console.log("client start");
             ws.onopen = () => {
                 console.log("client open", this.Loader);
                 if (!this.start) {
                     let data = JSON.stringify({
                         data: this.inputValue,
-                        // login: this.login,
-                        // pass: this.pass,
-                        // 45.87.0.164
-                        login: "447960659059",
-                        pass: "wss81lv9",
                         token: this.token,
                         messForSend: this.sendMessage
                     });
@@ -207,14 +215,10 @@ class Search {
             };
         };
         connect();
-        // let interval =  setInterval(()=> {
-        //      connect()
-        //      console.log('interval')
-        //  }, 20000)
+
     }
 }
 
 export default new Search();
 let search = new  Search()
-// search.CheckIsSend()
-// new Search().istoken()
+

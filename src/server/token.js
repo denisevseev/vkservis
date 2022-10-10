@@ -1,9 +1,5 @@
-class token {
-    constructor(token) {
-        this.token = token;
-    }
-    splitToken() {
-        const data = encodeURI(this.token)
+    const splitToken=(t)=> {
+        const data = encodeURI(t)
             .split("=")
         const token = data.filter((data) => data.indexOf("vk1.a.") > -1)
         const data2 = encodeURI(token)
@@ -11,5 +7,5 @@ class token {
         const token2 = data2.filter((k) => k.indexOf('vk1.a.') > -1)
         return token2
     }
-}
-module.exports = token;
+
+module.exports = splitToken;

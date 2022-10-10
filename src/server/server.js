@@ -6,13 +6,8 @@ const app = express();
 const port = 3001;
 const ws = require("express-ws")(app);
 const WebSocket = require("ws");
-const groups_search = require("./post");
-const Group_post = require("./posts");
-const token = require("./token");
-const { removeConsoleHandler } = require("selenium-webdriver/lib/logging");
-const autorize_class = require('./autorize')
-const wssend = require('./wsSendData')
-const getUserInfo = require('./getUserInfo')
+const searchGroup = require('./owner')
+const search = new searchGroup()
 app.use(cors());
 app.use(
     express.urlencoded({
@@ -21,50 +16,16 @@ app.use(
 );
 app.use(express.json());
 
-class searchGroup {
+class Server {
     constructor() {
-        this.token = null;
-        this.arr = [];
-        this.message = null;
-        this.i = 0;
-        this.arrForsend = [];
-        this.d = null;
-        this.wsOnMessage = false
-        this.login = null
-        this.pass = null
-        this.start = false
-        this.mailing = 0
-        this.startAuto = false
+        this.arr = []
     }
 
-    VariblesNull(){
-        this.message = null
-        this.login = null
-        this.pass = null
-        this.token =  null
-        this.arr = []
-        this.arrForsend = [];
-        this.i=0
-        this.startAuto = false
-        this.mailing = '70'
-    }
      AutorizeOwnMethod(){
         app.ws('/autorize', (ws)=>{
             ws.on('message', async (mes)=>{
                 let data = JSON.parse(mes)
-                console.log(data, '71')
-                this.startAuto = true
-                const autorizeconst = new autorize_class(data.login, data.pass)
-                const gettoken  = await autorizeconst.autorizeMethod()
-                const token2 = new token(gettoken);
-                this.token = await token2.splitToken();
-
-                const userInfo = new getUserInfo(this.token[0])
-                await userInfo.getUser()
-                const user = await userInfo.returnUserinfo()
-                console.log(this.token)
-                await wssend(ws, this.token, JSON.stringify(user))
-                return await ws.close()
+                new searchGroup().AutorizeOwnMethod(data, ws)
             })
         })
 
@@ -73,77 +34,43 @@ class searchGroup {
     StopSend(){
         app.ws(`/stopsend`, (ws)=>{
             ws.on('message', async (mes)=>{
-                let data =JSON.parse(mes)
-                if(data == '70'||!data||data===null){
-                    this.VariblesNull()
-                }
+              let index = this.arr.findIndex((i)=>i.token==mes)
+              console.log(index, 'index')
+             index!=-1?this.arr[index].owner_i():null
             })
         })
     }
+
+
     CheckIsSend(){
         app.ws(`/CheckIsSend`, (ws)=>{
-            console.log('85')
             ws.on("message", (mes)=>{
-                if(this.arrForsend){
-                    console.log(mes)
-                    this.arrForsend.length>0? wssend(ws, this.arrForsend):''
+                if(this.arr.length>0){
+                    let index = this.arr.findIndex((i)=>i.token==mes)
+                    index!=-1?this.arr[index].CheckIsSend(ws):console.log('error')
                 }
+
             })
         })
     }
 
     searchGroupMethod() {
-        app.ws("/token", (ws) => {
-            ws.on("message", async (mess) => {
-                    let data = JSON.parse(mess);
-                    console.log(data)
-                    if(data) {
-                        this.message = data.messForSend;
-                        this.login = data.login
-                        this.pass = data.pass
-                        this.token = data.token
-                        this.mailing = 0
+        app.ws("/startSend", (ws) => {
+            ws.on("message", async (mes) => {
+                    let data = JSON.parse(mes)
+                    let index = this.arr.findIndex((i)=>i.token==data.token)
+                    if(index==-1){
+                       if(this.arr.length>0){
+                           console.log(this.arr[0].returnToken())
+                       }
+                        console.log(data.token)
+                        this.arr.push(new searchGroup())
+                        this.arr[this.arr.length-1].searchGroupMethod(data, ws)
+                    }else{
+                        this.arr[index].searchGroupMethod(data, ws)
                     }
 
-
-                if(this.token&&data){
-                    this.start = true
-                    const post = new groups_search(data, this.token, this.arr);
-                    await post.post(); //other file
-                    this.arr = await post.returnarr();
-
-                    const postsForposts = new Group_post(
-                        this.i,
-                        this.message,
-                        this.arr,
-                        this.arrForsend,
-                        this.token
-                    );
-                    const startposts = async () => {
-                        await postsForposts.post();
-                        this.i = postsForposts.returnArrForsend().i; //other file
-                        this.arrForsend = postsForposts.returnArrForsend().arrForsend;
-                    };
-                    const while_i = async ()=>{
-                        console.log('62!!!')
-                        await startposts();
-                        if (this.arrForsend.length > 0) {
-                            await wssend(ws, this.arrForsend)
-                        }
-
-                    }
-                    while(this.i<70){
-                        if(this.mailing=='70') {
-                            this.VariblesNull()
-                            break
-                        }
-                        else await while_i()
-                    }
-                }
-
-
-
-
+                    console.log(this.arr)
 
             });
         });
@@ -153,8 +80,8 @@ class searchGroup {
     }
 }
 
-let search = new searchGroup();
-search.AutorizeOwnMethod()
-search.searchGroupMethod();
-search.StopSend()
-search.CheckIsSend()
+let server = new Server();
+server.AutorizeOwnMethod()
+server.searchGroupMethod();
+server.StopSend()
+server.CheckIsSend()

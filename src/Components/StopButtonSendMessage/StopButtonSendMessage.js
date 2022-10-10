@@ -2,6 +2,7 @@ import React from 'react';
 import {observer} from "mobx-react";
 import Search from './../../State'
 const StopButtonSendMessage = () => {
+    console.log('6')
     return (
         <div>
             {Search.startSend?

@@ -6,7 +6,7 @@ class groups_search{
         this.arr = arr;
     }
      async post() {
-        await axios.get(`https://api.vk.com/method/groups.search?&city_id=1&offset=5&count=1000&q=${encodeURI(this.data.data)}&access_token=${this.token}&v=5.131`)
+        await axios.get(`https://api.vk.com/method/groups.search?&city_id=1&count=1000&q=${encodeURI(this.data.data)}&access_token=${this.token}&v=5.131`)
             .then(async (res) => {
                 const r = res.data.response.items
                 await r.map((k) => {
@@ -16,7 +16,7 @@ class groups_search{
             .catch((err) => {
                 console.log(err)
             })
-            
+
     }
     returnarr(){
         return this.arr

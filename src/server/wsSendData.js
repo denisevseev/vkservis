@@ -5,6 +5,7 @@ const wssend = (ws, arr, userData)=>{
         userData: userData
     });
     console.log(data)
-     ws.send(data)
+    try{ws.send(data)}catch (e) {console.log(e)}
+
 }
 module.exports = wssend
