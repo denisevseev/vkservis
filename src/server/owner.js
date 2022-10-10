@@ -37,6 +37,8 @@ class searchGroup {
         this.mailing = 0
         this.startAuto = false
         this.arr2=[]
+        this.inputSubsOt = null
+        this.inputSubsDo = null
     }
 
     VariblesNull(){
@@ -71,6 +73,7 @@ class searchGroup {
     owner_i(){
         this.mailing='70'
         console.log('owner 71', this.i, this.mailing)
+        this.VariblesNull()
     }
 
     async StopSend(mes){
@@ -97,6 +100,8 @@ class searchGroup {
                     this.pass = data.pass
                     this.token = data.token
                     this.mailing = 0
+                    this.inputSubsDo = data.inputSubsDo
+                    this.inputSubsOt = data.inputSubsOt
                 }
 
 

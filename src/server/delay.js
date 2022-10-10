@@ -1,8 +1,9 @@
-const delay=(ms)=> {
+const delay=(min, max)=> {
+    let rand=  Math.random() * (max - min) + min
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve();
-        }, ms);
+        }, rand);
     });
 }
 module.exports = delay

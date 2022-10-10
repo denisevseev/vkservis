@@ -34,7 +34,7 @@ class Server {
     StopSend(){
         app.ws(`/stopsend`, (ws)=>{
             ws.on('message', async (mes)=>{
-              let index = this.arr.findIndex((i)=>i.token==mes)
+              let index = this.arr.findIndex((i)=>i.token===mes)
               console.log(index, 'index')
              index!=-1?this.arr[index].owner_i():null
             })
@@ -46,8 +46,8 @@ class Server {
         app.ws(`/CheckIsSend`, (ws)=>{
             ws.on("message", (mes)=>{
                 if(this.arr.length>0){
-                    let index = this.arr.findIndex((i)=>i.token==mes)
-                    index!=-1?this.arr[index].CheckIsSend(ws):console.log('error')
+                    let index = this.arr.findIndex((i)=>i.token===mes)
+                    index!=-1?this.arr[index].CheckIsSend(ws):console.log('error 50 server')
                 }
 
             })
@@ -58,12 +58,8 @@ class Server {
         app.ws("/startSend", (ws) => {
             ws.on("message", async (mes) => {
                     let data = JSON.parse(mes)
-                    let index = this.arr.findIndex((i)=>i.token==data.token)
+                    let index = this.arr.findIndex((i)=>i.token===data.token)
                     if(index==-1){
-                       if(this.arr.length>0){
-                           console.log(this.arr[0].returnToken())
-                       }
-                        console.log(data.token)
                         this.arr.push(new searchGroup())
                         this.arr[this.arr.length-1].searchGroupMethod(data, ws)
                     }else{

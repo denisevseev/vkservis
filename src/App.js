@@ -11,6 +11,7 @@ import Preloader from "./Components/Preloader/Preloader";
 import Instruction from "./Components/Instruction/Instruction";
 import StartButtonSendMessage from "./Components/StartButtonSendMessage/StartButtonSendMessage";
 import StopButtonSendMessage from "./Components/StopButtonSendMessage/StopButtonSendMessage";
+import WaitSecSend from "./Components/waitSecSend/WaitSecSend";
 function App() {
     return (
         <div className="App">
@@ -23,6 +24,8 @@ function App() {
              <Preloader/>
             {/*<SubscribersCount />*/}
             <SendMessageToGroup />
+            <SubscribersCount/>
+            <WaitSecSend/>
             <StartButtonSendMessage/>
         </div>
     )

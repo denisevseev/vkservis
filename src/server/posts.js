@@ -10,13 +10,13 @@ class Group_post {
         this.token = token;
     }
 
-    async post() {
+    async post(min, max) {
         const send = async () => {
             console.log(this.i, "this.i");
             await posts(this.arr, this.i, this.message, this.token)
             console.log("https://vk.com/club" + this.arr[this.i], "this.arr[this.i]");
             this.i++;
-            await delay(5000);
+            await delay(min, max);
             this.arrForsend.push(this.arr[this.i]);
         };
         await send();

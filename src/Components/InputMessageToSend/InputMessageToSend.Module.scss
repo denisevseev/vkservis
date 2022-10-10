@@ -1,0 +1,18 @@
+.InputWords{
+  margin-top: 6em;
+    >input{
+      text-align: center;
+      height: 5em;
+      word-break: break-word;
+      @media (min-width: 400px) {
+        width: 50%;
+        margin-left: 25%;
+      }
+    }
+
+  >span{
+    font-size: 0.6em;
+    color: lightgray;
+    padding: -1em;
+  }
+}

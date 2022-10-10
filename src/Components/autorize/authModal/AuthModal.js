@@ -26,7 +26,7 @@ const AuthModal = () => {
 
     const preloader = <img style={{width: '1em', height: '1em', borderRadius: "2em"}} src='https://i.ibb.co/ZSHVv2v/1488.gif' alt=""/>
     return (
-        <>
+        <div >
             {state===null?
                 <button type="button"  onClick={()=>{
                     handleShow()
@@ -37,7 +37,7 @@ const AuthModal = () => {
             }
 
             <Modal show={show} onHide={handleClose}>
-                <Modal.Header>
+                <Modal.Header >
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -56,7 +56,7 @@ const AuthModal = () => {
                     </span>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 };
 

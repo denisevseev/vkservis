@@ -10,7 +10,7 @@ const InputWordsToSearch = () => {
     }
     return (
         <div className='InputWordsToSearch' >
-            <input ref={value} onChange={() => val()}
+            <input  ref={value} onChange={() => val()}
                    placeholder=" ключевое слово для поиска групп" type="text"
                    className="form-control inputControl" aria-label="Default"
                    aria-describedby="inputGroup-sizing-default">

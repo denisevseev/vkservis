@@ -1,5 +1,11 @@
-﻿import {makeAutoObservable, observable, toJS} from "mobx";
-import { configure } from "mobx";
+﻿import {
+    makeAutoObservable,
+    observable,
+    toJS
+} from "mobx";
+import {
+    configure
+} from "mobx";
 
 class Search {
     Group = null;
@@ -19,6 +25,8 @@ class Search {
     avatar = null;
     startSend = null
     Search_CheckIsSend = false
+    inputSubsOt = ''
+    inputSubsDo = ''
 
     constructor() {
         configure({
@@ -27,6 +35,8 @@ class Search {
         });
         makeAutoObservable(this, {
             Group: observable,
+            inputSubsOt: observable,
+            inputSubsDo: observable,
             inputValue: observable,
             sendMessage: observable,
             SendDone: observable,
@@ -38,8 +48,8 @@ class Search {
             pass: observable,
             start: observable,
             avatar: observable,
-            token:observable,
-            Search_CheckIsSend:observable
+            token: observable,
+            Search_CheckIsSend: observable
         });
     }
 
@@ -60,8 +70,8 @@ class Search {
             console.log(ws, '58')
             console.log("61 satte");
             await ws.send(null);
-           await window.location.reload();
-           ws.close()
+            await window.location.reload();
+            ws.close()
         };
     }
     MessageForSend(mess) {
@@ -77,18 +87,18 @@ class Search {
         this.pass = data;
         console.log(this.pass);
     }
-    StopSend(){
+    StopSend() {
         this.start = false
         this.startSend = false
-        let ws  = new WebSocket(`ws://localhost:3001/stopsend`);
-        ws.onopen = ()=>{
+        let ws = new WebSocket(`ws://localhost:3001/stopsend`);
+        ws.onopen = () => {
             ws.send(this.token)
             this.SendDone = []
             ws.close()
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.startSend = false
                 this.start = false
-            },4000)
+            }, 4000)
 
         }
     }
@@ -105,17 +115,24 @@ class Search {
             return null;
         }
     }
-    GetLoginData(){
-        let data  = JSON.parse(localStorage.getItem('loginData'))
-        if(data){
+
+    ChangeSubsOt(value) {
+        this.inputSubsOt = value
+    }
+    ChangeSubsDo(value) {
+        this.inputSubsDo = value
+    }
+    GetLoginData() {
+        let data = JSON.parse(localStorage.getItem('loginData'))
+        if (data) {
             this.login = data.login
             this.pass = data.pass
         }
     }
 
-    AutorizeOwnMethod(){
+    AutorizeOwnMethod() {
         let ws = new WebSocket(`ws://localhost:3001/autorize`)
-        ws.onopen = ()=>{
+        ws.onopen = () => {
             let data = JSON.stringify({
                 login: this.login,
                 pass: this.pass,
@@ -157,35 +174,35 @@ class Search {
 
     }
 
-    CheckIsSend(){
-        let  ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
+    CheckIsSend() {
+        let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
 
-        ws.onopen = (e)=>{
+        ws.onopen = (e) => {
             console.log(this.token)
             ws.send(this.token)
         }
-        ws.onerror = (e)=>{
+        ws.onerror = (e) => {
             console.log(ws.readyState)
         }
-        ws.onmessage = (event)=>{
+        ws.onmessage = (event) => {
             this.WsOnMessage(ws, event)
         }
     }
 
-    WsOnMessage(ws , event){
+    WsOnMessage(ws, event) {
         // console.log(event.data)
-            let dataEvetn = JSON.parse(event.data);
-            if(dataEvetn){
-                this.start = true
-                this.startSend = true
-            }
-            let result = dataEvetn.arr.concat(this.SendDone);
-            let finalresult = [...new Set(result)];
-            this.SendDone = toJS(finalresult)
-            console.log(this.SendDone)
+        let dataEvetn = JSON.parse(event.data);
+        if (dataEvetn) {
+            this.start = true
+            this.startSend = true
+        }
+        let result = dataEvetn.arr.concat(this.SendDone);
+        let finalresult = [...new Set(result)];
+        this.SendDone = toJS(finalresult)
+        console.log(this.SendDone)
     }
 
-    SendDoneReturn(){
+    SendDoneReturn() {
         return this.SendDone
     }
 
@@ -199,13 +216,15 @@ class Search {
                     let data = JSON.stringify({
                         data: this.inputValue,
                         token: this.token,
-                        messForSend: this.sendMessage
+                        messForSend: this.sendMessage,
+                        Ot: this.inputSubsOt,
+                        Do: this.inputSubsDo
                     });
                     ws.send(data);
                     this.start = true
                 }
             };
-            ws.onmessage = (event)=>{
+            ws.onmessage = (event) => {
                 this.WsOnMessage(ws, event)
             }
 
@@ -230,6 +249,5 @@ class Search {
 }
 
 export default new Search();
-let search = new  Search()
+let search = new Search()
 search.GetLoginData()
-

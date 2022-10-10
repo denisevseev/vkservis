@@ -2,8 +2,12 @@
   margin-top: 6em;
 >input{
   text-align: center;
-}
+  @media (min-width: 400px) {
+    width: 50%;
+    margin-left: 25%;
+  }
 
+}
   >span{
     font-size: 0.6em;
     color: lightgray;
