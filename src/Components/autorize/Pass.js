@@ -11,6 +11,7 @@ const Pass = () => {
         <div style={{marginTop: "1em"}}>
             <input type="password" ref={value} style={{textAlign: "center"}}
                    onChange={()=>change()}
+                   value={Search.pass}
                    placeholder="ваш пароль вк" type="text"
                    className="form-control inputControl" aria-label="Default"
                    aria-describedby="inputGroup-sizing-default"></input>

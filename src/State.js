@@ -105,6 +105,13 @@ class Search {
             return null;
         }
     }
+    GetLoginData(){
+        let data  = JSON.parse(localStorage.getItem('loginData'))
+        if(data){
+            this.login = data.login
+            this.pass = data.pass
+        }
+    }
 
     AutorizeOwnMethod(){
         let ws = new WebSocket(`ws://localhost:3001/autorize`)
@@ -118,9 +125,12 @@ class Search {
                 // token: this.token,
                 // messForSend: this.sendMessage
             });
+            localStorage.setItem('loginData', data)
             ws.send(data);
 
         }
+
+
 
         ws.onmessage = (event) => {
             let dataEvetn = JSON.parse(event.data);
@@ -221,4 +231,5 @@ class Search {
 
 export default new Search();
 let search = new  Search()
+search.GetLoginData()
 

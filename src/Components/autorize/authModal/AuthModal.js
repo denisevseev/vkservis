@@ -23,11 +23,15 @@ const AuthModal = () => {
     }
 
 
+
     const preloader = <img style={{width: '1em', height: '1em', borderRadius: "2em"}} src='https://i.ibb.co/ZSHVv2v/1488.gif' alt=""/>
     return (
         <>
             {state===null?
-                <button type="button"  onClick={handleShow}
+                <button type="button"  onClick={()=>{
+                    handleShow()
+                    Search.GetLoginData()
+                }}
                         className="btn btn-outline-primary">
                     Войти с помщью VK</button>:''
             }
