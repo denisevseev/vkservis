@@ -25,8 +25,8 @@ class Search {
     avatar = null;
     startSend = null
     Search_CheckIsSend = false
-    inputSubsOt = ''
-    inputSubsDo = ''
+    Ot = ''
+    Do = ''
 
     constructor() {
         configure({
@@ -35,8 +35,8 @@ class Search {
         });
         makeAutoObservable(this, {
             Group: observable,
-            inputSubsOt: observable,
-            inputSubsDo: observable,
+            Ot: observable,
+            Do: observable,
             inputValue: observable,
             sendMessage: observable,
             SendDone: observable,
@@ -116,11 +116,11 @@ class Search {
         }
     }
 
-    ChangeSubsOt(value) {
-        this.inputSubsOt = value
+    ChangeOt(value) {
+        this.Ot = value
     }
-    ChangeSubsDo(value) {
-        this.inputSubsDo = value
+    ChangeDo(value) {
+        this.Do = value
     }
     GetLoginData() {
         let data = JSON.parse(localStorage.getItem('loginData'))
@@ -217,8 +217,8 @@ class Search {
                         data: this.inputValue,
                         token: this.token,
                         messForSend: this.sendMessage,
-                        Ot: this.inputSubsOt,
-                        Do: this.inputSubsDo
+                        Ot: this.Ot,
+                        Do: this.Do
                     });
                     ws.send(data);
                     this.start = true

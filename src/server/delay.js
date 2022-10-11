@@ -1,9 +1,14 @@
 const delay=(min, max)=> {
-    let rand=  Math.random() * (max - min) + min
+    if(min||max==""){
+         this.rand =2000
+        console.log('delay')
+    }else{
+        this.rand=  Math.random() * (max*1000 - min*1000) + min*1000
+    }
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve();
-        }, rand);
+        }, this.rand);
     });
 }
 module.exports = delay

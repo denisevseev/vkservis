@@ -72,8 +72,8 @@ class searchGroup {
 
     owner_i(){
         this.mailing='70'
-        console.log('owner 71', this.i, this.mailing)
         this.VariblesNull()
+        console.log( this.i, this.mailing)
     }
 
     async StopSend(mes){
@@ -100,8 +100,8 @@ class searchGroup {
                     this.pass = data.pass
                     this.token = data.token
                     this.mailing = 0
-                    this.inputSubsDo = data.inputSubsDo
-                    this.inputSubsOt = data.inputSubsOt
+                    this.Do = data.Do
+                    this.Ot = data.Ot
                 }
 
 
@@ -119,7 +119,7 @@ class searchGroup {
                         this.token
                     );
                     const startposts = async () => {
-                        await postsForposts.post();
+                        await postsForposts.post(this.Ot, this.Do);
                         this.i = postsForposts.returnArrForsend().i; //other file
                         this.arrForsend = postsForposts.returnArrForsend().arrForsend;
                     };

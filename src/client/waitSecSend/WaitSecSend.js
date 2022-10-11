@@ -6,10 +6,10 @@ const WaitSecSend = () => {
     const value = useRef()
     const value2 = useRef()
     const val = () => {
-        Search.ChangeSubsOt(value.current.value)
+        Search.ChangeOt(value.current.value)
     }
     const val2 = () => {
-        Search.ChangeSubsDo(value2.current.value)
+        Search.ChangeDo(value2.current.value)
     }
 
     return (

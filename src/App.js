@@ -1,17 +1,17 @@
 import './App.scss';
 import { observer } from "mobx-react";
 import React, { useEffect } from 'react'
-import InputWordsToSearch from './Components/InputWordsToSearch/InputWordsToSearch';
-import SubscribersCount from "./Components/SubscribersCount/SubscribersCount";
-import InputMessageToSend from "./Components/InputMessageToSend/InputMessageToSend";
-import SendMessageToGroup from "./Components/SendMessageToGroup/SendMessageToGroup";
-import Avatar from "./Components/UserProfile/Avatar";
-import AuthModal from "./Components/autorize/authModal/AuthModal";
-import Preloader from "./Components/Preloader/Preloader";
-import Instruction from "./Components/Instruction/Instruction";
-import StartButtonSendMessage from "./Components/StartButtonSendMessage/StartButtonSendMessage";
-import StopButtonSendMessage from "./Components/StopButtonSendMessage/StopButtonSendMessage";
-import WaitSecSend from "./Components/waitSecSend/WaitSecSend";
+import InputWordsToSearch from './client/InputWordsToSearch/InputWordsToSearch';
+import SubscribersCount from "./client/SubscribersCount/SubscribersCount";
+import InputMessageToSend from "./client/InputMessageToSend/InputMessageToSend";
+import SendMessageToGroup from "./client/SendMessageToGroup/SendMessageToGroup";
+import Avatar from "./client/UserProfile/Avatar";
+import AuthModal from "./client/autorize/authModal/AuthModal";
+import Preloader from "./client/Preloader/Preloader";
+import Instruction from "./client/Instruction/Instruction";
+import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonSendMessage";
+import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
+import WaitSecSend from "./client/waitSecSend/WaitSecSend";
 function App() {
     return (
         <div className="App">
@@ -24,7 +24,7 @@ function App() {
              <Preloader/>
             {/*<SubscribersCount />*/}
             <SendMessageToGroup />
-            <SubscribersCount/>
+            {/*<SubscribersCount/>*/}
             <WaitSecSend/>
             <StartButtonSendMessage/>
         </div>
