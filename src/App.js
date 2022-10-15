@@ -12,6 +12,7 @@ import Instruction from "./client/Instruction/Instruction";
 import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonSendMessage";
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
 import WaitSecSend from "./client/waitSecSend/WaitSecSend";
+import Modals from "./client/Modals/Modals";
 function App() {
     return (
         <div className="App">
@@ -24,9 +25,12 @@ function App() {
              <Preloader/>
             {/*<SubscribersCount />*/}
             <SendMessageToGroup />
-            {/*<SubscribersCount/>*/}
+            <SubscribersCount/>
             <WaitSecSend/>
             <StartButtonSendMessage/>
+            <Modals/>
+            {/*<ErrorFromServer/>*/}
+
         </div>
     )
 }

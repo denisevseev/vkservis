@@ -22,8 +22,6 @@ const AuthModal = () => {
        return handleClose
     }
 
-
-
     const preloader = <img style={{width: '1em', height: '1em', borderRadius: "2em"}} src='https://i.ibb.co/ZSHVv2v/1488.gif' alt=""/>
     return (
         <div >

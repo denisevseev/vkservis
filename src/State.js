@@ -27,6 +27,9 @@ class Search {
     Search_CheckIsSend = false
     Ot = ''
     Do = ''
+    subsOt=undefined
+    subsDo=undefined
+    errorFromServer = undefined
 
     constructor() {
         configure({
@@ -35,6 +38,9 @@ class Search {
         });
         makeAutoObservable(this, {
             Group: observable,
+            errorFromServer:observable,
+            subsOt:observable,
+            subsDo:observable,
             Ot: observable,
             Do: observable,
             inputValue: observable,
@@ -122,6 +128,13 @@ class Search {
     ChangeDo(value) {
         this.Do = value
     }
+    ChangeSubsOt(value){
+        this.subsOt = value
+  }
+
+  ChangeSubsDo(value){
+        this.subsDo= value
+  }
     GetLoginData() {
         let data = JSON.parse(localStorage.getItem('loginData'))
         if (data) {
@@ -190,16 +203,26 @@ class Search {
     }
 
     WsOnMessage(ws, event) {
-        // console.log(event.data)
-        let dataEvetn = JSON.parse(event.data);
-        if (dataEvetn) {
-            this.start = true
-            this.startSend = true
+        console.log(event, 'event data 208')
+        let dataEvent
+        if(event){
+            dataEvent = JSON.parse(event.data);
+            if(dataEvent.userData){
+                this.errorFromServer = dataEvent.userData
+                console.log( this.errorFromServer)
+            }
+            console.log(dataEvent.userData)
+            if (dataEvent) {
+                this.start = true
+                this.startSend = true
+            }
+            let result = dataEvent.arr.concat(this.SendDone);
+            let finalresult = [...new Set(result)];
+            this.SendDone = toJS(finalresult)
+            console.log(this.SendDone)
         }
-        let result = dataEvetn.arr.concat(this.SendDone);
-        let finalresult = [...new Set(result)];
-        this.SendDone = toJS(finalresult)
-        console.log(this.SendDone)
+
+
     }
 
     SendDoneReturn() {
@@ -218,7 +241,9 @@ class Search {
                         token: this.token,
                         messForSend: this.sendMessage,
                         Ot: this.Ot,
-                        Do: this.Do
+                        Do: this.Do,
+                        subsOt:this.subsOt,
+                        subsDo:this.subsDo
                     });
                     ws.send(data);
                     this.start = true
