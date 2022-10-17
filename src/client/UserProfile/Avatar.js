@@ -28,7 +28,7 @@ console.log(Search.token)
        if (Search.token) {
            return (
                <div onClick={handleStyle} className="own">
-                   <div>
+                   <div>{!Search.photo?<div>Ваш аккаунт заблокирован</div>:''}
                        <img
                            style={{ width: "2em", height: "2em", borderRadius: "2em" }}
                            src={Search.photo}

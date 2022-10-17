@@ -30,6 +30,8 @@ class Search {
     subsOt=undefined
     subsDo=undefined
     errorFromServer = undefined
+    captcha = null
+    captchaValue = null
 
     constructor() {
         configure({
@@ -38,6 +40,8 @@ class Search {
         });
         makeAutoObservable(this, {
             Group: observable,
+            captchaValue:observable,
+            captcha:observable,
             errorFromServer:observable,
             subsOt:observable,
             subsDo:observable,
@@ -149,11 +153,7 @@ class Search {
             let data = JSON.stringify({
                 login: this.login,
                 pass: this.pass,
-                // 45.87.0.164
-                // login: "79082480296",
-                // pass: "Ptiza1010dff",
-                // token: this.token,
-                // messForSend: this.sendMessage
+                captchaValue: this.captchaValue
             });
             localStorage.setItem('loginData', data)
             ws.send(data);
@@ -170,6 +170,7 @@ class Search {
                     let data = JSON.parse(dataEvetn.userData);
                     this.first_name = data[0].first_name;
                     this.last_name = data[0].last_name;
+                    console.log(this.last_name, 'lastname')
                     this.photo = data[0].photo_50;
                     let user = {
                         token: this.token,
@@ -181,7 +182,12 @@ class Search {
                     localStorage.setItem("user", JSON.stringify(user));
                 }
             }
-            ws.close()
+            if(dataEvetn.arr.indexOf('captcha')>-1){
+                this.captcha = dataEvetn.arr
+            }else {
+                ws.close()
+            }
+
 
         };
 

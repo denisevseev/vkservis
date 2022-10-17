@@ -19,6 +19,7 @@ app.use(express.json());
 class Server {
     constructor() {
         this.arr = []
+        this.arrLogin=[]
     }
 
      AutorizeOwnMethod(){
@@ -26,6 +27,14 @@ class Server {
             ws.on('message', async (mes)=>{
                 let data = JSON.parse(mes)
                 new searchGroup().AutorizeOwnMethod(data, ws)
+                // let index = this.arrLogin.findIndex((i)=>i.login===data.login)
+                // if(index==-1){
+                //     this.arrLogin.push(new searchGroup())
+                //     this.arrLogin[this.arrLogin.length-1].AutorizeOwnMethod(data, ws)
+                // }else{
+                //     this.arrLogin[index].AutorizeOwnMethod(data, ws)
+                //     console.log(this.arrLogin[index].AutorizeOwnMethod(data, ws), 'this.arrLogin[index].AutorizeOwnMethod(data, ws)')
+                // }
             })
         })
 

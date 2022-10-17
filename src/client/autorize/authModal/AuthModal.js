@@ -5,6 +5,7 @@ import Login from "../Login";
 import Pass from "../Pass";
 import Search from './../../../State'
 import {observer} from "mobx-react";
+import Captcha from "../../captcha/Captcha";
 
 const AuthModal = () => {
     const name = Search.last_name
@@ -21,6 +22,8 @@ const AuthModal = () => {
     if(Search.token!==null){
        return handleClose
     }
+
+
 
     const preloader = <img style={{width: '1em', height: '1em', borderRadius: "2em"}} src='https://i.ibb.co/ZSHVv2v/1488.gif' alt=""/>
     return (
@@ -39,8 +42,7 @@ const AuthModal = () => {
                     <Modal.Title></Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Login/>
-                    <Pass/>
+                <Captcha/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button style={{width: "10em"}} onClick={()=> {
