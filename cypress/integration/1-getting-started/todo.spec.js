@@ -17,19 +17,19 @@
 //   })
 // })
 
- // const someFunc = require('./test')
- // describe(`testing custom method run`, () => {
- //
- //   it(`should run custom method`, () => {
- //
- //     cy.visit('https://vk.com')
- //     cy.window().then( win => {
- //
- //
- //     })
- //   })
- // })
- const result = ()=>{
-   return "window.location.href"
- }
-module.exports = result
+// const someFunc = require('./test')
+// describe(`testing custom method run`, () => {
+//
+//   it(`should run custom method`, () => {
+//
+//     cy.visit('https://vk.com')
+//     cy.window().then( win => {
+//
+//
+//     })
+//   })
+// })
+const result = () => {
+  return "window.location.href";
+};
+module.exports = result;

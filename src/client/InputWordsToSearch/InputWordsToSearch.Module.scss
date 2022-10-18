@@ -1,14 +1,13 @@
-.InputWordsToSearch{
+.InputWordsToSearch {
   margin-top: 6em;
->input{
-  text-align: center;
-  @media (min-width: 550px) {
-    width: 50%;
-    margin-left: 25%;
+  > input {
+    text-align: center;
+    @media (min-width: 550px) {
+      width: 50%;
+      margin-left: 25%;
+    }
   }
-
-}
-  >span{
+  > span {
     font-size: 0.6em;
     color: lightgray;
     padding: -1em;

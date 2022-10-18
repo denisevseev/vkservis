@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
-    "chromedriver": "^105.0.1"
+    "chromedriver": "^105.0.1",
+    "prettier": "2.7.1"
   }
 }

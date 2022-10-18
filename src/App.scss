@@ -1,5 +1,5 @@
 .App {
-   background-color: #e6eaf1;
+  background-color: #e6eaf1;
   min-height: 100vh;
   text-align: center;
   padding: 0.5em;
@@ -10,11 +10,10 @@
   font-size: calc(10px + 2vmin);
 }
 
-
 @media (max-width: 550px) {
-  .App-header{
+  .App-header {
     text-align: left;
-    >h1{
+    > h1 {
       font-size: 1.5em;
     }
   }
@@ -24,7 +23,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(8px + 2vmin);
-  >h1{
+  > h1 {
     color: #0a0a0a;
   }
   color: green;
@@ -33,4 +32,3 @@
 .App-link {
   color: #61dafb;
 }
-
