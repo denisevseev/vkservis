@@ -21,7 +21,7 @@ const SendMessageToGroup = () => {
             ) : (
               <a href={`https://vk.com/club${k}`}>
                 {`https://vk.com/club${k}`}
-                <span style={{ color: "black" }}>отправлено!</span>{" "}
+                <span style={{ color: "black" }}>&#10004;&#65039;</span>{" "}
               </a>
             )}
           </div>

@@ -88,6 +88,7 @@ class searchGroup {
 
   owner_i() {
     this.mailing = "70";
+    wssend(ws, null, null)
     this.VariblesNull();
     console.log(this.i, this.mailing);
   }
@@ -156,7 +157,7 @@ class searchGroup {
       const is_error = async () => {
         try {
           if (this.result.error.error_msg) {
-            this.error_msg = this.result.error.error_msg;
+            // this.error_msg = this.result.error.error_msg;
           }
         } catch (e) {
           console.log("error в ответе не найден");
@@ -175,8 +176,8 @@ class searchGroup {
       };
 
       const while_i = async () => {
-        this.group_post = await Group_post(this.post_data);
         this.post_data.i++;
+        this.group_post = await Group_post(this.post_data);
         await i_res_arr();
         await if_arr();
       };

@@ -91,19 +91,22 @@ class Search {
     this.pass = data;
     console.log(this.pass);
   }
-  StopSend() {
+  StartFalse(){
     this.start = false;
     this.startSend = false;
+    this.SendDone = [];
+  }
+
+  StopSend() {
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
+    this.StartFalse()
     ws.onopen = () => {
       ws.send(this.token);
-      this.SendDone = [];
-      ws.close();
-      setTimeout(() => {
-        this.startSend = false;
-        this.start = false;
-      }, 4000);
     };
+    // ws.onmessage=()=>{
+    //  setTimeout(()=>this.StartFalse(),1000)
+    // }
+
   }
   istoken() {
     let data = JSON.parse(localStorage.getItem("user"));
@@ -204,7 +207,7 @@ class Search {
         console.log(this.errorFromServer);
       }
       console.log(dataEvent.userData);
-      if (dataEvent) {
+      if (dataEvent&&this.startSend===null) {
         this.start = true;
         this.startSend = true;
       }
@@ -243,11 +246,7 @@ class Search {
         this.WsOnMessage(ws, event);
       };
 
-      this.WsOnMessage(ws);
-
-      const closews = (ws) => {
-        ws.close();
-      };
+      // this.WsOnMessage(ws);
 
       ws.onerror = (err) => {
         console.error(
