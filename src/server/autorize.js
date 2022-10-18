@@ -43,7 +43,7 @@ class autorize_class{
         }
         await this.driver.findElement({id: 'install_allow'}).click()
         try{await this.driver.findElement({xpath: '//*[@id="oauth_wrap_content"]/div[3]/div/div[1]/button[1]'}).click()}catch (e) {}
-        try{this.captcha = await this.driver.findElement({xpath: '//*[@id="login_submit"]/div/div/img'})}catch (e){console.log('captcha not found')}
+        try{this.captcha = await this.driver.findElement({xpath: '//*[@id="login_submit"]/div/div/img'}).getAttribute('src')}catch (e){console.log('captcha not found')}
 
         // this.driver.takeScreenshot("c:\\selenium_local_map\\out1.png");
         // this.driver.takeScreenshot().then(

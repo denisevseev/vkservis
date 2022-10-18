@@ -128,75 +128,72 @@ class searchGroup {
         }
 
 
-        if (this.token && data)
+        if (this.token && data) {
             this.start = true
-        this.arr = await groups_search(data, this.token, this.arr, this.subsOt, this.subsDo);
+            this.arr = await groups_search(data, this.token, this.arr, this.subsOt, this.subsDo);
 
 
-        this.post_data = {
-            i: this.i,
-            message: this.message,
-            arr: this.arr,
-            arrForsend: this.arrForsend,
-            token: this.token,
-            Ot: this.Ot,
-            Do: this.Do,
-            subsDo: this.subsDo,
-            subsOt: this.subsOt
-        }
-
-
-        this.group_post = await Group_post(this.post_data)
-
-
-        const i_res_arr = () => {
-            console.log('131')
-            this.i = this.group_post.i
-            this.arrForsend = this.group_post.arrForsend
-            this.result = this.group_post.result
-        }
-        await i_res_arr()
-        const is_error = async () => {
-            try {
-                if (this.result.error.error_msg) {
-                    this.error_msg = this.result.error.error_msg
-                }
-            } catch (e) {
-                console.log(e)
+            this.post_data = {
+                i: this.i,
+                message: this.message,
+                arr: this.arr,
+                arrForsend: this.arrForsend,
+                token: this.token,
+                Ot: this.Ot,
+                Do: this.Do,
+                subsDo: this.subsDo,
+                subsOt: this.subsOt
             }
 
-        }
-        await is_error()
 
-        const if_arr = async () => {
-            console.log(this.arrForsend.length, 'arr forsend leng')
-            if (this.arrForsend.length > 0) {
-                await wssend(ws, this.arrForsend, this.error_msg)
-                if (this.error_msg) {
-                    this.VariblesNull()
-                }
-            }
-        }
-
-        const while_i = async () => {
-            console.log('62!!!')
             this.group_post = await Group_post(this.post_data)
-            await i_res_arr()
-            await if_arr()
-        }
 
-        while (this.i < 70) {
-            console.log('150')
-            if (this.mailing == '70' || this.error_msg) {
-                await wssend(ws, this.arrForsend, this.error_msg)
-                this.VariblesNull()
-                break
-            } else {
-                await while_i()
+            const i_res_arr = () => {
+                // this.i = this.group_post.i
+                this.arrForsend = this.group_post.arrForsend
+                this.result = this.group_post.result
+            }
+            await i_res_arr()
+            const is_error = async () => {
+                try {
+                    if (this.result.error.error_msg) {
+                        this.error_msg = this.result.error.error_msg
+                    }
+                } catch (e) {
+                    console.log('error в ответе не найден')
+                }
+
+            }
+            await is_error()
+
+            const if_arr = async () => {
+                console.log(this.arrForsend.length, 'arr forsend leng')
+                if (this.arrForsend.length > 0) {
+                    await wssend(ws, this.arrForsend, this.error_msg)
+                    if (this.error_msg) {
+                        this.VariblesNull()
+                    }
+                }
+            }
+
+            const while_i = async () => {
+                this.group_post = await Group_post(this.post_data)
+                this.post_data.i++
+                await i_res_arr()
+                await if_arr()
+            }
+
+            while (this.i < 70) {
+                if (this.mailing == '70' || this.error_msg) {
+                    await wssend(ws, this.arrForsend, this.error_msg)
+                    this.VariblesNull()
+                    break
+                } else {
+                    await while_i()
+                }
             }
         }
     }
-
 }
 
 module.exports = searchGroup

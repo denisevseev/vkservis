@@ -1,10 +1,10 @@
 const axios = require("axios");
-const posts_request = async (arr, i, mes, token) => {
+const posts_request = async (data) => {
        const response = await axios.get(
             `https://api.vk.com/method/wall.post?&owner_id=-${encodeURI(
-                arr[i]
-            )}&message=${encodeURI(mes)}&access_token=${
-                token
+                data.arr[data.i]
+            )}&message=${encodeURI(data.message)}&access_token=${
+                data.token
             }&v=5.131`
         )
 return response.data

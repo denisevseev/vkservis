@@ -1,23 +1,15 @@
 const delay = require('./delay')
 const {posts_request} = require("./requests");
 const Group_post = async (data)=>{
-            this.i = data.i;
-            this.message = data.message;
-            this.arr = data.arr;
-            this.arrForsend = data.arrForsend;
-            this.token = data.token;
-            this.Ot = data.Ot
-            this.Do  = data.Do
-            let result = await posts_request(this.arr, this.i, this.message, this.token)
-            console.log("https://vk.com/club" + this.arr[this.i], "this.arr[this.i]");
-            this.i++;
-            await delay(this.Ot, this.Do);
-            this.arrForsend.push(this.arr[this.i]);
+            let result = await posts_request(data)
+            console.log("https://vk.com/club" + data.arr[data.i], "this.arr[this.i]");
+            await delay(data.Ot, data.Do);
+            data.arrForsend.push(data.arr[data.i]);
 
        let data2  = {
             result: result,
-            arrForsend: this.arrForsend,
-            i: this.i,
+            arrForsend: data.arrForsend,
+            // i: this.i,
         }
         return data2
 }
