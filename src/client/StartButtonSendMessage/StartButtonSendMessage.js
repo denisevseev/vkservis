@@ -6,7 +6,7 @@ const StartButtonSendMessage = () => {
   const ResultGroup = () => {
     Search.startSend = true;
     Search.ResultGroup();
-    debugger
+    debugger;
   };
 
   return (

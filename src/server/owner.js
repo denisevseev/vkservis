@@ -5,15 +5,14 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 const ws = require("express-ws")(app);
-const WebSocket = require("ws");
-const groups_search = require("./GroupSearch");
+// const WebSocket = require("ws");
 const Group_post = require("./posts");
 const splitToken = require("./token");
-// const { removeConsoleHandler } = require("selenium-webdriver/lib/logging");
 const autorize_class = require("./autorize");
 const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
-// const test = require('./Test')
+const { Filter_group, search, df, posts_request } = require("./requests");
+const { groups_search, sdf } = require("./GroupSearch");
 app.use(cors());
 app.use(
   express.urlencoded({
@@ -44,6 +43,7 @@ class searchGroup {
     this.error_msg = null;
     this.tumbler = false;
     this.autorizeconst = null;
+    this.filter_group = null;
   }
 
   VariblesNull() {
@@ -88,7 +88,7 @@ class searchGroup {
 
   owner_i() {
     this.mailing = "70";
-    wssend(ws, null, null)
+    wssend(ws, null, null);
     this.VariblesNull();
     console.log(this.i, this.mailing);
   }
@@ -123,6 +123,7 @@ class searchGroup {
       this.subsOt = data.subsOt;
       this.subsDo = data.subsDo;
     }
+    await sdf();
 
     if (this.token && data) {
       this.start = true;
@@ -133,6 +134,35 @@ class searchGroup {
         this.subsOt,
         this.subsDo
       );
+      const is_error = async () => {
+        try {
+          if (this.result.error.error_msg) {
+            this.error_msg = this.result.error.error_msg;
+            await wssend(ws, this.error_msg);
+            return this.error_msg;
+          }
+        } catch (e) {
+          console.log("error в ответе не найден");
+        }
+      };
+
+      if (this.arr instanceof Array) {
+        this.result = await Filter_group(this.token, this.arr);
+        let return_err = await is_error();
+        if (return_err) {
+          return return_err;
+        }
+        this.arr = [];
+        await this.result.response.map((el) => {
+          el.members_count >= this.subsOt &&
+          el.members_count <= this.subsDo &&
+          this.subsDo != undefined &&
+          this.subsOt != undefined &&
+          el.can_post === 1
+            ? this.arr.push(el.id)
+            : null;
+        });
+      }
 
       this.post_data = {
         i: this.i,
@@ -154,24 +184,21 @@ class searchGroup {
         this.result = this.group_post.result;
       };
       await i_res_arr();
-      const is_error = async () => {
-        try {
-          if (this.result.error.error_msg) {
-            // this.error_msg = this.result.error.error_msg;
-          }
-        } catch (e) {
-          console.log("error в ответе не найден");
+
+      await is_error();
+
+      const if_err_send_err = async () => {
+        await wssend(ws, this.arrForsend, this.error_msg);
+        if (this.error_msg) {
+          //если ошибка то отправляем ее
+          this.VariblesNull();
         }
       };
-      await is_error();
 
       const if_arr = async () => {
         console.log(this.arrForsend.length, "arr forsend leng");
         if (this.arrForsend.length > 0) {
-          await wssend(ws, this.arrForsend, this.error_msg);
-          if (this.error_msg) {
-            this.VariblesNull();
-          }
+          await if_err_send_err();
         }
       };
 

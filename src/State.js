@@ -91,7 +91,7 @@ class Search {
     this.pass = data;
     console.log(this.pass);
   }
-  StartFalse(){
+  StartFalse() {
     this.start = false;
     this.startSend = false;
     this.SendDone = [];
@@ -99,14 +99,13 @@ class Search {
 
   StopSend() {
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
-    this.StartFalse()
+    this.StartFalse();
     ws.onopen = () => {
       ws.send(this.token);
     };
     // ws.onmessage=()=>{
     //  setTimeout(()=>this.StartFalse(),1000)
     // }
-
   }
   istoken() {
     let data = JSON.parse(localStorage.getItem("user"));
@@ -207,7 +206,7 @@ class Search {
         console.log(this.errorFromServer);
       }
       console.log(dataEvent.userData);
-      if (dataEvent&&this.startSend===null) {
+      if (dataEvent && this.startSend === null) {
         this.start = true;
         this.startSend = true;
       }
