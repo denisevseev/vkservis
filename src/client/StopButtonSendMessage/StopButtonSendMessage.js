@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import Search from "./../../State";
+import Search from "../../store/State";
 const StopButtonSendMessage = () => {
   console.log("6");
   return (

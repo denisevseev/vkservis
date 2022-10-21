@@ -1,7 +1,7 @@
 import React from "react";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
-import Search from "../../State";
+import Search from "../../store/State";
 import StartButtonSendMessage from "../StartButtonSendMessage/StartButtonSendMessage";
 const Preloader = () => {
   if (Search.startSend == true) {

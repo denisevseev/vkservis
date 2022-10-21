@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Search from "./../../State";
+import Search from "../../store/State";
 
 function ErrorFromServer({ data }) {
   console.log(data);

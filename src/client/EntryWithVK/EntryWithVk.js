@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Search from "../../State";
+import Search from "../../store/State";
 import Login from "../autorize/Login";
 import Pass from "../autorize/Pass";
 import { observer } from "mobx-react";

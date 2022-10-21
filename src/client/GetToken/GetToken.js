@@ -1,5 +1,5 @@
 import React from "react";
-import Search from "../../State";
+import Search from "../../store/State";
 import { Navigate } from "react-router-dom";
 
 const GetToken = () => {

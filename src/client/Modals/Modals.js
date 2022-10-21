@@ -1,7 +1,7 @@
 import React from "react";
 import ErrorFromServer from "./ErrorFromServer";
 import { observer } from "mobx-react";
-import Search from "./../../State";
+import Search from "../../store/State";
 const Modals = () => {
   let data;
   let dataError = Search.errorFromServer;

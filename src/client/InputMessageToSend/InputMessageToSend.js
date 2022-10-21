@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Search from "../../State";
+import Search from "../../store/State";
 import { observer } from "mobx-react-lite";
 import "./InputMessageToSend.Module.scss";
 const InputMessageToSend = () => {
@@ -14,7 +14,7 @@ const InputMessageToSend = () => {
         onChange={() => val()}
         style={{ textAlign: "center" }}
         placeholder="сообщение для рассылки"
-        value={Search.getLocalStorageArea().sendMessage}
+        value={Search.sendMessage}
         type="text"
         className="form-control inputControl text-wrap"
         aria-label="Default"

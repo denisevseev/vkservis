@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import "./SubscribersCount.Module.scss";
 import { useRef } from "react";
-import Search from "../../State";
+import Search from "../../store/State";
 const SubscribersCount = () => {
   const value = useRef();
   const value2 = useRef();
@@ -22,14 +22,14 @@ const SubscribersCount = () => {
           ref={value}
           onChange={() => val()}
           type="text"
-          value={Search.getLocalStorageArea().subsOt}
+          value={Search.subsOt}
           aria-label="First name"
           className="form-control"
         />
         <span className="input-group-text">До</span>
         <input
           ref={value2}
-          value={Search.getLocalStorageArea().subsDo}
+          value={Search.subsDo}
           onChange={() => val2()}
           type="text"
           aria-label="Last name"

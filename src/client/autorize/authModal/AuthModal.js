@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Login from "../Login";
 import Pass from "../Pass";
-import Search from "./../../../State";
+import Search from "../../../store/State";
 import { observer } from "mobx-react";
 import Captcha from "../../captcha/Captcha";
 

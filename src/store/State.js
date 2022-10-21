@@ -156,7 +156,7 @@ class Search {
       if (this.token === null && localStorage.getItem("token") === null) {
         if (dataEvetn.arr[0].length > 50) {
           this.token = dataEvetn.arr[0];
-          let data = JSON.parse(dataEvetn.userData);
+          let data = JSON.parse(dataEvetn.userData); //получаем аватарку с сервера
           this.first_name = data[0].first_name;
           this.last_name = data[0].last_name;
           console.log(this.last_name, "lastname");
@@ -240,6 +240,15 @@ class Search {
   getLocalStorageArea(){
     let data  = JSON.parse(localStorage.getItem('textAll'))
     if(data){
+      this.first_name = data.first_name
+      this.last_name = data.last_name
+      this.photo = data.photo
+      this.inputValue = data.inputValue
+      this.sendMessage = data.sendMessage
+      this.subsOt = data.subsOt
+      this.subsDo = data.subsDo
+      this.Ot = data.Ot
+      this.Do = data.Do
       return data
     }else{
       return ''
@@ -289,4 +298,3 @@ class Search {
 export default new Search();
 let search = new Search();
 search.GetLoginData();
-search.getLocalStorageArea()

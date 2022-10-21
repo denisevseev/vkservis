@@ -1,6 +1,6 @@
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
-import Search from "../../State";
+import Search from "../../store/State";
 import React, { useEffect, useState } from "react";
 
 const SendMessageToGroup = () => {

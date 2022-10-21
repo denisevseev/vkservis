@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./Avatar.Module.scss";
-import Search from "./../../State";
+import Search from "../../store/State";
 import { observer } from "mobx-react";
 const Avatar = () => {
+  Search.getLocalStorageArea()
   console.log(Search.token);
-  // const start = ()=>{
-  //     const ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
-  //     Search.CheckIsSend(ws)
-  //
-  // }
+
   const [state, setState] = useState("none");
   const [ava, setAva] = useState(Search.avatar);
-  // useEffect(()=>{
-  //     setAva(Search.Login())
-  // })
+
   const handleStyle = () => {
     if (state == "none") {
       setState("block");
@@ -21,9 +16,6 @@ const Avatar = () => {
       setState("none");
     }
   };
-  // return <div>
-  //     <button onClick={start}>клик</button>
-  // </div>
 
   if (Search.token) {
     return (

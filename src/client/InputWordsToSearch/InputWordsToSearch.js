@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useRef, useState } from "react";
-import Search from "../../State";
+import Search from "../../store/State";
 import "./InputWordsToSearch.Module.scss";
 
 const InputWordsToSearch = () => {
@@ -14,7 +14,7 @@ const InputWordsToSearch = () => {
         ref={value}
         onChange={() => val()}
         placeholder=" ключевое слово для поиска групп"
-        value={Search.getLocalStorageArea().inputValue}
+        value={Search.inputValue}
         type="text"
         className="form-control inputControl"
         aria-label="Default"
