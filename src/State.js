@@ -103,14 +103,11 @@ class Search {
     ws.onopen = () => {
       ws.send(this.token);
     };
-    // ws.onmessage=()=>{
-    //  setTimeout(()=>this.StartFalse(),1000)
-    // }
   }
+
   istoken() {
     let data = JSON.parse(localStorage.getItem("user"));
     if (data) {
-      // console.log(data.token)
       this.token = data.token;
       this.first_name = data.first_name;
       this.last_name = data.last_name;
@@ -221,7 +218,36 @@ class Search {
     return this.SendDone;
   }
 
+  Return_obj_text_all_area(){
+    let user = {
+      first_name: this.first_name,
+      last_name: this.last_name,
+      photo: this.photo,
+      inputValue:this.inputValue,
+      sendMessage:this.sendMessage,
+      subsOt:this.subsOt,
+      subsDo:this.subsDo,
+      Ot:this.Ot,
+      Do:this.Do
+    };
+    return user
+  }
+
+  setLocalStorageArea(){
+    localStorage.setItem("textAll", JSON.stringify(this.Return_obj_text_all_area()));
+  }
+
+  getLocalStorageArea(){
+    let data  = JSON.parse(localStorage.getItem('textAll'))
+    if(data){
+      return data
+    }else{
+      return ''
+    }
+  }
+
   ResultGroup() {
+    this.setLocalStorageArea()
     const connect = () => {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
@@ -263,3 +289,4 @@ class Search {
 export default new Search();
 let search = new Search();
 search.GetLoginData();
+search.getLocalStorageArea()

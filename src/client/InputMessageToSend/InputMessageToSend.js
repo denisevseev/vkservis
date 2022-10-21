@@ -14,6 +14,7 @@ const InputMessageToSend = () => {
         onChange={() => val()}
         style={{ textAlign: "center" }}
         placeholder="сообщение для рассылки"
+        value={Search.getLocalStorageArea().sendMessage}
         type="text"
         className="form-control inputControl text-wrap"
         aria-label="Default"

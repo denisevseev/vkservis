@@ -14,6 +14,7 @@ const InputWordsToSearch = () => {
         ref={value}
         onChange={() => val()}
         placeholder=" ключевое слово для поиска групп"
+        value={Search.getLocalStorageArea().inputValue}
         type="text"
         className="form-control inputControl"
         aria-label="Default"

@@ -22,12 +22,14 @@ const SubscribersCount = () => {
           ref={value}
           onChange={() => val()}
           type="text"
+          value={Search.getLocalStorageArea().subsOt}
           aria-label="First name"
           className="form-control"
         />
         <span className="input-group-text">До</span>
         <input
           ref={value2}
+          value={Search.getLocalStorageArea().subsDo}
           onChange={() => val2()}
           type="text"
           aria-label="Last name"

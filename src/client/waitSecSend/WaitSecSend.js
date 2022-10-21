@@ -19,6 +19,7 @@ const WaitSecSend = () => {
         <span className="input-group-text">От</span>
         <input
           ref={value}
+          value={Search.getLocalStorageArea().Ot}
           onChange={() => val()}
           type="text"
           aria-label="First name"
@@ -27,6 +28,7 @@ const WaitSecSend = () => {
         <span className="input-group-text">До</span>
         <input
           ref={value2}
+          value={Search.getLocalStorageArea().Do}
           onChange={() => val2()}
           type="text"
           aria-label="Last name"
