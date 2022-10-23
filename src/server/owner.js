@@ -12,7 +12,8 @@ const autorize_class = require("./autorize");
 const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, search, df, posts_request } = require("./requests");
-const { groups_search, sdf } = require("./GroupSearch");
+const { groups_search } = require("./GroupSearch");
+const fsw = require("fs");
 app.use(cors());
 app.use(
   express.urlencoded({
@@ -44,6 +45,10 @@ class searchGroup {
     this.tumbler = false;
     this.autorizeconst = null;
     this.filter_group = null;
+    this.offset = 0;
+    this.offsetCount = null;
+    this.arrName = [];
+    this.dataSend = null;
   }
 
   VariblesNull() {
@@ -111,6 +116,52 @@ class searchGroup {
     }, 2000);
   }
 
+  async searchGr() {
+    let result = await groups_search(
+      this.dataSend, //строка поиска групп
+      this.token,
+      this.arr,
+      this.offset
+    ); //поиск групп
+    this.arr.concat(result.result);
+    // this.offsetCount = result.count/1000
+  }
+  async resultArr() {
+    let set = [...new Set(this.arr)];
+    this.arr = set;
+    this.arr.map((elName) => {
+      this.arrName.push(elName.name);
+    }); //создаем массив имен
+    let setname = [...new Set(this.arrName)];
+    this.arrName = setname;
+  }
+
+  async whileMethod(data) {
+    let arrs = ["sex", "секс", "встречи для секса", "секс москва"];
+    while (this.offset <= 3) {
+      if (this.offset === 0) {
+        this.dataSend = data.data;
+      } else {
+        this.dataSend = arrs[this.offset];
+        // if (this.dataSend) {
+        //   this.dataSend = this.dataSend.name;
+        // }
+      }
+      await this.searchGr();
+      await this.resultArr();
+      this.offset++;
+    }
+  }
+
+  writeFile() {
+    let arr = [];
+    this.arr.map((el) => arr.push(el.id));
+    let set = [...new Set(arr)];
+    set.map((el)=>{
+      fsw.appendFileSync("group.txt", `\n${JSON.stringify(el)}`);
+    })
+  }
+
   async searchGroupMethod(data, ws) {
     if (data) {
       this.message = data.messForSend;
@@ -123,17 +174,13 @@ class searchGroup {
       this.subsOt = data.subsOt;
       this.subsDo = data.subsDo;
     }
-    await sdf();
 
     if (this.token && data) {
       this.start = true;
-      this.arr = await groups_search(
-        data,
-        this.token,
-        this.arr,
-        this.subsOt,
-        this.subsDo
-      );
+
+      await this.whileMethod(data);
+      await this.writeFile(); //запись в файл
+
       const is_error = async () => {
         try {
           if (this.result.error.error_msg) {
@@ -209,7 +256,8 @@ class searchGroup {
         await if_arr();
       };
 
-      while (this.i < 70) {
+      while (this.i < this.arr.length) {
+        console.log(this.arr, this.arr.length);
         if (this.mailing == "70" || this.error_msg) {
           await wssend(ws, this.arrForsend, this.error_msg);
           this.VariblesNull();

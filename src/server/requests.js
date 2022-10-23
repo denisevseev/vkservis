@@ -9,8 +9,8 @@ const posts_request = async (data) => {
   return response.data;
 };
 
-const search = async (mes, token) => {
-  console.log(this.data, "13 requests");
+const search = async (mes, token, offset) => {
+  console.log(offset);
   let search = await axios.get(
     `https://api.vk.com/method/groups.search?&city_id=1&count=1000&q=${encodeURI(
       mes

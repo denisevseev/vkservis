@@ -1,21 +1,26 @@
 const { search, df } = require("./requests");
-const groups_search = async (data, token, arr, subsOt, subsDo) => {
+const groups_search = async (data, token, arr, offset) => {
   this.arr = arr;
-  let result = await search(data.data, token);
+  let result = await search(data, token, offset);
   if (!result.error) {
     await result.response.items.map((res) => {
-      this.arr.push(res.id);
+      let idName = {
+        id: res.id,
+        name: res.name,
+      };
+      this.arr.push(idName);
     });
-    return this.arr;
+    let resultData = {
+      arr: this.arr,
+      count: result.response.count,
+    };
+    return resultData;
   } else {
     return result.error.error_msg;
   }
 };
-const sdf = () => {
-  df();
-};
+
 module.exports = {
   groups_search,
-  sdf,
 };
 // module.exports.sdf=sdf

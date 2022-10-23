@@ -218,45 +218,48 @@ class Search {
     return this.SendDone;
   }
 
-  Return_obj_text_all_area(){
+  Return_obj_text_all_area() {
     let user = {
       first_name: this.first_name,
       last_name: this.last_name,
       photo: this.photo,
-      inputValue:this.inputValue,
-      sendMessage:this.sendMessage,
-      subsOt:this.subsOt,
-      subsDo:this.subsDo,
-      Ot:this.Ot,
-      Do:this.Do
+      inputValue: this.inputValue,
+      sendMessage: this.sendMessage,
+      subsOt: this.subsOt,
+      subsDo: this.subsDo,
+      Ot: this.Ot,
+      Do: this.Do,
     };
-    return user
+    return user;
   }
 
-  setLocalStorageArea(){
-    localStorage.setItem("textAll", JSON.stringify(this.Return_obj_text_all_area()));
+  setLocalStorageArea() {
+    localStorage.setItem(
+      "textAll",
+      JSON.stringify(this.Return_obj_text_all_area())
+    );
   }
 
-  getLocalStorageArea(){
-    let data  = JSON.parse(localStorage.getItem('textAll'))
-    if(data){
-      this.first_name = data.first_name
-      this.last_name = data.last_name
-      this.photo = data.photo
-      this.inputValue = data.inputValue
-      this.sendMessage = data.sendMessage
-      this.subsOt = data.subsOt
-      this.subsDo = data.subsDo
-      this.Ot = data.Ot
-      this.Do = data.Do
-      return data
-    }else{
-      return ''
+  getLocalStorageArea() {
+    let data = JSON.parse(localStorage.getItem("textAll"));
+    if (data) {
+      this.first_name = data.first_name;
+      this.last_name = data.last_name;
+      this.photo = data.photo;
+      this.inputValue = data.inputValue;
+      this.sendMessage = data.sendMessage;
+      this.subsOt = data.subsOt;
+      this.subsDo = data.subsDo;
+      this.Ot = data.Ot;
+      this.Do = data.Do;
+      return data;
+    } else {
+      return "";
     }
   }
 
   ResultGroup() {
-    this.setLocalStorageArea()
+    this.setLocalStorageArea();
     const connect = () => {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
