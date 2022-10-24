@@ -1,8 +1,8 @@
 const axios = require("axios");
-
+const url = `https://api.vk.com/method/`;
 const posts_request = async (data) => {
   const response = await axios.get(
-    `https://api.vk.com/method/wall.post?&owner_id=-${encodeURI(
+    `${url}wall.post?&owner_id=-${encodeURI(
       data.arr[data.i]
     )}&message=${encodeURI(data.message)}&access_token=${data.token}&v=5.131`
   );
@@ -12,26 +12,30 @@ const posts_request = async (data) => {
 const search = async (mes, token, offset) => {
   console.log(offset);
   let search = await axios.get(
-    `https://api.vk.com/method/groups.search?&city_id=1&count=1000&q=${encodeURI(
+    `${url}groups.search?&city_id=1&count=1000&q=${encodeURI(
       mes
     )}&access_token=${token}&v=5.131`
   );
   return search.data;
 };
 
+const groupSetRequest = async (token, group_id) => {
+  let groupSettings = await axios.get(
+    `${url}groups.getSettings?&group_id=${group_id}&access_token=${token}&v=5.131`
+  );
+  return groupSettings.data;
+};
+
 const Filter_group = async (token, arr) => {
   let filter = await axios.get(
-    `https://api.vk.com/method/groups.getById?&group_ids=${arr}&fields=can_post,members_count&access_token=${token}&v=5.131`
+    `${url}groups.getById?&group_ids=${arr}&fields=can_post,members_count&access_token=${token}&v=5.131`
   );
   return filter.data;
-};
-const df = () => {
-  console.log("sdf");
 };
 
 module.exports = {
   posts_request,
   search,
   Filter_group,
-  df,
+  groupSetRequest,
 };

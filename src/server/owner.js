@@ -12,7 +12,7 @@ const autorize_class = require("./autorize");
 const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, search, df, posts_request } = require("./requests");
-const { groups_search } = require("./GroupSearch");
+const { groups_search, groupSettings } = require("./GroupSearch");
 const fsw = require("fs");
 app.use(cors());
 app.use(
@@ -124,6 +124,7 @@ class searchGroup {
       this.offset
     ); //поиск групп
     this.arr.concat(result.result);
+    // console.log(this.arr);
     // this.offsetCount = result.count/1000
   }
   async resultArr() {
@@ -132,20 +133,23 @@ class searchGroup {
     this.arr.map((elName) => {
       this.arrName.push(elName.name);
     }); //создаем массив имен
-    let setname = [...new Set(this.arrName)];
+    let setname = [...new Set(this.arrName)]; //уникализируем массив имен
     this.arrName = setname;
   }
 
   async whileMethod(data) {
-    let arrs = ["sex", "секс", "встречи для секса", "секс москва"];
-    while (this.offset <= 3) {
+    while (this.offset <= 2) {
       if (this.offset === 0) {
         this.dataSend = data.data;
       } else {
-        this.dataSend = arrs[this.offset];
-        // if (this.dataSend) {
-        //   this.dataSend = this.dataSend.name;
-        // }
+        let mess = this.arrName[this.offset]; //строка поиска групп
+        if (mess) {
+          this.dataSend = mess;
+        } else {
+          console.log("148");
+          this.offset++;
+          // this.whileMethod(data);
+        }
       }
       await this.searchGr();
       await this.resultArr();
@@ -156,10 +160,11 @@ class searchGroup {
   writeFile() {
     let arr = [];
     this.arr.map((el) => arr.push(el.id));
-    let set = [...new Set(arr)];
-    set.map((el)=>{
+    let set = [...new Set(arr)]; //здесь повторно уникализируем массив айдишников
+    set.map((el) => {
       fsw.appendFileSync("group.txt", `\n${JSON.stringify(el)}`);
-    })
+    });
+    this.arr = set;
   }
 
   async searchGroupMethod(data, ws) {
@@ -180,6 +185,7 @@ class searchGroup {
 
       await this.whileMethod(data);
       await this.writeFile(); //запись в файл
+      let settingsResult = await groupSettings(this.token, this.arr[3]);
 
       const is_error = async () => {
         try {

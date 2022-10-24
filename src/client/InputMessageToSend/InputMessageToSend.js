@@ -3,6 +3,7 @@ import Search from "../../store/State";
 import { observer } from "mobx-react-lite";
 import "./InputMessageToSend.Module.scss";
 const InputMessageToSend = () => {
+    Search.getLocalStorageArea();
   const value = useRef();
   const val = () => {
     Search.MessageForSend(value.current.value);

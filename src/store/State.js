@@ -26,6 +26,7 @@ class Search {
   errorFromServer = undefined;
   captcha = null;
   captchaValue = null;
+  tumbler = false
 
   constructor() {
     configure({
@@ -163,7 +164,7 @@ class Search {
           this.photo = data[0].photo_50;
           let user = {
             token: this.token,
-            first_name: this.first_name,
+            first_name: this.first_name, //данные для аватарки
             last_name: this.last_name,
             photo: this.photo,
           };
@@ -240,21 +241,30 @@ class Search {
     );
   }
 
-  getLocalStorageArea() {
-    let data = JSON.parse(localStorage.getItem("textAll"));
+  getUser() {
+    let data = localStorage.getItem("user");
     if (data) {
       this.first_name = data.first_name;
       this.last_name = data.last_name;
       this.photo = data.photo;
-      this.inputValue = data.inputValue;
-      this.sendMessage = data.sendMessage;
-      this.subsOt = data.subsOt;
-      this.subsDo = data.subsDo;
-      this.Ot = data.Ot;
-      this.Do = data.Do;
-      return data;
-    } else {
-      return "";
+    }
+  }
+
+  getLocalStorageArea() {
+    if(!this.tumbler){ //проверяет был ли вызван уже этот метод
+      let data = JSON.parse(localStorage.getItem("textAll"));
+      if (data) {
+        this.tumbler = true
+        this.inputValue = data.inputValue;
+        this.sendMessage = data.sendMessage;
+        this.subsOt = data.subsOt;
+        this.subsDo = data.subsDo;
+        this.Ot = data.Ot;
+        this.Do = data.Do;
+        return data;
+      } else {
+        return "";
+      }
     }
   }
 
@@ -301,3 +311,5 @@ class Search {
 export default new Search();
 let search = new Search();
 search.GetLoginData();
+search.getUser();
+

@@ -14,6 +14,7 @@ const AuthModal = () => {
     Search.istoken();
     if (state === null) setState(name);
   });
+
   const [show, setShow] = useState(false);
   const [preload, setPreload] = useState("Войти");
   const handleClose = () => setShow(false);

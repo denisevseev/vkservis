@@ -1,4 +1,4 @@
-const { search, df } = require("./requests");
+const { search, groupSetRequest } = require("./requests");
 const groups_search = async (data, token, arr, offset) => {
   this.arr = arr;
   let result = await search(data, token, offset);
@@ -10,6 +10,7 @@ const groups_search = async (data, token, arr, offset) => {
       };
       this.arr.push(idName);
     });
+
     let resultData = {
       arr: this.arr,
       count: result.response.count,
@@ -20,7 +21,14 @@ const groups_search = async (data, token, arr, offset) => {
   }
 };
 
+const groupSettings = async (token, group_id) => {
+  console.log("sdf");
+  let result = await groupSetRequest(token, group_id);
+  return result;
+};
+
 module.exports = {
   groups_search,
+  groupSettings,
 };
 // module.exports.sdf=sdf

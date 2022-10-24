@@ -3,7 +3,6 @@ import "./Avatar.Module.scss";
 import Search from "../../store/State";
 import { observer } from "mobx-react";
 const Avatar = () => {
-  Search.getLocalStorageArea();
   console.log(Search.token);
 
   const [state, setState] = useState("none");
