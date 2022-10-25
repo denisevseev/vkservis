@@ -10,6 +10,7 @@ const InputWordsToSearch = () => {
   };
   return (
     <div className="InputWordsToSearch">
+        <div style={{color:"lightblue"}}> <u>Рассылка по группам:</u> </div>
       <input
         ref={value}
         onChange={() => val()}

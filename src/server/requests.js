@@ -30,5 +30,5 @@ module.exports = {
   posts_request,
   search,
   Filter_group,
-  url
+  url,
 };
