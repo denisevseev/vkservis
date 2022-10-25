@@ -21,14 +21,7 @@ const groups_search = async (data, token, arr, offset) => {
   }
 };
 
-const groupSettings = async (token, group_id) => {
-  console.log("sdf");
-  let result = await groupSetRequest(token, group_id);
-  return result;
-};
-
 module.exports = {
   groups_search,
-  groupSettings,
 };
 // module.exports.sdf=sdf

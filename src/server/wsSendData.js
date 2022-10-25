@@ -1,7 +1,8 @@
 const wssend = (ws, arr, userData) => {
+  let arr2 = arr?arr.filter(el=>el!=null):''
   let data = JSON.stringify({
-    arr: arr,
-    userData: userData,
+    arr: arr2,
+    userData: userData?userData:'',
   });
   console.log(data, "6 wssen");
   try {

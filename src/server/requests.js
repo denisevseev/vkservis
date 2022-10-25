@@ -19,13 +19,6 @@ const search = async (mes, token, offset) => {
   return search.data;
 };
 
-const groupSetRequest = async (token, group_id) => {
-  let groupSettings = await axios.get(
-    `${url}groups.getSettings?&group_id=${group_id}&access_token=${token}&v=5.131`
-  );
-  return groupSettings.data;
-};
-
 const Filter_group = async (token, arr) => {
   let filter = await axios.get(
     `${url}groups.getById?&group_ids=${arr}&fields=can_post,members_count&access_token=${token}&v=5.131`
@@ -37,5 +30,5 @@ module.exports = {
   posts_request,
   search,
   Filter_group,
-  groupSetRequest,
+  url
 };

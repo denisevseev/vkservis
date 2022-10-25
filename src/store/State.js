@@ -26,7 +26,7 @@ class Search {
   errorFromServer = undefined;
   captcha = null;
   captchaValue = null;
-  tumbler = false
+  tumbler = false;
 
   constructor() {
     configure({
@@ -251,10 +251,11 @@ class Search {
   }
 
   getLocalStorageArea() {
-    if(!this.tumbler){ //проверяет был ли вызван уже этот метод
+    if (!this.tumbler) {
+      //проверяет был ли вызван уже этот метод
       let data = JSON.parse(localStorage.getItem("textAll"));
       if (data) {
-        this.tumbler = true
+        this.tumbler = true;
         this.inputValue = data.inputValue;
         this.sendMessage = data.sendMessage;
         this.subsOt = data.subsOt;
@@ -312,4 +313,3 @@ export default new Search();
 let search = new Search();
 search.GetLoginData();
 search.getUser();
-
