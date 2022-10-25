@@ -164,12 +164,14 @@ class searchGroup {
       } else {
         let mess = this.arrName[this.offset]; //строка поиска групп
         let dataSend = data.data;
-        if (
-          mess.indexOf(dataSend) > -1 ||
-          mess.indexOf(dataSend.toUpperCase()) > -1
-        ) {
-          // indexOf проверка вхождения слова заданного пользователем
-          this.dataSend = mess;
+        if (mess) {
+          if (
+            mess.indexOf(dataSend) > -1 ||
+            mess.indexOf(dataSend.toUpperCase()) > -1
+          ) {
+            // indexOf проверка вхождения слова заданного пользователем
+            this.dataSend = mess;
+          }
         } else {
           this.offset++;
           // this.whileMethod(data);
@@ -202,9 +204,66 @@ class searchGroup {
     this.arr = set;
   }
 
+  async instanceArr() {
+    if (this.arr instanceof Array) {
+      this.resetGlobVar(); //обнуляем переменные
+      this.result = await Filter_group(this.token, this.arr);
+      let return_err = await this.is_error(ws);
+      if (return_err) {
+        return return_err;
+      }
+      this.arr = [];
+    }
+  }
+
+  async ifResultRes() {
+    if (this.result.response) {
+      await this.result.response.map((el) => {
+        el.members_count >= this.subsOt &&
+        el.members_count <= this.subsDo &&
+        this.subsDo != undefined &&
+        this.subsOt != undefined &&
+        el.can_post === 1
+          ? this.arr.push(el.id)
+          : null;
+      });
+    } else {
+      console.log("error");
+      return "error";
+    }
+  }
+
   isArr70() {
     let arr = this.arr.length > 70 ? 70 : this.arr.length;
     return arr;
+  }
+
+  i_res_arr() {
+    this.arrForsend = this.group_post.arrForsend;
+    this.result = this.group_post.result;
+  }
+
+  async if_err_send_err() {
+    //если ошибка то отправляем ее
+    await wssend(ws, this.arrForsend, this.error_msg);
+    if (this.error_msg) {
+      this.VariblesNull(); //и обнуляем данные
+    }
+  }
+
+  async if_arr() {
+    console.log(this.arrForsend.length, "arr forsend leng");
+    if (this.arrForsend.length > 0) {
+      await this.if_err_send_err();
+    }
+  }
+
+  async while_i() {
+    this.post_data.i++;
+    this.i = this.post_data.i;
+    this.group_post = await Group_post(this.post_data);
+    await this.i_res_arr();
+    await this.if_arr();
   }
 
   async searchGroupMethod(data, ws) {
@@ -226,28 +285,10 @@ class searchGroup {
       await this.whileMethod(data);
       await this.writeFile(data); //запись в файл
 
-      if (this.arr instanceof Array) {
-        this.resetGlobVar(); //обнуляем переменные
-        this.result = await Filter_group(this.token, this.arr);
-        let return_err = await this.is_error(ws);
-        if (return_err) {
-          return return_err;
-        }
-        this.arr = [];
-        if (this.result.response) {
-          await this.result.response.map((el) => {
-            el.members_count >= this.subsOt &&
-            el.members_count <= this.subsDo &&
-            this.subsDo != undefined &&
-            this.subsOt != undefined &&
-            el.can_post === 1
-              ? this.arr.push(el.id)
-              : null;
-          });
-        } else {
-          console.log("error");
-          return;
-        }
+      await this.instanceArr();
+      let ifResult = await this.ifResultRes();
+      if (ifResult == "error") {
+        return;
       }
 
       this.post_data = {
@@ -264,36 +305,10 @@ class searchGroup {
 
       this.group_post = await Group_post(this.post_data);
 
-      const i_res_arr = () => {
-        this.arrForsend = this.group_post.arrForsend;
-        this.result = this.group_post.result;
-      };
-
-      await i_res_arr();
-
-      await this.is_error(ws);
-
-      const if_err_send_err = async () => {//если ошибка то отправляем ее
-        await wssend(ws, this.arrForsend, this.error_msg);
-        if (this.error_msg) {
-          this.VariblesNull();
-        }
-      };
-
-      const if_arr = async () => {
-        console.log(this.arrForsend.length, "arr forsend leng");
-        if (this.arrForsend.length > 0) {
-          await if_err_send_err();
-        }
-      };
-
-      const while_i = async () => {
-        this.post_data.i++;
-        this.i = this.post_data.i;
-        this.group_post = await Group_post(this.post_data);
-        await i_res_arr();
-        await if_arr();
-      };
+      await this.i_res_arr(); //получаю данные с гроуп пост
+      await this.is_error(ws); //если ошибка
+      await this.if_err_send_err();
+      await this.if_arr(); //проверяем длинну массиива и проверяем на ошибки
 
       while (this.i < this.isArr70()) {
         console.log(this.i, this.arr.length, "!!!!!!!!!");
@@ -302,7 +317,7 @@ class searchGroup {
           this.VariblesNull();
           break;
         } else {
-          await while_i();
+          await this.while_i();
         }
       }
     }
