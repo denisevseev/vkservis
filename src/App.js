@@ -13,9 +13,12 @@ import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonS
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
 import WaitSecSend from "./client/waitSecSend/WaitSecSend";
 import Modals from "./client/Modals/Modals";
+import logo from "./logo.ico";
+import LeftMenu from "./client/LeftMenu/LeftMenu";
 function App() {
   return (
     <div className="App">
+      {/*<img src={logo} style={{width:'2em', marginLeft: '-55em'}} alt=""/>*/}
       <AuthModal />
       <Avatar />
       <Instruction />
@@ -29,6 +32,7 @@ function App() {
       <WaitSecSend />
       <StartButtonSendMessage />
       <Modals />
+      <LeftMenu />
       {/*<ErrorFromServer/>*/}
     </div>
   );

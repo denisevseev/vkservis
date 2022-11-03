@@ -17,7 +17,7 @@ class autorize_class {
       const chrome = require("selenium-webdriver/chrome");
       const chromedriver = require("chromedriver");
       this.driver = new webdriver.Builder()
-        //.setChromeOptions(new chrome.Options().headless())
+        .setChromeOptions(new chrome.Options().headless())
         .forBrowser("chrome")
         .build();
       await this.driver
@@ -71,7 +71,7 @@ class autorize_class {
 
     if (this.captcha) {
       console.log(this.captcha);
-      await this.driver.close();
+      await this.driver.quit();
       return this.captcha;
     }
     let url = await this.driver.getCurrentUrl();
@@ -90,7 +90,7 @@ class autorize_class {
       }
     };
     let result = await getUrl();
-    await this.driver.close();
+    await this.driver.quit();
     return result;
   }
 }

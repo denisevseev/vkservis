@@ -1,13 +1,15 @@
 import React from "react";
-import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
-import StartButtonSendMessage from "../StartButtonSendMessage/StartButtonSendMessage";
 const Preloader = () => {
-  if (Search.startSend == true) {
-    return <div>Идет рассылка...</div>;
+  if (Search.progress) {
+    console.log(Search.progress);
+    return <div>поиск групп {Search.progress}% </div>;
+  } else if (Search.startSend) {
+    return <div>идет рассылка...</div>;
+  } else {
   }
-  // if(Search.Loader!=true){return <StartButtonSendMessage/>}
+
 };
 
 export default observer(Preloader);

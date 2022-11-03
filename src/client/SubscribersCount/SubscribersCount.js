@@ -15,7 +15,7 @@ const SubscribersCount = () => {
 
   return (
     <div className="inputs">
-      <div>Количество подписчиков в группах</div>
+      <div>Количество подписчиков в группах:</div>
       <div className="input-group">
         <span className="input-group-text">ОТ</span>
         <input

@@ -1,6 +1,6 @@
 {
-  "homepage": "https://denisevseev.github.io/vkservis",
-  "name": "vkservis",
+  "homepage": "./",
+  "name": "vk-ekler",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -53,6 +53,16 @@ class Server {
       });
     });
   }
+  httpMethod() {
+    app.get(`mailru-domainAgdxMPH55DhMKEvw.html`, (req, res) => {
+      res.sendFile(`mailru-domainAgdxMPH55DhMKEvw.html`, (err) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log("send");
+      });
+    });
+  }
 
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {
@@ -80,3 +90,4 @@ server.AutorizeOwnMethod();
 server.searchGroupMethod();
 server.StopSend();
 server.CheckIsSend();
+server.httpMethod();

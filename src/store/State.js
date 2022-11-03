@@ -27,6 +27,7 @@ class Search {
   captcha = null;
   captchaValue = null;
   tumbler = false;
+  progress = null;
 
   constructor() {
     configure({
@@ -35,6 +36,7 @@ class Search {
     });
     makeAutoObservable(this, {
       Group: observable,
+      progress: observable,
       captchaValue: observable,
       captcha: observable,
       errorFromServer: observable,
@@ -195,9 +197,16 @@ class Search {
   }
 
   WsOnMessage(ws, event) {
-    console.log(event, "event data 208");
     let dataEvent;
-    if (event) {
+    let data = JSON.parse(event.data);
+    if (data.progress) {
+      this.progress = data.progress;
+      if (this.progress >= 99) {
+        this.progress = null;
+      }
+      return;
+    }
+    if (event && !data.progress) {
       dataEvent = JSON.parse(event.data);
       if (dataEvent.userData) {
         this.errorFromServer = dataEvent.userData;

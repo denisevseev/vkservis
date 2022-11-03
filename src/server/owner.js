@@ -78,7 +78,8 @@ class searchGroup {
       const user = await userInfo.returnUserinfo();
       console.log(this.token);
       await wssend(ws, this.token, JSON.stringify(user));
-      return await ws.close();
+      await ws.close();
+      return;
     }
   }
 
@@ -157,7 +158,7 @@ class searchGroup {
     this.dataSend = null;
   }
 
-  async whileMethod(data) {
+  async whileMethod(data, ws) {
     while (this.offset < this.count) {
       if (this.offset === 0) {
         this.dataSend = data.data;
@@ -180,6 +181,7 @@ class searchGroup {
       await this.searchGr();
       await this.resultArr();
       this.offset++;
+      await wssend(ws, "", "", this.offset);
     }
   }
 
@@ -282,7 +284,7 @@ class searchGroup {
     if (this.token && data) {
       this.start = true;
 
-      await this.whileMethod(data);
+      await this.whileMethod(data, ws);
       await this.writeFile(data); //запись в файл
 
       await this.instanceArr();
