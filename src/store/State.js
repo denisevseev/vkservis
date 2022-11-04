@@ -201,8 +201,8 @@ class Search {
     let data = JSON.parse(event.data);
     if (data.progress) {
       this.progress = data.progress;
-      if (this.progress >= 99) {
-        this.progress = null;
+      if(this.progress>=99){
+        this.progress=null
       }
       return;
     }
