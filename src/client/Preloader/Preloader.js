@@ -9,7 +9,6 @@ const Preloader = () => {
     return <div>идет рассылка...</div>;
   } else {
   }
-
 };
 
 export default observer(Preloader);

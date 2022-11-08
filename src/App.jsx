@@ -9,30 +9,45 @@ import Avatar from "./client/UserProfile/Avatar";
 import AuthModal from "./client/autorize/authModal/AuthModal";
 import Preloader from "./client/Preloader/Preloader";
 import Instruction from "./client/Instruction/Instruction";
+import { Routes, Route } from "react-router-dom";
 import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonSendMessage";
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
 import WaitSecSend from "./client/waitSecSend/WaitSecSend";
 import Modals from "./client/Modals/Modals";
-import logo from "./logo.ico";
 import LeftMenu from "./client/LeftMenu/LeftMenu";
+import BuyAccounts from "./client/buyAccounts/BuyAccounts";
+import Filter from "./client/Filter/Filter";
 function App() {
   return (
     <div className="App">
-      {/*<img src={logo} style={{width:'2em', marginLeft: '-55em'}} alt=""/>*/}
-      <AuthModal />
-      <Avatar />
-      <Instruction />
-      <StopButtonSendMessage />
-      <InputWordsToSearch />
-      <InputMessageToSend />
-      <Preloader />
-      {/*<SubscribersCount />*/}
-      <SendMessageToGroup />
-      <SubscribersCount />
-      <WaitSecSend />
-      <StartButtonSendMessage />
-      <Modals />
-      <LeftMenu />
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={
+            <>
+              <AuthModal />
+              <Avatar />
+              <Instruction />
+              <StopButtonSendMessage />
+                <div style={{display: "flex", marginLeft: "25%"}} >
+                  <InputWordsToSearch />
+                  <Filter/>
+                </div>
+              {/*<InputMessageToSend />*/}
+              <Preloader />
+              {/*<SubscribersCount />*/}
+              <SendMessageToGroup />
+              <SubscribersCount />
+              <WaitSecSend />
+              <StartButtonSendMessage />
+              <Modals />
+              <LeftMenu />
+            </>
+          }
+        />
+        <Route exact path="/buyAccounts" element={<BuyAccounts />} />
+      </Routes>
       {/*<ErrorFromServer/>*/}
     </div>
   );

@@ -188,6 +188,7 @@ class searchGroup {
   writeFile(data) {
     let arr = [];
     this.arr.map((el) => {
+      console.log(el.name);
       let arrEl = el.name;
       let dataArr = data.data;
       if (

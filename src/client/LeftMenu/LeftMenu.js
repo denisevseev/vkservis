@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Module.LeftMenu.scss";
 // import State from "../store/State";
 import { observer } from "mobx-react";
+import { NavLink } from "react-router-dom";
 
 const LeftMenu = () => {
   const [isActive, setActive] = useState(false);
@@ -14,7 +15,6 @@ const LeftMenu = () => {
   };
   const inputChanged = (e) => {
     setActive(true);
-    // State.input(e.target.value)
     setTimeout(() => setActive(false), 2000);
   };
   return (
@@ -37,6 +37,11 @@ const LeftMenu = () => {
             рассылка
           </a>
         </li>
+        <NavLink to="/BuyAccounts" style={{ textDecoration: "none" }}>
+          <li>
+            <a className="dropdown-item">Аккаунты</a>
+          </li>
+        </NavLink>
       </div>
     </div>
   );

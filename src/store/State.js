@@ -71,7 +71,7 @@ class Search {
 
   Logout() {
     localStorage.removeItem("user");
-    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
+    let ws = new WebSocket(`ws://45.87.0.164:3001/stopsend`);
     console.log(ws);
     ws.onopen = async () => {
       console.log(ws, "58");
@@ -101,7 +101,7 @@ class Search {
   }
 
   StopSend() {
-    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
+    let ws = new WebSocket(`ws://45.87.0.164:3001/stopsend`);
     this.StartFalse();
     ws.onopen = () => {
       ws.send(this.token);
@@ -143,7 +143,7 @@ class Search {
   }
 
   AutorizeOwnMethod() {
-    let ws = new WebSocket(`ws://localhost:3001/autorize`);
+    let ws = new WebSocket(`ws://45.87.0.164:3001/autorize`);
     ws.onopen = () => {
       let data = JSON.stringify({
         login: this.login,
@@ -182,7 +182,7 @@ class Search {
   }
 
   CheckIsSend() {
-    let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
+    let ws = new WebSocket(`ws://45.87.0.164:3001/CheckIsSend`);
 
     ws.onopen = (e) => {
       console.log(this.token);
@@ -201,8 +201,8 @@ class Search {
     let data = JSON.parse(event.data);
     if (data.progress) {
       this.progress = data.progress;
-      if(this.progress>=99){
-        this.progress=null
+      if (this.progress >= 99) {
+        this.progress = null;
       }
       return;
     }
@@ -281,7 +281,7 @@ class Search {
   ResultGroup() {
     this.setLocalStorageArea();
     const connect = () => {
-      const ws = new WebSocket(`ws://localhost:3001/startSend`);
+      const ws = new WebSocket(`ws://45.87.0.164:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
         console.log("client open", this.Loader);
