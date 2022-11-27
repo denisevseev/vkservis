@@ -28,6 +28,8 @@ class Search {
   captchaValue = null;
   tumbler = false;
   progress = null;
+  disabled = true;
+  reqMustTitle = false;
 
   constructor() {
     configure({
@@ -36,6 +38,7 @@ class Search {
     });
     makeAutoObservable(this, {
       Group: observable,
+      disabled: observable,
       progress: observable,
       captchaValue: observable,
       captcha: observable,
@@ -59,7 +62,20 @@ class Search {
       Search_CheckIsSend: observable,
     });
   }
-
+  handleCheck(data, target) {
+    if (data == "exclude" && target) {
+      this.disabled = false;
+      //выключаем текстовые поля в зависимости от чекбокса
+    } else if (data == "exclude") {
+      this.disabled = true;
+    }
+    if (data == "reqMustTitle" && target) {
+      this.reqMustTitle = true;
+    } else if (data == "reqMustTitle") {
+      this.reqMustTitle = false;
+      console.log(this.reqMustTitle);
+    }
+  }
   changeInput(data) {
     //ключевое слово для поиска групп
     this.inputValue = data;

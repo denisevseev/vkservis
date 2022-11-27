@@ -17,6 +17,7 @@ import Modals from "./client/Modals/Modals";
 import LeftMenu from "./client/LeftMenu/LeftMenu";
 import BuyAccounts from "./client/buyAccounts/BuyAccounts";
 import Filter from "./client/Filter/Filter";
+import Results from "./client/results/Results";
 function App() {
   return (
     <div className="App">
@@ -30,16 +31,20 @@ function App() {
               <Avatar />
               <Instruction />
               <StopButtonSendMessage />
-                <div style={{display: "flex", marginLeft: "25%"}} >
+              <div className="BorderSearchGroup">
+                <div style={{ display: "flex" }}>
                   <InputWordsToSearch />
-                  <Filter/>
+                  <Filter />
                 </div>
+                <Results />
+              </div>
+
               {/*<InputMessageToSend />*/}
               <Preloader />
               {/*<SubscribersCount />*/}
-              <SendMessageToGroup />
-              <SubscribersCount />
-              <WaitSecSend />
+              {/*<SendMessageToGroup />*/}
+              {/*<SubscribersCount />*/}
+              {/*<WaitSecSend />*/}
               <StartButtonSendMessage />
               <Modals />
               <LeftMenu />
