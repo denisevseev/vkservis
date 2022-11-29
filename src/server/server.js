@@ -64,18 +64,29 @@ class Server {
     });
   }
 
+  startSearchMethod() {
+    app.ws("/startSearch", (ws) => {
+      ws.on("message", async (mes) => {
+        this.sessionExist(ws,mes)
+      });
+    });
+  }
+
+  sessionExist =(ws, mes)=>{ //проверка существования активного юзера по токену
+    let data = JSON.parse(mes);
+    let index = this.arr.findIndex((i) => i.token === data.token);
+    if (index == -1) {
+      this.arr.push(new searchGroup());
+      this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
+    } else {
+      this.arr[index].searchGroupMethod(data, ws);
+    }
+  }
+
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
-        let data = JSON.parse(mes);
-        let index = this.arr.findIndex((i) => i.token === data.token);
-        if (index == -1) {
-          this.arr.push(new searchGroup());
-          this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
-        } else {
-          this.arr[index].searchGroupMethod(data, ws);
-        }
-
+        this.sessionExist(ws, mes)
         console.log(this.arr);
       });
     });
@@ -91,3 +102,4 @@ server.searchGroupMethod();
 server.StopSend();
 server.CheckIsSend();
 server.httpMethod();
+server.startSearchMethod();

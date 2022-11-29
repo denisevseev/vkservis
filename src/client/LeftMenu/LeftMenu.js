@@ -28,7 +28,7 @@ const LeftMenu = () => {
 
       <div className="hidden-menu">
         <li>
-          <a className="dropdown-item" href="#">
+          <a style={{ marginTop: "1em" }} className="dropdown-item" href="#">
             группы
           </a>
         </li>

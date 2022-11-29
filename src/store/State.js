@@ -1,5 +1,6 @@
 ﻿import { makeAutoObservable, observable, toJS } from "mobx";
 import { configure } from "mobx";
+import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
   Group = null;
@@ -18,6 +19,7 @@ class Search {
   start = false;
   avatar = null;
   startSend = null;
+  inputValue2 = ""; //исключить сообщества со словами
   Search_CheckIsSend = false;
   Ot = "";
   Do = "";
@@ -28,8 +30,22 @@ class Search {
   captchaValue = null;
   tumbler = false;
   progress = null;
+  //чекбоксы
   disabled = true;
-  reqMustTitle = false;
+  reqMustTitle = false; //запрос обязан быть в названии галочка
+  openWalls = false; // открытые стены галочка
+  openMessages = false; //открытые сообщения галочка
+  openComments = false; //открытые комментарии галочка
+  countMembers = false; //колич участников галочка
+  fromToMembersBoolean = true; //от до галка колич участников вклчает возможность ввода текстовых полей
+  //страны и города
+  Country = Country[0].label;
+  City = City[0].label;
+  allGroups = Groups[0].label;
+  allGroups2 = Groups2[0].label;
+
+  countMemFrom = null;
+  countMemTo = null;
 
   constructor() {
     configure({
@@ -38,7 +54,20 @@ class Search {
     });
     makeAutoObservable(this, {
       Group: observable,
+      countMemFrom: observable,
+      countMemTo: observable,
+      City: observable,
+      inputValue2: observable,
+      fromToMembersBoolean: observable,
+      allGroups2: observable,
+      allGroups: observable,
+      Country: observable,
+      countMembers: observable,
+      openWalls: observable,
+      openComments: observable,
+      openMessages: observable,
       disabled: observable,
+      reqMustTitle: observable,
       progress: observable,
       captchaValue: observable,
       captcha: observable,
@@ -62,10 +91,34 @@ class Search {
       Search_CheckIsSend: observable,
     });
   }
+
+  // selectPlaceholder(val, data) {
+  //   let result = data.map((key)=>{
+  //     if(key.value==val){
+  //       return key.label
+  //     }
+  //   })
+  //
+  // }
+
   handleCheck(data, target) {
+    if (data == "countMembers" && target) {
+      this.fromToMembersBoolean = false;
+    } else if (data == "countMembers") {
+      this.fromToMembersBoolean = true;
+    }
+    if (data == "openComments" && target) {
+      this.openComments = true;
+    } else if (data == "openComments") {
+      this.openComments = false;
+    }
+    if (data == "openMessages" && target) {
+      this.openMessages = true;
+    } else if (data == "openMessages") {
+      this.openMessages = false;
+    }
     if (data == "exclude" && target) {
       this.disabled = false;
-      //выключаем текстовые поля в зависимости от чекбокса
     } else if (data == "exclude") {
       this.disabled = true;
     }
@@ -75,10 +128,22 @@ class Search {
       this.reqMustTitle = false;
       console.log(this.reqMustTitle);
     }
+    if (data == "openWalls" && target) {
+      this.openWalls = true;
+    } else if (data == "openWalls") {
+      this.openWalls = false;
+    }
   }
-  changeInput(data) {
+  changeInput(val, target) {
     //ключевое слово для поиска групп
-    this.inputValue = data;
+    let result = target.split(`\n`);
+    if (val == "val1") {
+      this.inputValue = result;
+      console.log(this.inputValue);
+    }
+    if (val == "val2") {
+      this.inputValue2 = result; //исключить сообщества со словами
+    }
   }
   Login() {
     this.avatar = JSON.parse(localStorage.getItem("user"));
@@ -87,7 +152,7 @@ class Search {
 
   Logout() {
     localStorage.removeItem("user");
-    let ws = new WebSocket(`ws://45.87.0.164:3001/stopsend`);
+    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     console.log(ws);
     ws.onopen = async () => {
       console.log(ws, "58");
@@ -117,7 +182,7 @@ class Search {
   }
 
   StopSend() {
-    let ws = new WebSocket(`ws://45.87.0.164:3001/stopsend`);
+    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     this.StartFalse();
     ws.onopen = () => {
       ws.send(this.token);
@@ -159,7 +224,7 @@ class Search {
   }
 
   AutorizeOwnMethod() {
-    let ws = new WebSocket(`ws://45.87.0.164:3001/autorize`);
+    let ws = new WebSocket(`ws://localhost:3001/autorize`);
     ws.onopen = () => {
       let data = JSON.stringify({
         login: this.login,
@@ -198,7 +263,7 @@ class Search {
   }
 
   CheckIsSend() {
-    let ws = new WebSocket(`ws://45.87.0.164:3001/CheckIsSend`);
+    let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
 
     ws.onopen = (e) => {
       console.log(this.token);
@@ -294,10 +359,29 @@ class Search {
     }
   }
 
+  startSearch = () => {
+    const ws = new WebSocket(`ws://localhost:3001/startSearch`);
+    ws.onopen = () => {
+      let data = JSON.stringify({
+        inputValue2: this.inputValue2,
+        reqMustTitle: this.reqMustTitle,
+        openWalls: this.openWalls,
+        openComments: this.openComments,
+        countMemFrom: this.countMemFrom,
+        countMemTo: this.countMemTo,
+        allGroups: this.allGroups,
+        allGroups2: this.allGroups2,
+        city: this.City,
+        country: this.Country,
+      });
+      ws.send(data);
+    };
+  };
+
   ResultGroup() {
     this.setLocalStorageArea();
     const connect = () => {
-      const ws = new WebSocket(`ws://45.87.0.164:3001/startSend`);
+      const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
         console.log("client open", this.Loader);
@@ -306,9 +390,9 @@ class Search {
             data: this.inputValue,
             token: this.token,
             messForSend: this.sendMessage,
-            Ot: this.Ot,
+            Ot: this.Ot, //задержка в секундах для рассылки
             Do: this.Do,
-            subsOt: this.subsOt,
+            subsOt: this.subsOt, //кол-во подписчиков
             subsDo: this.subsDo,
           });
           ws.send(data);

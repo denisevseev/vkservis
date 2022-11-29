@@ -6,12 +6,6 @@ import Select from "react-select";
 import { City, Country } from "./../options/Options";
 
 const InputWordsToSearch = () => {
-  const [value1, setValue] = useState(null);
-  const value = useRef();
-  const val = () => {
-    Search.changeInput(value.current.value);
-  };
-
   return (
     <div style={{ width: "40em" }}>
       <label htmlFor="exampleFormControlTextarea1">поисковые запросы</label>
@@ -19,8 +13,7 @@ const InputWordsToSearch = () => {
         <div className="form-group">
           <div className="border1">
             <textarea
-              ref={value}
-              onChange={() => val()}
+              onChange={(e) => Search.changeInput("val1", e.target.value)}
               value={Search.inputValue}
               className="form-control"
               id="exampleFormControlTextarea1"
@@ -62,6 +55,8 @@ const InputWordsToSearch = () => {
             </div>
             <textarea
               disabled={Search.disabled}
+              onChange={(e) => Search.changeInput("val2", e.target.value)}
+              value={Search.inputValue2}
               className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
@@ -82,10 +77,20 @@ const InputWordsToSearch = () => {
               }}
             >
               <div style={{ width: "50%" }}>
-                <Select placeholder="Любая страна" options={Country} />
+                <Select
+                  onChange={(e) => {
+                    Search.Country = e.value;
+                  }}
+                  placeholder={Search.Country}
+                  options={Country}
+                />
               </div>
               <div style={{ width: "50%" }}>
-                <Select placeholder="Любой город" options={City} />
+                <Select
+                  onChange={(e) => (Search.City = e.value)}
+                  placeholder={Search.City}
+                  options={City}
+                />
               </div>
             </div>
           </div>

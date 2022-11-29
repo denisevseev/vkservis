@@ -76,6 +76,12 @@
 .hidden-menu-ticker:checked ~ .hidden-menu {
   left: 0;
 }
+.hidden-menu {
+  font-size: 2em;
+}
+.dropdown-item {
+  padding: 10px;
+}
 
 .hidden-menu-ticker:checked ~ .btn-menu span.first {
   -webkit-transform: rotate(45deg);
