@@ -20,11 +20,10 @@ class autorize_class {
           //.setChromeOptions(new chrome.Options().headless())
         .forBrowser("chrome")
         .build();
-      await this.driver.get('https://google.com')
-      // await this.driver
-      //   .get(
-      //     "https://oauth.vk.com/authorize?client_id=51399251&display=page&scope=wall,photos,groups,friends,video,market,email,offline&response_type=token&v=5.131"
-      //   )
+      await this.driver
+        .get(
+          "https://oauth.vk.com/authorize?client_id=51399251&display=page&scope=wall,photos,groups,friends,video,market,email,offline&response_type=token&v=5.131"
+        )
         .then((success, error) => {
           if (error) {
             console.log(error);

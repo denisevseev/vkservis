@@ -5,7 +5,7 @@ import { Country, City, Groups, Groups2 } from "../client/options/Options";
 class Search {
   Group = null;
   Loader = false;
-  inputValue = "";
+  inputValue = [];
   sendMessage = "";
   SendDone = [];
   i = 0;
@@ -41,8 +41,8 @@ class Search {
   //страны и города
   Country = Country[0].label;
   City = City[0].label;
-  allGroups = Groups[0].label;
-  allGroups2 = Groups2[0].label;
+  allGroups = Groups[0];
+  allGroups2 = Groups2[0];
 
   countMemFrom = null;
   countMemTo = null;
@@ -134,11 +134,11 @@ class Search {
       this.openWalls = false;
     }
   }
-  changeInput(val, target) {
+  changeInput = (val, target)=> {
     //ключевое слово для поиска групп
-    let result = target.split(`\n`);
+    let result = target
     if (val == "val1") {
-      this.inputValue = result;
+      this.inputValue = result
       console.log(this.inputValue);
     }
     if (val == "val2") {
@@ -359,21 +359,30 @@ class Search {
     }
   }
 
+  groupLookUpValues = ()=>{
+    let data = JSON.stringify({
+      inputValue: this.inputValue,
+      inputValue2: this.inputValue2,
+      reqMustTitle: this.reqMustTitle,
+      openWalls: this.openWalls,
+      openComments: this.openComments,
+      countMemFrom: this.countMemFrom,
+      countMemTo: this.countMemTo,
+      allGroups: this.allGroups.value,
+      allGroups2: this.allGroups2.value,
+      city: this.City,
+      country: this.Country,
+      token: this.token
+    });
+    return data
+  }
+
+
   startSearch = () => {
     const ws = new WebSocket(`ws://localhost:3001/startSearch`);
     ws.onopen = () => {
-      let data = JSON.stringify({
-        inputValue2: this.inputValue2,
-        reqMustTitle: this.reqMustTitle,
-        openWalls: this.openWalls,
-        openComments: this.openComments,
-        countMemFrom: this.countMemFrom,
-        countMemTo: this.countMemTo,
-        allGroups: this.allGroups,
-        allGroups2: this.allGroups2,
-        city: this.City,
-        country: this.Country,
-      });
+     let data  =  this.groupLookUpValues()
+      console.log(data, '384')
       ws.send(data);
     };
   };

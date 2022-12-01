@@ -24,4 +24,3 @@ const groups_search = async (data, token, arr, offset) => {
 module.exports = {
   groups_search,
 };
-// module.exports.sdf=sdf

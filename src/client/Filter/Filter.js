@@ -21,11 +21,11 @@ const Filter = () => {
             Search.allGroups = e.value;
             time();
           }}
-          placeholder={Search.allGroups}
+          placeholder={Search.allGroups.label}
           options={Groups}
         />
         <Select
-          placeholder={Search.allGroups2}
+          placeholder={Search.allGroups2.label}
           onChange={(e) => (Search.allGroups2 = e.value)}
           options={Groups2}
         />
