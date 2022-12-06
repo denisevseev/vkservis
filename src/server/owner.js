@@ -111,14 +111,8 @@ class searchGroup {
       }
     }, 2000);
   }
-
   async searchGr() {
-    let result = await groups_search(
-      this.dataSend, //строка поиска групп
-      this.token,
-      this.arr,
-      this.offset
-    ); //поиск групп
+    let result = await groups_search(this.searchParams()); //поиск групп
     this.arr.concat(result.result);
     if (!this.tumbler) {
       this.tumbler = true; //чтобы дважды не присваивать значение count
@@ -127,6 +121,21 @@ class searchGroup {
       }
     }
   }
+  searchParams = () => {
+    let arr = {
+      inputValue: this.inputValue,
+      inputValue2: this.inputValue2,
+      reqMustTitle: this.reqMustTitle,
+      openWalls: this.openWalls,
+      openComments: this.openComments,
+      countMemTo: this.countMemTo,
+      countMemFrom: this.countMemFrom,
+      city: this.city,
+      country: this.country,
+      token: this.token,
+    };
+    return arr;
+  };
 
   async is_error(ws) {
     try {
@@ -269,33 +278,39 @@ class searchGroup {
   }
 
   async searchGroupMethod(data, ws) {
-
     if (data) {
-      this.inputValue = data.inputValue.split('\n')
-      this.inputValue2 = data.inputValue2.split('\n')
-      this.reqMustTitle = data.reqMustTitle
-      this.openWalls = data.openWalls
-      this.openComments = data.openComments
-      this.countMemFrom = data.countMemFrom
-      this.countMemTo = data.countMemTo
-      this.city = data.city
-      this.country = data.country
-      this.mailing = 0
-      this.token = data.token
-      // this.message = data.messForSend;
-      // this.login = data.login;
-      // this.pass = data.pass;
-      // this.token = data.token;
-      // this.mailing = 0;
-      // this.Do = data.Do;
-      // this.Ot = data.Ot;
-      // this.subsOt = data.subsOt;
-      // this.subsDo = data.subsDo;
+      (this.inputValue = data.inputValue.split("\n")), // массив для поиска
+        (this.inputValue2 = data.inputValue2.split("\n")), //массив исключений
+        (this.reqMustTitle = data.reqMustTitle), //галка запрос обязан быть
+        (this.openWalls = data.openWalls), //галочка открытые стены
+        (this.openComments = data.openComments), // галочка открытые комментарии
+        (this.countMemFrom = data.countMemFrom), // количество участников от
+        (this.countMemTo = data.countMemTo), // кол-во участников до
+        (this.city = data.city), //город
+        (this.country = data.country), //страна
+        (this.mailing = 0),
+        (this.token = data.token);
     }
+    await this.searchGr();
+    // if (data) {
+    //
+    //   let fromClient = await  this.dataFromClient(data)
 
+    // this.message = data.messForSend;
+    // this.login = data.login;
+    // this.pass = data.pass;
+    // this.token = data.token;
+    // this.mailing = 0;
+    // this.Do = data.Do;
+    // this.Ot = data.Ot;
+    // this.subsOt = data.subsOt;
+    // this.subsDo = data.subsDo;
+    // }
 
-    if (this.token && data) {
+    if (this.dataFromClient(data).token && data) {
       this.start = true;
+
+      await this.searchGr(this.dataFromClient(data));
 
       await this.whileMethod(data, ws);
       await this.writeFile(data); //запись в файл

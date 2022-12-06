@@ -11,6 +11,7 @@ class Search {
   i = 0;
   token = null;
   clientSend = false;
+  validation = false;
   login = null;
   pass = null;
   last_name = null;
@@ -54,6 +55,7 @@ class Search {
     });
     makeAutoObservable(this, {
       Group: observable,
+      validation: observable,
       countMemFrom: observable,
       countMemTo: observable,
       City: observable,
@@ -134,17 +136,18 @@ class Search {
       this.openWalls = false;
     }
   }
-  changeInput = (val, target)=> {
+  changeInput = (val, target) => {
+    this.validation = false
     //ключевое слово для поиска групп
-    let result = target
+    let result = target;
     if (val == "val1") {
-      this.inputValue = result
+      this.inputValue = result;
       console.log(this.inputValue);
     }
     if (val == "val2") {
       this.inputValue2 = result; //исключить сообщества со словами
     }
-  }
+  };
   Login() {
     this.avatar = JSON.parse(localStorage.getItem("user"));
     return this.avatar;
@@ -359,10 +362,10 @@ class Search {
     }
   }
 
-  groupLookUpValues = ()=>{
+  groupLookUpValues = () => {
     let data = JSON.stringify({
-      inputValue: this.inputValue,
-      inputValue2: this.inputValue2,
+      inputValue: this.inputValue[0] != "" ? this.inputValue : false,
+      inputValue2: this.inputValue2[0] != "" ? this.inputValue2 : false,
       reqMustTitle: this.reqMustTitle,
       openWalls: this.openWalls,
       openComments: this.openComments,
@@ -370,21 +373,32 @@ class Search {
       countMemTo: this.countMemTo,
       allGroups: this.allGroups.value,
       allGroups2: this.allGroups2.value,
-      city: this.City,
-      country: this.Country,
-      token: this.token
+      city: this.City.indexOf("Люб") > -1 ? false : this.City,
+      country: this.Country.indexOf("Люб") > -1 ? false : this.Country,
+      token: this.token,
     });
-    return data
-  }
 
+    return data;
+  };
+
+  formValidation = () => {
+    debugger
+    if (!this.inputValue[0]) {
+      this.validation = true;
+    }
+  };
 
   startSearch = () => {
-    const ws = new WebSocket(`ws://localhost:3001/startSearch`);
-    ws.onopen = () => {
-     let data  =  this.groupLookUpValues()
-      console.log(data, '384')
-      ws.send(data);
-    };
+      const ws = new WebSocket(`ws://localhost:3001/startSearch`);
+      ws.onopen = () => {
+        let data = this.groupLookUpValues();
+        console.log(data, "384");
+        this.formValidation()
+        if(!this.validation){
+          this.validation = false;
+          ws.send(data);
+        }
+      };
   };
 
   ResultGroup() {

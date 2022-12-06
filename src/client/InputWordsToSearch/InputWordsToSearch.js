@@ -13,9 +13,10 @@ const InputWordsToSearch = () => {
         <div className="form-group">
           <div className="border1">
             <textarea
+              style={{ borderColor: !Search.validation ? "lightgray" : "red" }}
               onChange={(e) => Search.changeInput("val1", e.target.value)}
               value={Search.inputValue}
-              className="form-control"
+              className="form-control area-border"
               id="exampleFormControlTextarea1"
               rows="3"
             ></textarea>

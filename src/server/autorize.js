@@ -17,7 +17,7 @@ class autorize_class {
       const chrome = require("selenium-webdriver/chrome");
       const chromedriver = require("chromedriver");
       this.driver = new webdriver.Builder()
-          //.setChromeOptions(new chrome.Options().headless())
+        //.setChromeOptions(new chrome.Options().headless())
         .forBrowser("chrome")
         .build();
       await this.driver

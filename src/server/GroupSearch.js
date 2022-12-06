@@ -1,5 +1,5 @@
 const { search, groupSetRequest } = require("./requests");
-const groups_search = async (data, token, arr, offset) => {
+const groups_search = async (arr) => {
   this.arr = arr;
   let result = await search(data, token, offset);
   if (!result.error) {

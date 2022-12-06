@@ -57,12 +57,13 @@ class Server {
   startSearchMethod() {
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
-        this.sessionExist(ws,mes)
+        this.sessionExist(ws, mes);
       });
     });
   }
 
-  sessionExist =(ws, mes)=>{ //проверка существования активного юзера по токену
+  sessionExist = (ws, mes) => {
+    //проверка существования активного юзера по токену
     let data = JSON.parse(mes);
     let index = this.arr.findIndex((i) => i.token === data.token);
     if (index == -1) {
@@ -71,12 +72,12 @@ class Server {
     } else {
       this.arr[index].searchGroupMethod(data, ws);
     }
-  }
+  };
 
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
-        this.sessionExist(ws, mes)
+        this.sessionExist(ws, mes);
         console.log(this.arr);
       });
     });
