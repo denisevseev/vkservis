@@ -382,9 +382,8 @@ class Search {
   };
 
   formValidation = () => {
-    debugger
     if (!this.inputValue[0]) {
-      this.validation = true;
+      this.validation = true; //валидация первого поля поиска групп
     }
   };
 

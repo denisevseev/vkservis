@@ -1,7 +1,7 @@
 const { search, groupSetRequest } = require("./requests");
-const groups_search = async (arr) => {
-  this.arr = arr;
-  let result = await search(data, token, offset);
+const groups_search = async (data) => {
+  this.arr = []
+  let result = await search(data);
   if (!result.error) {
     await result.response.items.map((res) => {
       let idName = {

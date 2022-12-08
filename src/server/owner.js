@@ -39,7 +39,6 @@ class searchGroup {
     this.post_data = null;
     this.error_msg = null;
     this.autorizeconst = null;
-    this.tumbler = false;
     this.offset = 0;
     this.count = 2;
     this.arrName = [];
@@ -61,11 +60,8 @@ class searchGroup {
   async AutorizeOwnMethod(data, ws) {
     console.log(data, "71");
     this.startAuto = true;
-    // if (!this.tumbler) {
-    //     this.login = data.login
     this.autorizeconst = new autorize_class(data.login, data.pass);
-    // this.tumbler = true
-    // }
+
 
     const gettoken = await this.autorizeconst.autorizeMethod(data);
     if (gettoken.indexOf("captcha") > -1) {
@@ -111,16 +107,12 @@ class searchGroup {
       }
     }, 2000);
   }
+
   async searchGr() {
     let result = await groups_search(this.searchParams()); //поиск групп
-    this.arr.concat(result.result);
-    if (!this.tumbler) {
-      this.tumbler = true; //чтобы дважды не присваивать значение count
-      if (result.count > 990) {
-        this.count = 100;
-      }
-    }
+    this.arr = this.arr.concat(result.arr);
   }
+
   searchParams = () => {
     let arr = {
       inputValue: this.inputValue,
@@ -160,7 +152,6 @@ class searchGroup {
   }
 
   resetGlobVar() {
-    this.tumbler = false;
     this.offset = 0;
     this.count = 2;
     this.arrName = [];
@@ -188,7 +179,7 @@ class searchGroup {
         }
       }
       await this.searchGr();
-      await this.resultArr();
+      await this.resultArr(); //уникализируем массив имен
       this.offset++;
       await wssend(ws, "", "", this.offset);
     }
@@ -215,7 +206,7 @@ class searchGroup {
     this.arr = set;
   }
 
-  async instanceArr() {
+  async instanceArr() { //фильтрация групп
     if (this.arr instanceof Array) {
       this.resetGlobVar(); //обнуляем переменные
       this.result = await Filter_group(this.token, this.arr);
@@ -227,13 +218,13 @@ class searchGroup {
     }
   }
 
-  async ifResultRes() {
+  async ifResultRes() { //фильтрация групп
     if (this.result.response) {
       await this.result.response.map((el) => {
-        el.members_count >= this.subsOt &&
-        el.members_count <= this.subsDo &&
-        this.subsDo != undefined &&
-        this.subsOt != undefined &&
+        el.members_count >= this.countMemFrom &&
+        el.members_count <= this.countMemTo &&
+        this.countMemFrom != undefined &&
+        this.countMemTo != undefined &&
         el.can_post === 1
           ? this.arr.push(el.id)
           : null;
@@ -291,7 +282,6 @@ class searchGroup {
         (this.mailing = 0),
         (this.token = data.token);
     }
-    await this.searchGr();
     // if (data) {
     //
     //   let fromClient = await  this.dataFromClient(data)
@@ -307,14 +297,16 @@ class searchGroup {
     // this.subsDo = data.subsDo;
     // }
 
-    if (this.dataFromClient(data).token && data) {
+
+    if (this.token&&data) {
       this.start = true;
 
-      await this.searchGr(this.dataFromClient(data));
+      await this.searchGr();
 
       await this.whileMethod(data, ws);
       await this.writeFile(data); //запись в файл
 
+// фильтрация групп
       await this.instanceArr();
       let ifResult = await this.ifResultRes();
       if (ifResult == "error") {

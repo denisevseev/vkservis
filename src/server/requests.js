@@ -9,12 +9,12 @@ const posts_request = async (data) => {
   return response.data;
 };
 
-const search = async (mes, token, offset) => {
-  console.log(offset);
+const search = async (data) => {
+
   let search = await axios.get(
-    `${url}groups.search?&city_id=1&count=1000&q=${encodeURI(
-      mes
-    )}&access_token=${token}&v=5.131`
+    `${url}groups.search?&${data.city?`city=${data.city}`:''}&count=1000&q=${encodeURI(
+      data.inputValue[0]
+    )}&access_token=${data.token}&v=5.131`
   );
   return search.data;
 };
