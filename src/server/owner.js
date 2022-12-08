@@ -225,7 +225,7 @@ class searchGroup {
         el.members_count <= this.countMemTo &&
         this.countMemFrom != undefined &&
         this.countMemTo != undefined &&
-        el.can_post === 1
+        el.can_post == this.openWalls
           ? this.arr.push(el.id)
           : null;
       });
@@ -273,7 +273,7 @@ class searchGroup {
       (this.inputValue = data.inputValue.split("\n")), // массив для поиска
         (this.inputValue2 = data.inputValue2.split("\n")), //массив исключений
         (this.reqMustTitle = data.reqMustTitle), //галка запрос обязан быть
-        (this.openWalls = data.openWalls), //галочка открытые стены
+        (this.openWalls = data.openWalls===false?0:1), //галочка открытые стены
         (this.openComments = data.openComments), // галочка открытые комментарии
         (this.countMemFrom = data.countMemFrom), // количество участников от
         (this.countMemTo = data.countMemTo), // кол-во участников до
