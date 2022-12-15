@@ -1,19 +1,17 @@
-const { search, groupSetRequest } = require("./requests");
+const { search, groupSetRequest, canComments } = require("./requests");
 const groups_search = async (data) => {
-  this.arr = []
+  this.arr = [];
   let result = await search(data);
   if (!result.error) {
     await result.response.items.map((res) => {
-      let idName = {
-        id: res.id,
-        name: res.name,
-      };
+      let idName = res;
+      // console.log('isclosed: ', res.is_closed, '  type:', res.type)
       this.arr.push(idName);
     });
 
     let resultData = {
       arr: this.arr,
-      count: result.response.count,
+      // count: result.response.count,
     };
     return resultData;
   } else {

@@ -137,7 +137,7 @@ class Search {
     }
   }
   changeInput = (val, target) => {
-    this.validation = false
+    this.validation = false;
     //ключевое слово для поиска групп
     let result = target;
     if (val == "val1") {
@@ -388,16 +388,16 @@ class Search {
   };
 
   startSearch = () => {
-      const ws = new WebSocket(`ws://localhost:3001/startSearch`);
-      ws.onopen = () => {
-        let data = this.groupLookUpValues();
-        console.log(data, "384");
-        this.formValidation()
-        if(!this.validation){
-          this.validation = false;
-          ws.send(data);
-        }
-      };
+    const ws = new WebSocket(`ws://localhost:3001/startSearch`);
+    ws.onopen = () => {
+      let data = this.groupLookUpValues();
+      console.log(data, "384");
+      this.formValidation();
+      if (!this.validation) {
+        this.validation = false;
+        ws.send(data);
+      }
+    };
   };
 
   ResultGroup() {
