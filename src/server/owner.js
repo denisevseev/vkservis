@@ -10,6 +10,7 @@ const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, canComments } = require("./requests");
 const { groups_search } = require("./GroupSearch");
+const filter_type_is_closed = require("./GroupFilter")
 app.use(cors());
 app.use(
   express.urlencoded({
@@ -239,36 +240,7 @@ class searchGroup {
   }
 
 
-  arrMap = async (data) => {
-    let i = 0
-    while (i<this.inputValue.length){
-      let el = this.inputValue
-      if (data.name.toLowerCase().indexOf(el[i].toLowerCase()) > -1) {
-        this.unique_arr.push(data);
-        console.log(data.name, el[i])
-        if(this.unique_arr.length>10){
-          let f
-        }
-      }
-      i++
-      if(i>=this.inputValue.length){
-        this.reqMustTitleCount++
-        await this.reqMastTitleMethod()
-      }
-    }
-  };
 
-  reqMastTitleMethod = async () => {
-    if (this.reqMustTitle) {
-      // while (i<this.arr.length){
-      //   await this.arrMap(this.arr[i])
-      //   i++
-      // }
-    if(this.reqMustTitleCount<this.arr.length){
-      await this.arrMap(this.arr[this.reqMustTitleCount])
-    }
-    }
-  };
 
   async searchGroupMethod(data, ws) {
     if (data) {
@@ -292,11 +264,10 @@ class searchGroup {
 
       await this.whileMethod(data, ws);
       console.log(this.arr.length)
+      let result = await filter_type_is_closed(data, this.arr) //вызвы
 
-      await this.reqMastTitleMethod()
-      console.log(this.unique_arr.length)
 
-      //тут запускаем цикл фильтрации каждой группы
+      //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
       while (this.filterCount < this.arr.length) {
         let result = await canComments(
           this.arr[this.filterCount].id,
