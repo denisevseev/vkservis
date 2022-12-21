@@ -26,10 +26,14 @@
 // }
 // d()
 
-
-for( let i=0; i<5; i++){
-    console.log(i)
-    setTimeout(()=>{
-        console.log(i)
-    })
+// for( let i=0; i<500; i++){
+//     console.log(i)
+// }
+//
+// for( let i=500; i<1000; i++){
+//     console.log(i)
+// }
+let arr = "";
+if (arr) {
+  console.log(arr);
 }

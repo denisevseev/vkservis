@@ -21,20 +21,20 @@ const InputWordsToSearch = () => {
               rows="3"
             ></textarea>
 
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="flexCheckChecked"
-                defaultChecked={Search.reqMustTitle}
-                onChange={(e) =>
-                  Search.handleCheck("reqMustTitle", e.target.checked)
-                }
-              />
-              <label className="form-check-label" htmlFor="flexCheckChecked">
-                запрос обязан быть в названии
-              </label>
-            </div>
+            {/*<div className="form-check">*/}
+            {/*  <input*/}
+            {/*    className="form-check-input"*/}
+            {/*    type="checkbox"*/}
+            {/*    id="flexCheckChecked"*/}
+            {/*    defaultChecked={Search.reqMustTitle}*/}
+            {/*    onChange={(e) =>*/}
+            {/*      Search.handleCheck("reqMustTitle", e.target.checked)*/}
+            {/*    }*/}
+            {/*  />*/}
+            {/*  <label className="form-check-label" htmlFor="flexCheckChecked">*/}
+            {/*    запрос обязан быть в названии*/}
+            {/*  </label>*/}
+            {/*</div>*/}
           </div>
         </div>
 
@@ -55,8 +55,8 @@ const InputWordsToSearch = () => {
               </label>
             </div>
             <textarea
-              disabled={Search.disabled}
-              onChange={(e) => Search.changeInput("val2", e.target.value)}
+              disabled={Search.exclude}
+              onChange={(e) => Search.changeInput("val2", e.target.value)} //исключить сообщества со словами текстоывое поле
               value={Search.inputValue2}
               className="form-control"
               id="exampleFormControlTextarea1"

@@ -32,7 +32,7 @@ class Search {
   tumbler = false;
   progress = null;
   //чекбоксы
-  disabled = true;
+  exclude = true; // исключить сообщества со словами
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
   openMessages = false; //открытые сообщения галочка
@@ -42,7 +42,7 @@ class Search {
   //страны и города
   Country = Country[0].label;
   City = City[0].label;
-  allGroups = Groups[0];
+  is_closed = Groups[0];
   allGroups2 = Groups2[0];
 
   countMemFrom = null;
@@ -62,13 +62,13 @@ class Search {
       inputValue2: observable,
       fromToMembersBoolean: observable,
       allGroups2: observable,
-      allGroups: observable,
+      is_closed: observable,
       Country: observable,
       countMembers: observable,
       openWalls: observable,
       openComments: observable,
       openMessages: observable,
-      disabled: observable,
+      exclude: observable,
       reqMustTitle: observable,
       progress: observable,
       captchaValue: observable,
@@ -120,9 +120,9 @@ class Search {
       this.openMessages = false;
     }
     if (data == "exclude" && target) {
-      this.disabled = false;
+      this.exclude = false;
     } else if (data == "exclude") {
-      this.disabled = true;
+      this.exclude = true;
     }
     if (data == "reqMustTitle" && target) {
       this.reqMustTitle = true;
@@ -312,27 +312,29 @@ class Search {
     return this.SendDone;
   }
 
-  Return_obj_text_all_area() {
-    let user = {
-      first_name: this.first_name,
-      last_name: this.last_name,
-      photo: this.photo,
-      inputValue: this.inputValue,
-      sendMessage: this.sendMessage,
-      subsOt: this.subsOt,
-      subsDo: this.subsDo,
-      Ot: this.Ot,
-      Do: this.Do,
-    };
-    return user;
-  }
+  // Return_obj_text_all_area() {
+  //   let user = {
+  //     first_name: this.first_name,
+  //     last_name: this.last_name,
+  //     photo: this.photo,
+  //     inputValue: this.inputValue,
+  //     exclude: this.exclude, //галочка исключить сообщества со словами
+  //     sendMessage: this.sendMessage,
+  //     subsOt: this.subsOt,
+  //     subsDo: this.subsDo,
+  //     Ot: this.Ot,
+  //     Do: this.Do,
+  //   };
+  //   return user;
+  // }
 
-  setLocalStorageArea() {
-    localStorage.setItem(
-      "textAll",
-      JSON.stringify(this.Return_obj_text_all_area())
-    );
-  }
+  //
+  // setLocalStorageArea() {
+  //   localStorage.setItem(
+  //     "textAll",
+  //     JSON.stringify(this.Return_obj_text_all_area())
+  //   );
+  // }
 
   getUser() {
     let data = localStorage.getItem("user");
@@ -364,15 +366,15 @@ class Search {
 
   groupLookUpValues = () => {
     let data = JSON.stringify({
-      inputValue: this.inputValue[0] != "" ? this.inputValue : false,
-      inputValue2: this.inputValue2[0] != "" ? this.inputValue2 : false,
-      reqMustTitle: this.reqMustTitle,
+      inputValue: this.inputValue[0] != "" ? this.inputValue : false, //запросы
+      inputValue2: this.inputValue2[0] != "" ? this.inputValue2 : false, //исключить сообщества со словами
+      // reqMustTitle: this.reqMustTitle,
       openWalls: this.openWalls,
       openComments: this.openComments,
       countMemFrom: this.countMemFrom,
       countMemTo: this.countMemTo,
-      allGroups: this.allGroups.value,
-      allGroups2: this.allGroups2.value,
+      is_closed: this.is_closed,
+      type: this.allGroups2.value,
       city: this.City.indexOf("Люб") > -1 ? false : this.City,
       country: this.Country.indexOf("Люб") > -1 ? false : this.Country,
       token: this.token,
@@ -401,23 +403,23 @@ class Search {
   };
 
   ResultGroup() {
-    this.setLocalStorageArea();
+    // this.setLocalStorageArea();
     const connect = () => {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
         console.log("client open", this.Loader);
         if (!this.start) {
-          let data = JSON.stringify({
-            data: this.inputValue,
-            token: this.token,
-            messForSend: this.sendMessage,
-            Ot: this.Ot, //задержка в секундах для рассылки
-            Do: this.Do,
-            subsOt: this.subsOt, //кол-во подписчиков
-            subsDo: this.subsDo,
-          });
-          ws.send(data);
+          // let data = JSON.stringify({
+          //   data: this.inputValue,
+          //   token: this.token,
+          //   messForSend: this.sendMessage,
+          //   Ot: this.Ot, //задержка в секундах для рассылки
+          //   Do: this.Do,
+          //   subsOt: this.subsOt, //кол-во подписчиков
+          //   subsDo: this.subsDo,
+          // });
+          // ws.send(data);
           this.start = true;
         }
       };

@@ -18,10 +18,10 @@ const Filter = () => {
       <div className="border1">
         <Select
           onChange={(e) => {
-            Search.allGroups = e.value;
-            time();
+            Search.is_closed = e.value;
+            console.log(Search.is_closed);
           }}
-          placeholder={Search.allGroups.label}
+          placeholder={Search.is_closed.label}
           options={Groups}
         />
         <Select

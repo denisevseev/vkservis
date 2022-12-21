@@ -13,14 +13,14 @@ const City = [
   { value: "49", label: "Екатиринбург" },
 ];
 const Groups = [
-  { value: "1", label: "Открытые и закрытые сообщества" },
-  { value: "2", label: "Только открытые сообщества" },
-  { value: "3", label: "Только закрытые группы" },
+  { value: "", label: "Открытые и закрытые сообщества" },
+  { value: "0", label: "Только открытые сообщества" },
+  { value: "1", label: "Только закрытые сообщества" },
 ];
 const Groups2 = [
-  { value: "any", label: "Все типы сообществ" },
-  { value: "4", label: "Только группы" },
-  { value: "5", label: "Только публичные страницы" },
-  { value: "6", label: "Только мероприятия (встречи)" },
+  { value: "", label: "Все типы сообществ" },
+  { value: "group", label: "Только группы" },
+  { value: "page", label: "Только публичные страницы" },
+  { value: "event", label: "Только мероприятия (встречи)" },
 ];
 export { Country, City, Groups, Groups2 };

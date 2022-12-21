@@ -10,7 +10,7 @@ const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, canComments } = require("./requests");
 const { groups_search } = require("./GroupSearch");
-const filter_type_is_closed = require("./GroupFilter")
+const { filter_type_is_closed, filter_exclude, filter_type } = require("./GroupFilter");
 app.use(cors());
 app.use(
   express.urlencoded({
@@ -44,8 +44,10 @@ class searchGroup {
     this.error_msg = null;
     this.autorizeconst = null;
     this.arr_str_for_search = 0;
+    this.is_closed = "";
+    this.type = "";
     this.count = 2;
-    this.reqMustTitleCount = 0
+    this.reqMustTitleCount = 0;
     this.arrName = [];
     // this.dataSend = null;
   }
@@ -239,14 +241,13 @@ class searchGroup {
     await this.if_arr();
   }
 
-
-
-
   async searchGroupMethod(data, ws) {
     if (data) {
       (this.inputValue = data.inputValue.split("\n")), // массив для поиска
-        (this.inputValue2 = data.inputValue2.split("\n")), //массив исключений
-        (this.reqMustTitle = data.reqMustTitle), //галка запрос обязан быть
+        (this.inputValue2 = data.inputValue2.split("\n")), //исключить сообщества со словами
+        // (this.reqMustTitle = data.reqMustTitle), //галка запрос обязан быть
+        (this.is_closed = data.is_closed),
+        (this.type = data.type),
         (this.openWalls = data.openWalls === false ? 0 : 1), //галочка открытые стены
         (this.openComments = data.openComments), // галочка открытые комментарии
         (this.countMemFrom = data.countMemFrom), // количество участников от
@@ -263,10 +264,10 @@ class searchGroup {
       await this.searchGr();
 
       await this.whileMethod(data, ws);
-      console.log(this.arr.length)
-      let result = await filter_type_is_closed(data, this.arr) //вызвы
-
-
+      console.log(this.arr.length);
+      let resultIsClosed = await filter_type_is_closed(data, this.arr); //вызвы
+      let resultExclude = await filter_exclude(data, resultIsClosed); //исключить сооб со словами
+      let resultType = await  filter_type(data, resultExclude)
       //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
       while (this.filterCount < this.arr.length) {
         let result = await canComments(
