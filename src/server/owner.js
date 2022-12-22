@@ -15,6 +15,7 @@ const {
   filter_exclude,
   filter_type,
   can_Comments,
+  openWalls
 } = require("./GroupFilter");
 app.use(cors());
 app.use(
@@ -292,6 +293,8 @@ class searchGroup {
         this.arr.concat(this.arr15);
       }
       if (this.openWalls) {
+        let result = await openWalls(this.arr, this.token)
+        this.arr = result
       }
       // while (this.filterCount < this.arr.length) {
       //   let result = await canComments(

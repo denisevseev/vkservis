@@ -27,7 +27,7 @@ const filter_exclude = (data, arr) => {
       this.inputValue2.map((valKey) => {
         if (key.name.toLowerCase().indexOf(valKey.toLowerCase()) === -1) {
           this.arr.push(key);
-          console.log(key.name);
+          // console.log(key.name);
         }
       });
     });
@@ -76,9 +76,35 @@ const can_Comments = async (arr, token) => {
   };
   return data;
 };
+const openWalls = async (arr, token)=>{
+  let lengthArr = Math.ceil(arr.length/499)
+  let arrFromClient = arr
+  let arrIds = []
+  this.i = 0
+  let id = null
+  let whileCicle = ()=>{
+    let i = 0
+    for(i; i<arrFromClient.length; i++){
+      id = arrFromClient.shift()
+      if(id){
+        arrIds.push(id.id)
+      }
+      if(i>=arrFromClient.length-1||i>=499){
+        return arrIds
+        break
+      }
+    }
+  }
+  while (this.i<=lengthArr){
+    let result = await whileCicle()
+    this.i++
+  }
+  console.log(arrIds)
+}
 module.exports = {
   filter_type_is_closed,
   filter_exclude,
   filter_type,
   can_Comments,
+  openWalls
 };
