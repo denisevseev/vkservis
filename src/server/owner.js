@@ -10,7 +10,12 @@ const wssend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, canComments } = require("./requests");
 const { groups_search } = require("./GroupSearch");
-const { filter_type_is_closed, filter_exclude, filter_type } = require("./GroupFilter");
+const {
+  filter_type_is_closed,
+  filter_exclude,
+  filter_type,
+  can_Comments,
+} = require("./GroupFilter");
 app.use(cors());
 app.use(
   express.urlencoded({
@@ -28,6 +33,7 @@ class searchGroup {
     this.filteredArr = []; //сюда добавляем отфильтрованные группы
     this.filterCount = 0; //счетчик айдишников для фильтрации
     this.i = 0;
+    this.arr15 = []; //массив закрытых групп
     this.arrForsend = [];
     this.d = null;
     this.wsOnMessage = false;
@@ -266,33 +272,51 @@ class searchGroup {
       await this.whileMethod(data, ws);
       console.log(this.arr.length);
       let resultIsClosed = await filter_type_is_closed(data, this.arr); //вызвы
-      let resultExclude = await filter_exclude(data, resultIsClosed); //исключить сооб со словами
-      let resultType = await  filter_type(data, resultExclude)
-      //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
-      while (this.filterCount < this.arr.length) {
-        let result = await canComments(
-          this.arr[this.filterCount].id,
-          this.token
-        );
-        try {
-          // console.log('canpost:', result.response.items[1].comments.can_post, '  index:', this.filterCount)
-          console.log(
-            "canWallpost:",
-            result.response.groups[0].can_post,
-            "index",
-            this.filterCount,
-            "https://vk.com/club",
-            this.arr[this.filterCount].id
-          );
-        } catch (e) {
-          if (result.error.error_code === 15) {
-            //если группа закрытая и если есть запрос на закрытые группы от клиента то добавляем в массив
-            this.filteredArr.push(this.arr[this.filterCount].id);
-          }
-        }
-
-        this.filterCount++;
+      let resultExclude = await filter_exclude(
+        data,
+        resultIsClosed.length > 0 ? resultIsClosed : this.arr
+      ); //исключить сооб со словами
+      let resultType = await filter_type(
+        data,
+        resultExclude.length > 0 ? resultExclude : this.arr
+      ); //фильтр типа группы
+      this.arr = (await resultType.length) > 0 ? resultType : this.arr;
+      //тут запускаем цикл фильтрации каждой группы на возможность оставлять
+      if (this.openComments) {
+        let result = await can_Comments(this.arr, this.token);
+        this.arr = await result.arr;
+        this.arr15 = result.arr15;
       }
+      if (this.is_closed==""||this.is_closed=="1") {
+        //если нет запроса от клиента на только открытые группы то соед два массива
+        this.arr.concat(this.arr15);
+      }
+      if (this.openWalls) {
+      }
+      // while (this.filterCount < this.arr.length) {
+      //   let result = await canComments(
+      //     this.arr[this.filterCount].id,
+      //     this.token
+      //   );
+      // try {
+      //   // console.log('canpost:', result.response.items[1].comments.can_post, '  index:', this.filterCount)
+      //   console.log(
+      //     "canWallpost:",
+      //     result.response.groups[0].can_post,
+      //     "index",
+      //     this.filterCount,
+      //     "https://vk.com/club",
+      //     this.arr[this.filterCount].id
+      //   );
+      // } catch (e) {
+      //   if (result.error.error_code === 15) {
+      //     //если группа закрытая и если есть запрос на закрытые группы от клиента то добавляем в массив
+      //     this.filteredArr.push(this.arr[this.filterCount].id);
+      //   }
+      // }
+
+      // this.filterCount++;
+      // }
 
       // фильтрация групп
       await this.instanceArr();
