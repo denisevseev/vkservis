@@ -1,4 +1,4 @@
-const { canComments } = require("./requests");
+const { canComments, Filter_group } = require("./requests");
 const filter_type_is_closed = async (data, arr) => {
   this.arr = [];
   if (data.is_closed) {
@@ -37,15 +37,16 @@ const filter_exclude = (data, arr) => {
 
 const filter_type = (data, arr) => {
   //фильтр по типу сообщества
-  this.arr = [];
+  let sendArr = [];
   if (data.type) {
     arr.map((key) => {
-      if (key.type == data.type.value) {
-        this.arr.push(key);
+      console.log(key.type);
+      if (key.type == data.type) {
+        sendArr.push(key);
       }
     });
+    return sendArr;
   }
-  return this.arr;
 };
 
 const can_Comments = async (arr, token) => {
@@ -76,35 +77,50 @@ const can_Comments = async (arr, token) => {
   };
   return data;
 };
-const openWalls = async (arr, token)=>{
-  let lengthArr = Math.ceil(arr.length/499)
-  let arrFromClient = arr
-  let arrIds = []
-  this.i = 0
-  let id = null
-  let whileCicle = ()=>{
-    let i = 0
-    for(i; i<arrFromClient.length; i++){
-      id = arrFromClient.shift()
-      if(id){
-        arrIds.push(id.id)
+
+const openWalls = async (arr, token) => {
+  let arrForOwn = [];
+  let lengthArr = Math.ceil(arr.length / 499);
+  let arrFromClient = arr;
+  let arrIds = [];
+  this.i = 0;
+  let id = null;
+  let whileCicle = () => {
+    let i = 0;
+    arrIds = [];
+    for (i; i < arrFromClient.length; i++) {
+      id = arrFromClient.shift();
+      if (id) {
+        arrIds.push(id.id);
       }
-      if(i>=arrFromClient.length-1||i>=499){
-        return arrIds
-        break
+      if (i >= arrFromClient.length - 1 || i >= 499) {
+        return arrIds;
+        break;
       }
     }
+  };
+
+  while (arrFromClient.length > 1) {
+    let result = await whileCicle();
+    let resultReq = await Filter_group(result, token);
+    arrForOwn = arrForOwn.concat(resultReq);
+    this.i++;
   }
-  while (this.i<=lengthArr){
-    let result = await whileCicle()
-    this.i++
-  }
-  console.log(arrIds)
-}
+  let arr2 = [];
+  arrForOwn.map((key1) => {
+    key1.response.map((key2) => {
+      if (key2.can_post === 1) {
+        arr2.push(key2);
+      }
+    });
+  });
+  return arr2;
+};
+
 module.exports = {
   filter_type_is_closed,
   filter_exclude,
   filter_type,
   can_Comments,
-  openWalls
+  openWalls,
 };

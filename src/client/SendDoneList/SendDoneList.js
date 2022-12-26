@@ -1,9 +1,9 @@
-import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
 import React, { useEffect, useState } from "react";
 
-const SendMessageToGroup = () => {
+const SendDoneList = () => {
+  //вывод групп по которым разослано сообщение
   if (!Search.Search_CheckIsSend) {
     console.log("8");
     Search.Search_CheckIsSend = true;
@@ -31,4 +31,4 @@ const SendMessageToGroup = () => {
   );
 };
 
-export default observer(SendMessageToGroup);
+export default observer(SendDoneList);

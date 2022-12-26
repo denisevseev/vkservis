@@ -15,7 +15,7 @@ const {
   filter_exclude,
   filter_type,
   can_Comments,
-  openWalls
+  openWalls,
 } = require("./GroupFilter");
 app.use(cors());
 app.use(
@@ -60,6 +60,7 @@ class searchGroup {
   }
 
   VariblesNull() {
+    //старое удалить
     this.message = null;
     this.login = null;
     this.pass = null;
@@ -68,7 +69,8 @@ class searchGroup {
     this.arrForsend = [];
     this.i = 0;
     this.startAuto = false;
-    this.mailing = "70";
+    // новое
+    // this.mailing = "70";
   }
 
   async AutorizeOwnMethod(data, ws) {
@@ -187,33 +189,6 @@ class searchGroup {
     }
   }
 
-  // unique_id(data) { // метод уникализации имен и айдишников
-  //   this.arr.map((el) => {
-  //     let id_name = {
-  //       id:el.id, //здесь внимание уникальные айди не значат уникальные имена
-  //       name:el.name
-  //     }
-  //     this.unique_arr.push(id_name);
-  //   });
-  //   let set = [...new Set(this.unique_arr)]; //здесь повторно уникализируем массив айдишников
-  //   // set.map((el) => {
-  //   //     fs.appendFileSync("group.txt", `\n${JSON.stringify(el)}`);
-  //   // });
-  //   this.arr = set; //здесь массив уникальных айдишников
-  // }
-
-  async instanceArr() {
-    //фильтрация групп
-    if (this.arr instanceof Array) {
-      this.resetGlobVar(); //обнуляем переменные
-      this.result = await Filter_group(this.token, this.arr);
-      let return_err = await this.is_error(ws);
-      if (return_err) {
-        return return_err;
-      }
-      this.arr = [];
-    }
-  }
 
   isArr70() {
     let arr = this.arr.length > 70 ? 70 : this.arr.length;
@@ -248,6 +223,10 @@ class searchGroup {
     await this.if_arr();
   }
 
+  nothingFound = (ws)=>{
+    wssend(ws,'nothing', '','')
+  }
+
   async searchGroupMethod(data, ws) {
     if (data) {
       (this.inputValue = data.inputValue.split("\n")), // массив для поиска
@@ -272,91 +251,87 @@ class searchGroup {
 
       await this.whileMethod(data, ws);
       console.log(this.arr.length);
-      let resultIsClosed = await filter_type_is_closed(data, this.arr); //вызвы
-      let resultExclude = await filter_exclude(
-        data,
-        resultIsClosed.length > 0 ? resultIsClosed : this.arr
-      ); //исключить сооб со словами
-      let resultType = await filter_type(
-        data,
-        resultExclude.length > 0 ? resultExclude : this.arr
-      ); //фильтр типа группы
-      this.arr = (await resultType.length) > 0 ? resultType : this.arr;
-      //тут запускаем цикл фильтрации каждой группы на возможность оставлять
-      if (this.openComments) {
-        let result = await can_Comments(this.arr, this.token);
-        this.arr = await result.arr;
-        this.arr15 = result.arr15;
-      }
-      if (this.is_closed==""||this.is_closed=="1") {
-        //если нет запроса от клиента на только открытые группы то соед два массива
-        this.arr.concat(this.arr15);
-      }
-      if (this.openWalls) {
-        let result = await openWalls(this.arr, this.token)
-        this.arr = result
-      }
-      // while (this.filterCount < this.arr.length) {
-      //   let result = await canComments(
-      //     this.arr[this.filterCount].id,
-      //     this.token
-      //   );
-      // try {
-      //   // console.log('canpost:', result.response.items[1].comments.can_post, '  index:', this.filterCount)
-      //   console.log(
-      //     "canWallpost:",
-      //     result.response.groups[0].can_post,
-      //     "index",
-      //     this.filterCount,
-      //     "https://vk.com/club",
-      //     this.arr[this.filterCount].id
-      //   );
-      // } catch (e) {
-      //   if (result.error.error_code === 15) {
-      //     //если группа закрытая и если есть запрос на закрытые группы от клиента то добавляем в массив
-      //     this.filteredArr.push(this.arr[this.filterCount].id);
-      //   }
-      // }
+      //фильтр на открытые закрытые
+      // let resultIsClosed = await filter_type_is_closed(data, this.arr);
+      this.arr = await filter_type_is_closed(data, this.arr);
+      // this.arr.length==0?wssend(ws, 'nothing', '', ''):this.arr = await filter_exclude(data, this.arr); //исключить сообщества со словами
+      if(this.arr.length==0){
+        this.nothingFound(ws);
+        return
+      }else{
+        if(this.inputValue2!=''){
+          this.arr = await filter_exclude(data, this.arr);
+        }
 
-      // this.filterCount++;
-      // }
-
-      // фильтрация групп
-      await this.instanceArr();
-      let ifResult = await this.ifResultRes();
-      if (ifResult == "error") {
-        return;
       }
-      //рассылка по группам
-      this.post_data = {
-        i: this.i,
-        message: this.message,
-        arr: this.arr,
-        arrForsend: this.arrForsend,
-        token: this.token,
-        Ot: this.Ot,
-        Do: this.Do,
-        subsDo: this.subsDo,
-        subsOt: this.subsOt,
-      };
-      //рассылка по группам
-      this.group_post = await Group_post(this.post_data);
-      //рассылка по группам
-      await this.i_res_arr(); //получаю данные с гроуп пост
-      await this.is_error(ws); //если ошибка
-      await this.if_err_send_err();
-      await this.if_arr(); //проверяем длинну массиива и проверяем на ошибки
 
-      while (this.i < this.isArr70()) {
-        console.log(this.i, this.arr.length, "!!!!!!!!!");
-        if (this.mailing == "70" || this.error_msg) {
-          await wssend(ws, this.arrForsend, this.error_msg);
-          this.VariblesNull();
-          break;
-        } else {
-          await this.while_i();
+      if (this.arr.length == 0) {
+      this.nothingFound(ws)
+        return
+      } else {
+        if(this.openComments){   //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
+          let result = await can_Comments(this.arr, this.token);
+          this.arr = await result.arr;
+          this.arr15 = result.arr15;
         }
       }
+
+      //если нет запроса от клиента на только открытые группы то соед два массива
+      if (this.is_closed == "" || this.is_closed == "1") {
+        this.arr.concat(this.arr15);
+      }
+
+      //если есть галочка открытая стена
+      if (this.openWalls) {
+        let result = await openWalls(this.arr, this.token);
+        this.arr = result;
+      }
+
+      //фильтр количества подписчиков
+      if(this.countMemTo||this.countMemFrom){
+        let arrCount = []
+        this.arr.map((key)=>{
+          if(key.members_count>=this.countMemFrom||key.members_count<=this.countMemTo){
+            arrCount.push(key)
+          }
+        })
+        this.arr = arrCount
+      }
+
+
+      this.arr = await filter_type(data, this.arr)  //фильтр типа группы (public, event, group)
+
+
+      // //рассылка по группам
+      // this.post_data = {
+      //   i: this.i,
+      //   message: this.message,
+      //   arr: this.arr,
+      //   arrForsend: this.arrForsend,
+      //   token: this.token,
+      //   Ot: this.Ot,
+      //   Do: this.Do,
+      //   subsDo: this.subsDo,
+      //   subsOt: this.subsOt,
+      // };
+      // //рассылка по группам
+      // this.group_post = await Group_post(this.post_data);
+      // //рассылка по группам
+      // await this.i_res_arr(); //получаю данные с гроуп пост
+      // await this.is_error(ws); //если ошибка
+      // await this.if_err_send_err();
+      // await this.if_arr(); //проверяем длинну массиива и проверяем на ошибки
+      //
+      // while (this.i < this.isArr70()) {
+      //   console.log(this.i, this.arr.length, "!!!!!!!!!");
+      //   if (this.mailing == "70" || this.error_msg) {
+      //     await wssend(ws, this.arrForsend, this.error_msg);
+      //     this.VariblesNull();
+      //     break;
+      //   } else {
+      //     await this.while_i();
+      //   }
+      // }
     }
   }
 }

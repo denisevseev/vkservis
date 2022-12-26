@@ -4,6 +4,7 @@ import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
   Group = null;
+  nothingFound = false //ничего не найдено
   Loader = false;
   inputValue = [];
   sendMessage = "";
@@ -24,8 +25,6 @@ class Search {
   Search_CheckIsSend = false;
   Ot = "";
   Do = "";
-  subsOt = undefined;
-  subsDo = undefined;
   errorFromServer = undefined;
   captcha = null;
   captchaValue = null;
@@ -55,6 +54,7 @@ class Search {
     });
     makeAutoObservable(this, {
       Group: observable,
+      nothingFound:observable,
       validation: observable,
       countMemFrom: observable,
       countMemTo: observable,
@@ -74,10 +74,6 @@ class Search {
       captchaValue: observable,
       captcha: observable,
       errorFromServer: observable,
-      subsOt: observable,
-      subsDo: observable,
-      Ot: observable,
-      Do: observable,
       inputValue: observable,
       sendMessage: observable,
       SendDone: observable,
@@ -142,7 +138,6 @@ class Search {
     let result = target;
     if (val == "val1") {
       this.inputValue = result;
-      console.log(this.inputValue);
     }
     if (val == "val2") {
       this.inputValue2 = result; //исключить сообщества со словами
@@ -211,13 +206,8 @@ class Search {
   ChangeDo(value) {
     this.Do = value;
   }
-  ChangeSubsOt(value) {
-    this.subsOt = value;
-  }
 
-  ChangeSubsDo(value) {
-    this.subsDo = value;
-  }
+
   GetLoginData() {
     let data = JSON.parse(localStorage.getItem("loginData"));
     if (data) {
@@ -280,9 +270,13 @@ class Search {
     };
   }
 
-  WsOnMessage(ws, event) {
+  WsOnMessage(event, ws) {
     let dataEvent;
     let data = JSON.parse(event.data);
+    if(data.arr=='nothing'){
+    this.nothingFound = true
+    }
+    debugger
     if (data.progress) {
       this.progress = data.progress;
       if (this.progress >= 99) {
@@ -290,7 +284,7 @@ class Search {
       }
       return;
     }
-    if (event && !data.progress) {
+    if (event && !data.progress) { //если не не прогресс и дата не пусто
       dataEvent = JSON.parse(event.data);
       if (dataEvent.userData) {
         this.errorFromServer = dataEvent.userData;
@@ -309,7 +303,7 @@ class Search {
   }
 
   SendDoneReturn() {
-    return this.SendDone;
+    return this.SendDone; //массив групп по которым сделана рассылка
   }
 
   // Return_obj_text_all_area() {
@@ -353,8 +347,6 @@ class Search {
         this.tumbler = true;
         this.inputValue = data.inputValue;
         this.sendMessage = data.sendMessage;
-        this.subsOt = data.subsOt;
-        this.subsDo = data.subsDo;
         this.Ot = data.Ot;
         this.Do = data.Do;
         return data;
@@ -374,7 +366,7 @@ class Search {
       countMemFrom: this.countMemFrom,
       countMemTo: this.countMemTo,
       is_closed: this.is_closed,
-      type: this.allGroups2.value,
+      type: this.allGroups2,
       city: this.City.indexOf("Люб") > -1 ? false : this.City,
       country: this.Country.indexOf("Люб") > -1 ? false : this.Country,
       token: this.token,
@@ -399,6 +391,10 @@ class Search {
         this.validation = false;
         ws.send(data);
       }
+    };
+    ws.onmessage = (event) => {
+      console.log(event.data, "404 state");
+      this.WsOnMessage(event, ws)
     };
   };
 

@@ -30,7 +30,7 @@ const search = async (data) => {
   return search.data;
 };
 
-const Filter_group = async (token, arr) => {
+const Filter_group = async (arr, token) => {
   let filter = await axios.get(
     // фильтр групп на возможность постинга на стену и фильтр колич-ва подписчиков группы
     `${url}groups.getById?&group_ids=${arr}&fields=can_post,members_count,city,country,description&access_token=${token}&v=5.131`

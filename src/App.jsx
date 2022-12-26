@@ -2,9 +2,8 @@ import "./App.scss";
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import InputWordsToSearch from "./client/InputWordsToSearch/InputWordsToSearch";
-import SubscribersCount from "./client/SubscribersCount/SubscribersCount";
 import InputMessageToSend from "./client/InputMessageToSend/InputMessageToSend";
-import SendMessageToGroup from "./client/SendMessageToGroup/SendMessageToGroup";
+import SendMessageToGroup from "./client/SendDoneList/SendDoneList";
 import Avatar from "./client/UserProfile/Avatar";
 import AuthModal from "./client/autorize/authModal/AuthModal";
 import Preloader from "./client/Preloader/Preloader";
@@ -18,6 +17,7 @@ import LeftMenu from "./client/LeftMenu/LeftMenu";
 import BuyAccounts from "./client/buyAccounts/BuyAccounts";
 import Filter from "./client/Filter/Filter";
 import Results from "./client/results/Results";
+import NothingFound from "./client/Modals/NothingFound";
 function App() {
   return (
     <div className="App">
@@ -29,6 +29,7 @@ function App() {
             <>
               <AuthModal />
               <Avatar />
+              <NothingFound/>
               <Instruction />
               <StopButtonSendMessage />
               <div className="BorderSearchGroup">
@@ -42,7 +43,7 @@ function App() {
               {/*<InputMessageToSend />*/}
               <Preloader />
               {/*<SubscribersCount />*/}
-              {/*<SendMessageToGroup />*/}
+              {/*<SendDoneList />*/}
               {/*<SubscribersCount />*/}
               {/*<WaitSecSend />*/}
               <StartButtonSendMessage />
