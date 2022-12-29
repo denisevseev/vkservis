@@ -3,10 +3,15 @@ import Search from "../../store/State";
 import { observer } from "mobx-react";
 import "./../InputWordsToSearch/InputWordsToSearch.Module.scss";
 const Results = () => {
+    const foundGroups = ()=>{
+        if(Search.groupListRender.length>0){
+            return <span>найдено сообществ {'  '+Search.groupListRender.length}</span>
+        }
+    }
   return (
     <div className="results">
       <label className="form-check-label" htmlFor="flexCheckChecked">
-        Результаты:
+        Результаты: {foundGroups()}
       </label>
       <div className="border1">
         <div className="form-group">
