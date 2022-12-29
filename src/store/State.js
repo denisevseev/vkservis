@@ -3,15 +3,15 @@ import { configure } from "mobx";
 import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
-  Group = null;
-  nothingFound = false //ничего не найдено
+  groupListRender = [] //список групп с сервера для рендера в результатах
+  dotProgress = "...";
+  nothingFound = false; //ничего не найдено
   Loader = false;
   inputValue = [];
   sendMessage = "";
   SendDone = [];
   i = 0;
   token = null;
-  clientSend = false;
   validation = false;
   login = null;
   pass = null;
@@ -20,11 +20,9 @@ class Search {
   photo = null;
   start = false;
   avatar = null;
-  startSend = null;
+  startSend = null; //отвечает за кнопку остановить начать рассылку
   inputValue2 = ""; //исключить сообщества со словами
   Search_CheckIsSend = false;
-  Ot = "";
-  Do = "";
   errorFromServer = undefined;
   captcha = null;
   captchaValue = null;
@@ -53,8 +51,10 @@ class Search {
       enforceActions: "never",
     });
     makeAutoObservable(this, {
+      groupListRender: observable,
       Group: observable,
-      nothingFound:observable,
+      dotProgress: observable,
+      nothingFound: observable,
       validation: observable,
       countMemFrom: observable,
       countMemTo: observable,
@@ -90,22 +90,28 @@ class Search {
     });
   }
 
-  // selectPlaceholder(val, data) {
-  //   let result = data.map((key)=>{
-  //     if(key.value==val){
-  //       return key.label
-  //     }
-  //   })
-  //
-  // }
+  dot = (data) => {
+    let interval = setInterval(() => {
+      //прогресс бар
+      console.log('interval')
+      if (this.dotProgress === "...") {
+        this.dotProgress = "......";
+      } else {
+        this.dotProgress = "...";
+      }
+    }, 1000);
+    if (data == "stopInterval") {
+      clearInterval(interval);
+    }
+  };
 
   handleCheck(data, target) {
-    if (data == "countMembers" && target) {
+    if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
     } else if (data == "countMembers") {
       this.fromToMembersBoolean = true;
     }
-    if (data == "openComments" && target) {
+    if (data === "openComments" && target) {
       this.openComments = true;
     } else if (data == "openComments") {
       this.openComments = false;
@@ -143,10 +149,10 @@ class Search {
       this.inputValue2 = result; //исключить сообщества со словами
     }
   };
-  Login() {
-    this.avatar = JSON.parse(localStorage.getItem("user"));
-    return this.avatar;
-  }
+  // Login() {
+  //   this.avatar = JSON.parse(localStorage.getItem("user"));
+  //   return this.avatar;
+  // }
 
   Logout() {
     localStorage.removeItem("user");
@@ -200,13 +206,6 @@ class Search {
     }
   }
 
-  ChangeOt(value) {
-    this.Ot = value;
-  }
-  ChangeDo(value) {
-    this.Do = value;
-  }
-
 
   GetLoginData() {
     let data = JSON.parse(localStorage.getItem("loginData"));
@@ -258,11 +257,11 @@ class Search {
   CheckIsSend() {
     let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
 
-    ws.onopen = (e) => {
+    ws.onopen = () => {
       console.log(this.token);
       ws.send(this.token);
     };
-    ws.onerror = (e) => {
+    ws.onerror = () => {
       console.log(ws.readyState);
     };
     ws.onmessage = (event) => {
@@ -270,65 +269,47 @@ class Search {
     };
   }
 
-  WsOnMessage(event, ws) {
+  WsOnMessage(event) {
     let dataEvent;
     let data = JSON.parse(event.data);
-    if(data.arr=='nothing'){
-    this.nothingFound = true
+    console.log(data)
+    if (data.arr == "nothing") {
+      this.nothingFound = true; //если ничего не найдено
     }
-    debugger
     if (data.progress) {
       this.progress = data.progress;
-      if (this.progress >= 99) {
-        this.progress = null;
-      }
+      this.dot("stopInterval");
       return;
+    } else {
+      this.dot("stopInterval");
+      this.progress = null
     }
-    if (event && !data.progress) { //если не не прогресс и дата не пусто
+    // if(data.progress=='null'){
+    //   this.progress = null //убераем модальное окно
+    // }
+    if (event && !data.progress) {
+      //если не не прогресс и дата не пусто
       dataEvent = JSON.parse(event.data);
       if (dataEvent.userData) {
         this.errorFromServer = dataEvent.userData;
         console.log(this.errorFromServer);
       }
-      console.log(dataEvent.userData);
-      if (dataEvent && this.startSend === null) {
+      if (dataEvent.arr.length>0) { //если с сервера пришел массив
+        console.log('297')
         this.start = true;
         this.startSend = true;
+        let result = dataEvent.arr.concat(this.groupListRender);
+        let finalresult = [...new Set(result)];
+        console.log(finalresult)
+        this.groupListRender = toJS(finalresult)
+        console.log(this.groupListRender);
       }
-      let result = dataEvent.arr.concat(this.SendDone);
-      let finalresult = [...new Set(result)];
-      this.SendDone = toJS(finalresult);
-      console.log(this.SendDone);
     }
   }
 
   SendDoneReturn() {
     return this.SendDone; //массив групп по которым сделана рассылка
   }
-
-  // Return_obj_text_all_area() {
-  //   let user = {
-  //     first_name: this.first_name,
-  //     last_name: this.last_name,
-  //     photo: this.photo,
-  //     inputValue: this.inputValue,
-  //     exclude: this.exclude, //галочка исключить сообщества со словами
-  //     sendMessage: this.sendMessage,
-  //     subsOt: this.subsOt,
-  //     subsDo: this.subsDo,
-  //     Ot: this.Ot,
-  //     Do: this.Do,
-  //   };
-  //   return user;
-  // }
-
-  //
-  // setLocalStorageArea() {
-  //   localStorage.setItem(
-  //     "textAll",
-  //     JSON.stringify(this.Return_obj_text_all_area())
-  //   );
-  // }
 
   getUser() {
     let data = localStorage.getItem("user");
@@ -347,8 +328,6 @@ class Search {
         this.tumbler = true;
         this.inputValue = data.inputValue;
         this.sendMessage = data.sendMessage;
-        this.Ot = data.Ot;
-        this.Do = data.Do;
         return data;
       } else {
         return "";
@@ -394,7 +373,7 @@ class Search {
     };
     ws.onmessage = (event) => {
       console.log(event.data, "404 state");
-      this.WsOnMessage(event, ws)
+      this.WsOnMessage(event, ws);
     };
   };
 

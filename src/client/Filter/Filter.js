@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import "./Filter.Module.scss";
 import Search from "./../../store/State";
 import { observer } from "mobx-react";
+import Preloader from "../Preloader/Preloader";
 const Filter = () => {
   let time = () => {
     // let fr  = Search.allGroups
@@ -84,6 +85,7 @@ const Filter = () => {
           </div>
         </div>
       </div>
+      <Preloader />
     </div>
   );
 };

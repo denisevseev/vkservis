@@ -13,17 +13,14 @@ const SendDoneList = () => {
   return (
     <div>
       {Search.SendDoneReturn().map((k) => {
-        console.log(k, k.length);
         return (
           <div key={k}>
-            {k instanceof Array || k.length > 50 ? (
-              ""
-            ) : (
+            {
               <a href={`https://vk.com/club${k}`}>
                 {`https://vk.com/club${k}`}
                 <span style={{ color: "black" }}>&#10004;&#65039;</span>{" "}
               </a>
-            )}
+            }
           </div>
         );
       })}

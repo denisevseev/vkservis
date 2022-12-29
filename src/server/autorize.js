@@ -17,7 +17,7 @@ class autorize_class {
       const chrome = require("selenium-webdriver/chrome");
       const chromedriver = require("chromedriver");
       this.driver = new webdriver.Builder()
-        //.setChromeOptions(new chrome.Options().headless())
+        .setChromeOptions(new chrome.Options().headless())
         .forBrowser("chrome")
         .build();
       await this.driver
@@ -62,12 +62,12 @@ class autorize_class {
       console.log("captcha not found");
     }
 
-    this.driver.takeScreenshot("c:\\selenium_local_map\\out1.png");
-    this.driver.takeScreenshot().then(function (image, err) {
-      require("fs").writeFile("out.png", image, "base64", function (err) {
-        console.log(err);
-      });
-    });
+    // this.driver.takeScreenshot("c:\\selenium_local_map\\out1.png");
+    // this.driver.takeScreenshot().then(function (image, err) {
+    //   require("fs").writeFile("out.png", image, "base64", function (err) {
+    //     console.log(err);
+    //   });
+    // });
 
     if (this.captcha) {
       console.log(this.captcha);

@@ -1,24 +1,27 @@
 import React from "react";
 import Search from "../../store/State";
+import {observer} from "mobx-react";
 import "./../InputWordsToSearch/InputWordsToSearch.Module.scss";
 const Results = () => {
   return (
     <div className="results">
       <label className="form-check-label" htmlFor="flexCheckChecked">
-        Результаты
+        Результаты:
       </label>
       <div className="border1">
         <div className="form-group">
-          <div className="border1">
-            <textarea
-              disabled
-              // ref={value}
-              // onChange={() => val()}
-              value={Search.inputValue}
-              className="form-control"
-              id="exampleFormControlTextarea1"
-              rows="12"
-            ></textarea>
+          <div className="border1 overflow-auto"  style={{textAlign: 'left', height: '30em'}}>
+              {Search.groupListRender.map((k) => {
+                  return (
+                      <div key={k}>
+                          {
+                              <a href={`https://vk.com/club${k.id}`} target="_blank">
+                                  {`https://vk.com/club${k.id}`} <span style={{color: 'black'}}>{k.name}</span>
+                              </a>
+                          }
+                      </div>
+                  );
+              })}
           </div>
         </div>
       </div>
@@ -31,4 +34,4 @@ const Results = () => {
   );
 };
 
-export default Results;
+export default observer(Results);

@@ -124,6 +124,7 @@ class searchGroup {
   }
 
   async searchGr() {
+    await wssend(ws, '','', 'идет поиск групп')
     let result = await groups_search(this.searchParams()); //поиск групп
     this.arr = this.arr.concat(result.arr); //в this.arr собираем массив с каждого поискового запроса со счетчиком
   }
@@ -178,6 +179,7 @@ class searchGroup {
 
   async whileMethod(data, ws) {
     let lengthInputValue = this.inputValue.length;
+    await wssend(ws, "", "", 'идет поиск сообществ'); //отсылаем прогресс клиенту
     while (this.arr_str_for_search < lengthInputValue - 1) {
       if (lengthInputValue > 1) {
         this.arr_str_for_search++; //увеличиваем счетчик если поисковых запросов больше одного
@@ -185,10 +187,8 @@ class searchGroup {
       } else {
         break; //иначе завершаем поиск групп
       }
-      await wssend(ws, "", "", this.arr_str_for_search); //отсылаем прогресс клиенту
     }
   }
-
 
   isArr70() {
     let arr = this.arr.length > 70 ? 70 : this.arr.length;
@@ -223,9 +223,9 @@ class searchGroup {
     await this.if_arr();
   }
 
-  nothingFound = (ws)=>{
-    wssend(ws,'nothing', '','')
-  }
+  nothingFound = (ws) => {
+    wssend(ws, "nothing", "", "");
+  };
 
   async searchGroupMethod(data, ws) {
     if (data) {
@@ -252,24 +252,23 @@ class searchGroup {
       await this.whileMethod(data, ws);
       console.log(this.arr.length);
       //фильтр на открытые закрытые
-      // let resultIsClosed = await filter_type_is_closed(data, this.arr);
-      this.arr = await filter_type_is_closed(data, this.arr);
-      // this.arr.length==0?wssend(ws, 'nothing', '', ''):this.arr = await filter_exclude(data, this.arr); //исключить сообщества со словами
-      if(this.arr.length==0){
+      this.arr = await filter_type_is_closed(data, this.arr, ws);
+      if (this.arr.length == 0) {
         this.nothingFound(ws);
-        return
-      }else{
-        if(this.inputValue2!=''){
+        return;
+      } else {
+        if (this.inputValue2 != "") {
           this.arr = await filter_exclude(data, this.arr);
         }
-
       }
 
       if (this.arr.length == 0) {
-      this.nothingFound(ws)
-        return
+        this.nothingFound(ws);
+        return;
       } else {
-        if(this.openComments){   //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
+        if (this.openComments) {
+          //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
+          await wssend(ws, '','', 'запускаем цикл фильтрации каждой группы на возможность оставлять комменты')
           let result = await can_Comments(this.arr, this.token);
           this.arr = await result.arr;
           this.arr15 = result.arr15;
@@ -283,24 +282,29 @@ class searchGroup {
 
       //если есть галочка открытая стена
       if (this.openWalls) {
+        await wssend(ws, '','', 'фильтруем открытые стены')
         let result = await openWalls(this.arr, this.token);
         this.arr = result;
       }
 
       //фильтр количества подписчиков
-      if(this.countMemTo||this.countMemFrom){
-        let arrCount = []
-        this.arr.map((key)=>{
-          if(key.members_count>=this.countMemFrom||key.members_count<=this.countMemTo){
-            arrCount.push(key)
+      if (this.countMemTo || this.countMemFrom) {
+        await wssend(ws, '','', 'фильтр количества подписчиков')
+        let arrCount = [];
+        this.arr.map((key) => {
+          if (
+            key.members_count >= this.countMemFrom ||
+            key.members_count <= this.countMemTo
+          ) {
+            arrCount.push(key);
           }
-        })
-        this.arr = arrCount
+        });
+        this.arr = arrCount;
       }
-
-
-      this.arr = await filter_type(data, this.arr)  //фильтр типа группы (public, event, group)
-
+      await wssend(ws, '','', 'фильтруем тип сообществ')
+      this.arr = await filter_type(data, this.arr); //фильтр типа группы (public, event, group)
+      await wssend(ws, this.arr,'', null) //отправка финального массива поиска групп
+      console.log('307')
 
       // //рассылка по группам
       // this.post_data = {

@@ -5,7 +5,6 @@ const wssend = (ws, arr, userData, progress) => {
     userData: userData ? userData : "", //ошибки
     progress: progress ? progress : "", //прогресс
   });
-  console.log(data, "6 wssen");
   try {
     ws.send(data);
   } catch (e) {

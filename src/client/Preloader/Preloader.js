@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 const Preloader = () => {
-  if (Search.progress) {
-    console.log(Search.progress);
-    return <div>поиск групп {Search.progress}% </div>;
-  } else if (Search.startSend) {
-    return <div>идет рассылка...</div>;
-  } else {
-  }
+    return (
+      <div>
+        <Modal show={Search.progress ? true : false}>
+          <Modal.Body>
+            <div  style={{color: "red", fontWeight: "bold", wordWrap: 'break-word' }}>
+              <div>
+                {" "}
+                {Search.progress} <span>{Search.dotProgress}</span>{" "}
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
+    );
 };
 
 export default observer(Preloader);

@@ -1,10 +1,11 @@
-let a = async (arr) => {
-  arr[2] = "45";
-  return arr;
-};
+import { Server } from "socket.io";
 
-this.arr = ["1", "2", "3"];
+const io = new Server({
+    // options
+});
 
-this.arr = a(this.arr);
+io.on("connection", (socket) => {
+    // ...
+});
 
-console.log(this.arr);
+io.listen(3000);

@@ -29,7 +29,7 @@ function App() {
             <>
               <AuthModal />
               <Avatar />
-              <NothingFound/>
+              <NothingFound />
               <Instruction />
               <StopButtonSendMessage />
               <div className="BorderSearchGroup">
@@ -41,7 +41,6 @@ function App() {
               </div>
 
               {/*<InputMessageToSend />*/}
-              <Preloader />
               {/*<SubscribersCount />*/}
               {/*<SendDoneList />*/}
               {/*<SubscribersCount />*/}
