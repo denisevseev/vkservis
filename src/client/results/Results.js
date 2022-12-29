@@ -32,7 +32,7 @@ const Results = () => {
       <div style={{ display: "inline-block" }}>
         <button className="btn btn-outline-primary">Копировать</button>
         <button className="btn btn-outline-primary">Сохранить</button>
-        <button className="btn btn-outline-primary">Очистить</button>
+        <button className="btn btn-outline-primary" onClick={()=>Search.groupListRender=[]}>Очистить</button>
       </div>
     </div>
   );
