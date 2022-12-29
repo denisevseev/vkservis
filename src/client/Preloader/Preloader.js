@@ -4,20 +4,22 @@ import Search from "../../store/State";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 const Preloader = () => {
-    return (
-      <div>
-        <Modal show={Search.progress ? true : false}>
-          <Modal.Body>
-            <div  style={{color: "red", fontWeight: "bold", wordWrap: 'break-word' }}>
-              <div>
-                {" "}
-                {Search.progress} <span>{Search.dotProgress}</span>{" "}
-              </div>
+  return (
+    <div>
+      <Modal show={Search.progress ? true : false}>
+        <Modal.Body>
+          <div
+            style={{ color: "red", fontWeight: "bold", wordWrap: "break-word" }}
+          >
+            <div>
+              {" "}
+              {Search.progress} <span>{Search.dotProgress}</span>{" "}
             </div>
-          </Modal.Body>
-        </Modal>
-      </div>
-    );
+          </div>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
 };
 
 export default observer(Preloader);

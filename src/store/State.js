@@ -3,7 +3,7 @@ import { configure } from "mobx";
 import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
-  groupListRender = [] //список групп с сервера для рендера в результатах
+  groupListRender = []; //список групп с сервера для рендера в результатах
   dotProgress = "...";
   nothingFound = false; //ничего не найдено
   Loader = false;
@@ -18,9 +18,9 @@ class Search {
   last_name = null;
   first_name = null;
   photo = null;
-  start = false;
+  // start = false; //рассылка
   avatar = null;
-  startSend = null; //отвечает за кнопку остановить начать рассылку
+  // startSend = null; //отвечает за кнопку остановить начать рассылку
   inputValue2 = ""; //исключить сообщества со словами
   Search_CheckIsSend = false;
   errorFromServer = undefined;
@@ -93,7 +93,7 @@ class Search {
   dot = (data) => {
     let interval = setInterval(() => {
       //прогресс бар
-      console.log('interval')
+      console.log("interval");
       if (this.dotProgress === "...") {
         this.dotProgress = "......";
       } else {
@@ -186,6 +186,7 @@ class Search {
   }
 
   StopSend() {
+    //рассылка
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     this.StartFalse();
     ws.onopen = () => {
@@ -205,7 +206,6 @@ class Search {
       return null;
     }
   }
-
 
   GetLoginData() {
     let data = JSON.parse(localStorage.getItem("loginData"));
@@ -272,7 +272,7 @@ class Search {
   WsOnMessage(event) {
     let dataEvent;
     let data = JSON.parse(event.data);
-    console.log(data)
+    console.log(data);
     if (data.arr == "nothing") {
       this.nothingFound = true; //если ничего не найдено
     }
@@ -282,7 +282,7 @@ class Search {
       return;
     } else {
       this.dot("stopInterval");
-      this.progress = null
+      this.progress = null;
     }
     // if(data.progress=='null'){
     //   this.progress = null //убераем модальное окно
@@ -294,14 +294,15 @@ class Search {
         this.errorFromServer = dataEvent.userData;
         console.log(this.errorFromServer);
       }
-      if (dataEvent.arr.length>0) { //если с сервера пришел массив
-        console.log('297')
+      if (dataEvent.arr.length > 0) {
+        //если с сервера пришел массив
+        console.log("297");
         this.start = true;
         this.startSend = true;
         let result = dataEvent.arr.concat(this.groupListRender);
         let finalresult = [...new Set(result)];
-        console.log(finalresult)
-        this.groupListRender = toJS(finalresult)
+        console.log(finalresult);
+        this.groupListRender = toJS(finalresult);
         console.log(this.groupListRender);
       }
     }
@@ -378,6 +379,7 @@ class Search {
   };
 
   ResultGroup() {
+    //рассылка
     // this.setLocalStorageArea();
     const connect = () => {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);

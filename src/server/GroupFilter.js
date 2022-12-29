@@ -6,17 +6,13 @@ const filter_type_is_closed = async (data, arr, ws) => {
     await wssend(ws, "", "", "Фильтруем группы на закрытость");
     //фильтр на открытые закрытые
     arr.map((key) => {
-      try{
-        let d = key.is_closed
-      }catch (e) {
-        console.log(e)
-        wssend(ws, "", "недопустимые параметры поиска", "");
-        return
-      }
-
-      if (key.is_closed == data.is_closed) {
-        this.arr.push(key);
-        console.log(key.is_closed);
+      try {
+        if (key.is_closed == data.is_closed) {
+          this.arr.push(key);
+          console.log(key.is_closed);
+        }
+      } catch (e) {
+        console.log(e);
       }
     });
   }
@@ -54,10 +50,10 @@ const filter_type = (data, arr) => {
         sendArr.push(key);
       }
     });
-    if(sendArr.length>0){
-      return sendArr
-    }else {
-      return arr
+    if (sendArr.length > 0) {
+      return sendArr;
+    } else {
+      return arr;
     }
   }
 };
@@ -113,7 +109,7 @@ const openWalls = async (arr, token) => {
     }
   };
 
- while (arrFromClient.length > 1) {
+  while (arrFromClient.length > 1) {
     let result = await whileCicle();
     let resultReq = await Filter_group(result, token);
     arrForOwn = arrForOwn.concat(resultReq);

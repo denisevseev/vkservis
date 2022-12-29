@@ -31,7 +31,7 @@ function App() {
               <Avatar />
               <NothingFound />
               <Instruction />
-              <StopButtonSendMessage />
+              {/*<StopButtonSendMessage />*/}
               <div className="BorderSearchGroup">
                 <div style={{ display: "flex" }}>
                   <InputWordsToSearch />
@@ -45,7 +45,7 @@ function App() {
               {/*<SendDoneList />*/}
               {/*<SubscribersCount />*/}
               {/*<WaitSecSend />*/}
-              <StartButtonSendMessage />
+              {/*<StartButtonSendMessage /> //рассылка компонента*/}
               <Modals />
               <LeftMenu />
             </>
