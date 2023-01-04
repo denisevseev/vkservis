@@ -74,15 +74,19 @@ const Filter = () => {
               />
             </Form.Group>
           </div>
-          <div style={{ paddingTop: "5.3em"}} className="border1">
-            <button
-              onClick={Search.startSearch}
-              className="btn btn-outline-primary"
-            >
-              старт
-            </button>
-            <button style={{visibility: 'hidden'}}></button>
-            <button className="btn btn-outline-primary">стоп</button>
+          <div style={{ paddingTop: "5.3em" }} className="border1">
+            <div className="d-grid gap-4 d-md-flex justify-content-md-center">
+              <button className="btn btn-outline-primary" onClick={Search.startSearch} type="button">Старт</button>
+              <button className="btn btn-outline-primary" type="button">Стоп</button>
+            </div>
+            {/*<button*/}
+            {/*  onClick={Search.startSearch}*/}
+            {/*  className="btn btn-outline-primary"*/}
+            {/*>*/}
+            {/*  старт*/}
+            {/*</button>*/}
+            {/*<button style={{ visibility: "hidden" }}></button>*/}
+            {/*<button className="btn btn-outline-primary">стоп</button>*/}
           </div>
         </div>
       </div>

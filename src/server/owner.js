@@ -43,9 +43,6 @@ class searchGroup {
     this.start = false;
     this.mailing = 0;
     this.startAuto = false;
-    this.arr2 = [];
-    this.inputSubsOt = null;
-    this.inputSubsDo = null;
     this.result = false;
     this.post_data = null;
     this.error_msg = null;
@@ -69,6 +66,7 @@ class searchGroup {
     this.arrForsend = [];
     this.i = 0;
     this.startAuto = false;
+
     // новое
     // this.mailing = "70";
   }

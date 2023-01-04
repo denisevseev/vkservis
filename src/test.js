@@ -9,10 +9,8 @@
 // });
 //
 // io.listen(3000);
-let arr = ["sdf", "sdf", "sadf", "sdf", "sdf"];
-arr.map((k, i) => {
-  if (i === 2) {
-    return;
-  }
-  console.log(i);
-});
+let f = {
+  g: 2,
+  h: 4,
+};
+console.log(f.g);

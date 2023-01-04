@@ -18,6 +18,7 @@ import BuyAccounts from "./client/buyAccounts/BuyAccounts";
 import Filter from "./client/Filter/Filter";
 import Results from "./client/results/Results";
 import NothingFound from "./client/Modals/NothingFound";
+import Buttons from "./client/results/buttons/Buttons";
 function App() {
   return (
     <div className="App">
@@ -35,9 +36,12 @@ function App() {
               <div className="BorderSearchGroup">
                 <div style={{ display: "flex" }}>
                   <InputWordsToSearch />
-                  <Filter />
+                  <Filter/>
                 </div>
-                <Results />
+                <div className="border1" style={{ display: "flex" }}>
+                  <Results />
+                  <Buttons />
+                </div>
               </div>
 
               {/*<InputMessageToSend />*/}
