@@ -29,20 +29,17 @@ function App() {
           element={
             <>
               <AuthModal />
-              <Avatar />
               <NothingFound />
               <Instruction />
               {/*<StopButtonSendMessage />*/}
-              <div className="BorderSearchGroup">
-                <div style={{ display: "flex" }}>
-                  <InputWordsToSearch />
-                  <Filter/>
-                </div>
-                <div className="border1" style={{ display: "flex" }}>
-                  <Results />
-                  <Buttons />
-                </div>
-              </div>
+              <InputWordsToSearch />
+              <Filter/>
+              <Results />
+              <Buttons />
+              {/*<div className="BorderSearchGroup">*/}
+              {/*  <div className="border1">*/}
+              {/*  </div>*/}
+              {/*</div>*/}
 
               {/*<InputMessageToSend />*/}
               {/*<SubscribersCount />*/}

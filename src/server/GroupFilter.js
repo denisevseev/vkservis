@@ -63,8 +63,8 @@ const can_Comments = async (arr, token) => {
   this.arr15 = [];
   let count = 0;
   while (count < arr.length) {
-    let result = await canComments(arr[count].id, token);
     try {
+      let result = await canComments(arr[count].id, token);
       if (result.response.items[1].comments.can_post == 1) {
         this.arr.push(arr[count]);
       }
@@ -87,7 +87,7 @@ const can_Comments = async (arr, token) => {
   return data;
 };
 
-const openWalls = async (arr, token) => {
+const openWalls = async (arr, token, count) => {
   let arrForOwn = [];
   let lengthArr = Math.ceil(arr.length / 499);
   let arrFromClient = arr;
@@ -116,6 +116,16 @@ const openWalls = async (arr, token) => {
     this.i++;
   }
   let arr2 = [];
+
+
+  if(count){
+    arrForOwn.map((key1) => {
+      key1.response.map((key2) => {
+          arr2.push(key2);
+      }); //дублирование кода
+    });
+    return arr2
+  }
   arrForOwn.map((key1) => {
     key1.response.map((key2) => {
       if (key2.can_post === 1) {

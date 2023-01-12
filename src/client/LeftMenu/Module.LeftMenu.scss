@@ -21,6 +21,10 @@
   }
 }
 
+.leftMenu{
+  grid-column: 1/12;
+}
+
 @media screen and (min-width: 500px) {
   .hidden-menu {
     left: 0px;

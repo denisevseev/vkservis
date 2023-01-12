@@ -7,15 +7,10 @@ import Search from "./../../store/State";
 import { observer } from "mobx-react";
 import Preloader from "../Preloader/Preloader";
 const Filter = () => {
-  let time = () => {
-    // let fr  = Search.allGroups
-    // setTimeout(()=>{
-    //   console.log(Search.allGroups)
-    // },3000)
-  };
+
   return (
-    <div style={{ width: "40em" }}>
-      Фильтрация сообществ
+    <div className='filterGroup'>
+      Фильтрация собществ
       <div className="border1">
         <Select
           onChange={(e) => {
@@ -79,14 +74,6 @@ const Filter = () => {
               <button className="btn btn-outline-primary" onClick={Search.startSearch} type="button">Старт</button>
               <button className="btn btn-outline-primary" type="button">Стоп</button>
             </div>
-            {/*<button*/}
-            {/*  onClick={Search.startSearch}*/}
-            {/*  className="btn btn-outline-primary"*/}
-            {/*>*/}
-            {/*  старт*/}
-            {/*</button>*/}
-            {/*<button style={{ visibility: "hidden" }}></button>*/}
-            {/*<button className="btn btn-outline-primary">стоп</button>*/}
           </div>
         </div>
       </div>

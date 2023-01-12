@@ -7,7 +7,7 @@ import { City, Country } from "./../options/Options";
 
 const InputWordsToSearch = () => {
   return (
-    <div style={{ width: "40em" }}>
+    <div className="searchGroup" >
       <label htmlFor="exampleFormControlTextarea1">поисковые запросы</label>
       <div style={{ textAlign: "left" }} className="border1">
         <div className="form-group">

@@ -234,7 +234,7 @@ class searchGroup {
         (this.type = data.type),
         (this.openWalls = data.openWalls === false ? 0 : 1), //галочка открытые стены
         (this.openComments = data.openComments), // галочка открытые комментарии
-        (this.countMemFrom = data.countMemFrom), // количество участников от
+        (this.countMemFrom = Number(data.countMemFrom)), // количество участников от
         (this.countMemTo = data.countMemTo), // кол-во участников до
         (this.city = data.city), //город
         (this.country = data.country), //страна
@@ -294,12 +294,19 @@ class searchGroup {
       if (this.countMemTo || this.countMemFrom) {
         await wssend(ws, "", "", "фильтр количества подписчиков");
         let arrCount = [];
+        let result = await openWalls(this.arr, this.token, 'count');
+        this.arr = result;
         this.arr.map((key) => {
-          if (
-            key.members_count >= this.countMemFrom ||
-            key.members_count <= this.countMemTo
-          ) {
-            arrCount.push(key);
+          let g
+          try{
+            if (
+                key.members_count >= this.countMemFrom ||
+                key.members_count <= this.countMemTo
+            ) {
+              arrCount.push(key);
+            }
+          }catch(e){
+          console.log(e)
           }
         });
         this.arr = arrCount;
