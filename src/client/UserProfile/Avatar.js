@@ -18,27 +18,27 @@ const Avatar = () => {
 
   if (Search.token) {
     return (
-          <div onClick={handleStyle} className="own">
-            <div>
-              {!Search.photo ? <div>Ваш аккаунт заблокирован</div> : ""}
-              <img
-                  style={{ width: "2em", height: "2em", borderRadius: "2em" }}
-                  src={Search.photo}
-                  alt=""
-              />
-              <p>
-                <i className="down"></i>
-              </p>
-            </div>
+      <div onClick={handleStyle} className="own">
+        <div>
+          {!Search.photo ? <div>Ваш аккаунт заблокирован</div> : ""}
+          <img
+            style={{ width: "2em", height: "2em", borderRadius: "2em" }}
+            src={Search.photo}
+            alt=""
+          />
+          <p>
+            <i className="down"></i>
+          </p>
+        </div>
 
-            <div style={{ display: state, cursor: "pointer" }}>
-              <div>{Search.first_name}</div>
-              <div>{Search.last_name}</div>
-              <div onClick={Search.Logout} className="menuavatar">
-                Выйти
-              </div>
-            </div>
+        <div style={{ display: state, cursor: "pointer" }}>
+          <div>{Search.first_name}</div>
+          <div>{Search.last_name}</div>
+          <div onClick={Search.Logout} className="menuavatar">
+            Выйти
           </div>
+        </div>
+      </div>
     );
   }
 };

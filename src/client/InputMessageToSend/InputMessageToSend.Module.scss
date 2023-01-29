@@ -1,18 +1,17 @@
 .InputWords {
-  margin-top: 6em;
+  grid-column: 3/10;
   > input {
     text-align: center;
-    height: 5em;
     word-break: break-word;
-    @media (min-width: 550px) {
-      width: 50%;
-      margin-left: 25%;
-    }
+    //@media (min-width: 550px) {
+    //  width: 50%;
+    //  margin-left: 25%;
+    //}
   }
 
-  > span {
-    font-size: 0.6em;
-    color: lightgray;
-    padding: -1em;
-  }
+  //> span {
+  //  font-size: 0.6em;
+  //  color: lightgray;
+  //  padding: -1em;
+  //}
 }

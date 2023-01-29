@@ -1,11 +1,11 @@
 const axios = require("axios");
 const url = `https://api.vk.com/method/`;
 const posts_request = async (data) => {
+  console.log(data.owner_id, "data owner id");
   const response = await axios.get(
-    `${url}wall.post?&owner_id=-${encodeURI(
-      // оставить запись на стене
-      data.arr[data.i]
-    )}&message=${encodeURI(data.message)}&access_token=${data.token}&v=5.131`
+    `${url}wall.post?&owner_id=-${encodeURI(data.owner_id)}&message=${encodeURI(
+      data.message
+    )}&access_token=${data.token}&v=5.131`
   );
   return response.data;
 };

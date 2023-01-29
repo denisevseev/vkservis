@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import InputWordsToSearch from "./client/InputWordsToSearch/InputWordsToSearch";
 import InputMessageToSend from "./client/InputMessageToSend/InputMessageToSend";
-import SendMessageToGroup from "./client/SendDoneList/SendDoneList";
+import SendMessageToGroup from "./client/mailing/SendDoneList/SendDoneList";
 import Avatar from "./client/UserProfile/Avatar";
 import AuthModal from "./client/autorize/authModal/AuthModal";
 import Preloader from "./client/Preloader/Preloader";
@@ -19,42 +19,63 @@ import Filter from "./client/Filter/Filter";
 import Results from "./client/results/Results";
 import NothingFound from "./client/Modals/NothingFound";
 import Buttons from "./client/results/buttons/Buttons";
+import GroupListRender from "./client/results/GroupListRender";
+import ListRender from "./client/mailing/ListRender";
+import SendDoneList from "./client/mailing/SendDoneList/SendDoneList";
 function App() {
   return (
-    <div className="App">
+    <div>
       <Routes>
         <Route
           exact
-          path="/"
+          path="/mailingToGroups"
           element={
-            <>
-              <AuthModal />
-              <NothingFound />
-              <Instruction />
-              {/*<StopButtonSendMessage />*/}
-              <InputWordsToSearch />
-              <Filter/>
-              <Results />
-              <Buttons />
-              {/*<div className="BorderSearchGroup">*/}
-              {/*  <div className="border1">*/}
-              {/*  </div>*/}
-              {/*</div>*/}
-
-              {/*<InputMessageToSend />*/}
-              {/*<SubscribersCount />*/}
-              {/*<SendDoneList />*/}
-              {/*<SubscribersCount />*/}
-              {/*<WaitSecSend />*/}
-              {/*<StartButtonSendMessage /> //рассылка компонента*/}
-              <Modals />
-              <LeftMenu />
-            </>
+            <div className="listRenderAndLeftMenu">
+                <LeftMenu />
+                <ListRender cl="one" />
+                <WaitSecSend cl="WaitSecSend" />
+              <InputMessageToSend />
+              <StartButtonSendMessage />
+               <SendDoneList/>
+            </div>
           }
         />
-        <Route exact path="/buyAccounts" element={<BuyAccounts />} />
       </Routes>
-      {/*<ErrorFromServer/>*/}
+      <div className="App">
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <>
+                <AuthModal />
+                <NothingFound />
+                <Instruction />
+                {/*<StopButtonSendMessage />*/}
+                <InputWordsToSearch />
+                <Filter />
+                <Results />
+                <Buttons />
+                {/*<div className="BorderSearchGroup">*/}
+                {/*  <div className="border1">*/}
+                {/*  </div>*/}
+                {/*</div>*/}
+
+                {/*<InputMessageToSend />*/}
+                {/*<SubscribersCount />*/}
+                {/*<SendDoneList />*/}
+                {/*<SubscribersCount />*/}
+                {/*<WaitSecSend />*/}
+                {/*<StartButtonSendMessage /> //рассылка компонента*/}
+                <Modals />
+                <LeftMenu cl="leftMenu" />
+              </>
+            }
+          />
+          <Route exact path="/buyAccounts" element={<BuyAccounts />} />
+        </Routes>
+        {/*<ErrorFromServer/>*/}
+      </div>
     </div>
   );
 }

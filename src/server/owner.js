@@ -145,28 +145,6 @@ class searchGroup {
     return arr;
   };
 
-  async is_error(ws) {
-    //если ошибка
-    try {
-      if (this.result.error.error_msg) {
-        this.error_msg = this.result.error.error_msg;
-        await wssend(ws, this.error_msg);
-        return this.error_msg;
-      }
-    } catch (e) {
-      console.log("error в ответе не найден");
-    }
-  }
-
-  // async resultArr() {
-  //   let set = [...new Set(this.arr)];
-  //   this.arr = set;
-  //   this.arr.map((elName) => {
-  //     this.arrName.push(elName.name);
-  //   }); //создаем массив имен
-  //   let setname = [...new Set(this.arrName)]; //уникализируем массив имен
-  //   this.arrName = setname; //массив уникальных имен
-  // }
 
   resetGlobVar() {
     //обнуление данных
@@ -211,14 +189,6 @@ class searchGroup {
     if (this.arrForsend.length > 0) {
       await this.if_err_send_err();
     }
-  }
-
-  async while_i() {
-    this.post_data.i++;
-    this.i = this.post_data.i;
-    this.group_post = await Group_post(this.post_data);
-    await this.i_res_arr();
-    await this.if_arr();
   }
 
   nothingFound = (ws) => {
@@ -294,19 +264,19 @@ class searchGroup {
       if (this.countMemTo || this.countMemFrom) {
         await wssend(ws, "", "", "фильтр количества подписчиков");
         let arrCount = [];
-        let result = await openWalls(this.arr, this.token, 'count');
+        let result = await openWalls(this.arr, this.token, "count");
         this.arr = result;
         this.arr.map((key) => {
-          let g
-          try{
+          let g;
+          try {
             if (
-                key.members_count >= this.countMemFrom ||
-                key.members_count <= this.countMemTo
+              key.members_count >= this.countMemFrom ||
+              key.members_count <= this.countMemTo
             ) {
               arrCount.push(key);
             }
-          }catch(e){
-          console.log(e)
+          } catch (e) {
+            console.log(e);
           }
         });
         this.arr = arrCount;
@@ -315,37 +285,6 @@ class searchGroup {
       this.arr = await filter_type(data, this.arr); //фильтр типа группы (public, event, group)
       await wssend(ws, this.arr, "", null); //отправка финального массива поиска групп
       console.log("307");
-
-      // //рассылка по группам
-      // this.post_data = {
-      //   i: this.i,
-      //   message: this.message,
-      //   arr: this.arr,
-      //   arrForsend: this.arrForsend,
-      //   token: this.token,
-      //   Ot: this.Ot,
-      //   Do: this.Do,
-      //   subsDo: this.subsDo,
-      //   subsOt: this.subsOt,
-      // };
-      // //рассылка по группам
-      // this.group_post = await Group_post(this.post_data);
-      // //рассылка по группам
-      // await this.i_res_arr(); //получаю данные с гроуп пост
-      // await this.is_error(ws); //если ошибка
-      // await this.if_err_send_err();
-      // await this.if_arr(); //проверяем длинну массиива и проверяем на ошибки
-      //
-      // while (this.i < this.isArr70()) {
-      //   console.log(this.i, this.arr.length, "!!!!!!!!!");
-      //   if (this.mailing == "70" || this.error_msg) {
-      //     await wssend(ws, this.arrForsend, this.error_msg);
-      //     this.VariblesNull();
-      //     break;
-      //   } else {
-      //     await this.while_i();
-      //   }
-      // }
     }
   }
 }

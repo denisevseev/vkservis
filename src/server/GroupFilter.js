@@ -13,6 +13,7 @@ const filter_type_is_closed = async (data, arr, ws) => {
         }
       } catch (e) {
         console.log(e);
+        wssend(ws,"nothing")
       }
     });
   }
@@ -45,11 +46,15 @@ const filter_type = (data, arr) => {
   //фильтр по типу сообщества
   let sendArr = [];
   if (data.type) {
-    arr.map((key) => {
-      if (key.type == data.type) {
-        sendArr.push(key);
-      }
-    });
+    try {
+      arr.map((key) => {
+        if (key.type == data.type) {
+          sendArr.push(key);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
     if (sendArr.length > 0) {
       return sendArr;
     } else {
@@ -117,14 +122,13 @@ const openWalls = async (arr, token, count) => {
   }
   let arr2 = [];
 
-
-  if(count){
+  if (count) {
     arrForOwn.map((key1) => {
       key1.response.map((key2) => {
-          arr2.push(key2);
+        arr2.push(key2);
       }); //дублирование кода
     });
-    return arr2
+    return arr2;
   }
   arrForOwn.map((key1) => {
     key1.response.map((key2) => {

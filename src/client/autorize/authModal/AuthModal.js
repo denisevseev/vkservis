@@ -32,7 +32,7 @@ const AuthModal = () => {
     />
   );
   return (
-    <div>
+    <div style={{ marginLeft: "12rem" }}>
       {state === null ? (
         <button
           type="button"

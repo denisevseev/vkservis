@@ -4,6 +4,7 @@ import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
+  groupListMailing = [] //группы по которым сделана рассылка
   dotProgress = "...";
   nothingFound = false; //ничего не найдено
   Loader = false;
@@ -53,6 +54,7 @@ class Search {
     makeAutoObservable(this, {
       groupListRender: observable,
       Group: observable,
+      groupListMailing:observable,
       dotProgress: observable,
       nothingFound: observable,
       validation: observable,
@@ -166,6 +168,7 @@ class Search {
       ws.close();
     };
   }
+
   MessageForSend(mess) {
     // сообщение для рассылки
     this.sendMessage = mess;
@@ -254,25 +257,29 @@ class Search {
     };
   }
 
-  CheckIsSend() {
-    let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
+  // CheckIsSend() {
+  //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
+  //
+  //   ws.onopen = () => {
+  //     console.log(this.token);
+  //     ws.send(this.token);
+  //   };
+  //   ws.onerror = () => {
+  //     console.log(ws.readyState);
+  //   };
+  //   ws.onmessage = (event) => {
+  //     this.WsOnMessage(ws, event);
+  //   };
+  // }
 
-    ws.onopen = () => {
-      console.log(this.token);
-      ws.send(this.token);
-    };
-    ws.onerror = () => {
-      console.log(ws.readyState);
-    };
-    ws.onmessage = (event) => {
-      this.WsOnMessage(ws, event);
-    };
-  }
-
-  WsOnMessage(event) {
+  WsOnMessage = (event)=> {
     let dataEvent;
-    let data = JSON.parse(event.data);
-    console.log(data);
+    let data
+    console.log(event.data, 'event.data')
+    if(event.data){
+      data = JSON.parse(event.data);
+    }
+
     if (data.arr == "nothing") {
       this.nothingFound = true; //если ничего не найдено
     }
@@ -294,12 +301,12 @@ class Search {
         this.errorFromServer = dataEvent.userData;
         console.log(this.errorFromServer);
       }
-      if (dataEvent.arr.length > 0) {
+      if (toString(dataEvent.arr).length > 0) {
         //если с сервера пришел массив
         console.log("297");
         this.start = true;
         this.startSend = true;
-        let result = dataEvent.arr.concat(this.groupListRender);
+        let result = this.groupListRender.concat(dataEvent.arr)
         let finalresult = [...new Set(result)];
         console.log(finalresult);
         this.groupListRender = toJS(finalresult);
@@ -361,6 +368,12 @@ class Search {
     }
   };
 
+  groupListRenderMethod = () => {
+    let arr = [];
+    this.groupListRender.map((k) => arr.push(k.id)); //массив айди групп для рассылки для посыла их на сервер
+    return arr;
+  };
+
   startSearch = () => {
     const ws = new WebSocket(`ws://localhost:3001/startSearch`);
     ws.onopen = () => {
@@ -374,7 +387,7 @@ class Search {
     };
     ws.onmessage = (event) => {
       console.log(event.data, "404 state");
-      this.WsOnMessage(event, ws);
+      this.WsOnMessage(event);
     };
   };
 
@@ -386,26 +399,27 @@ class Search {
       console.log("client start");
       ws.onopen = () => {
         console.log("client open", this.Loader);
-        if (!this.start) {
-          // let data = JSON.stringify({
-          //   data: this.inputValue,
-          //   token: this.token,
-          //   messForSend: this.sendMessage,
-          //   Ot: this.Ot, //задержка в секундах для рассылки
-          //   Do: this.Do,
-          //   subsOt: this.subsOt, //кол-во подписчиков
-          //   subsDo: this.subsDo,
-          // });
-          // ws.send(data);
+        if (2 > 1) {
+          let data = JSON.stringify({
+            token: this.istoken(),
+            messForSend: this.sendMessage,
+            groupArrMailing: this.groupListRenderMethod(),
+            //   Ot: this.Ot, //задержка в секундах для рассылки
+            //   Do: this.Do,
+          });
+          ws.send(data);
           this.start = true;
         }
       };
       ws.onmessage = (event) => {
-        this.WsOnMessage(ws, event);
+        let data  = JSON.parse(event.data)
+        let result = this.groupListMailing.concat(data.arr)
+        let finalresult = [...new Set(result)];
+        this.groupListMailing = toJS(finalresult);
+        console.log(this.groupListMailing);
       };
 
       // this.WsOnMessage(ws);
-
       ws.onerror = (err) => {
         console.error(
           "Socket encountered error: ",

@@ -1,18 +1,18 @@
 import { observer } from "mobx-react";
-import Search from "../../store/State";
+import Search from "../../../store/State";
 import React, { useEffect, useState } from "react";
 
 const SendDoneList = () => {
   //вывод групп по которым разослано сообщение
-  if (!Search.Search_CheckIsSend) {
-    console.log("8");
-    Search.Search_CheckIsSend = true;
-    Search.CheckIsSend();
-  }
+  // if (!Search.Search_CheckIsSend) {
+  //   console.log("8");
+  //   Search.Search_CheckIsSend = true;
+  //   Search.CheckIsSend();
+  // }
 
   return (
     <div>
-      {Search.SendDoneReturn().map((k) => {
+      {Search.groupListMailing.map((k) => {
         return (
           <div key={k}>
             {

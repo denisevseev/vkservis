@@ -11,6 +11,7 @@ const City = [
   { value: "95", label: "Нижний новгород" },
   { value: "99", label: "Новосибирск" },
   { value: "49", label: "Екатиринбург" },
+  { value: "60", label: "Казань" },
 ];
 const Groups = [
   { value: "", label: "Открытые и закрытые сообщества" },

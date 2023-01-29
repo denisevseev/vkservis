@@ -7,9 +7,8 @@ import Search from "./../../store/State";
 import { observer } from "mobx-react";
 import Preloader from "../Preloader/Preloader";
 const Filter = () => {
-
   return (
-    <div className='filterGroup'>
+    <div className="filterGroup">
       Фильтрация собществ
       <div className="border1">
         <Select
@@ -71,8 +70,16 @@ const Filter = () => {
           </div>
           <div style={{ paddingTop: "5.3em" }} className="border1">
             <div className="d-grid gap-4 d-md-flex justify-content-md-center">
-              <button className="btn btn-outline-primary" onClick={Search.startSearch} type="button">Старт</button>
-              <button className="btn btn-outline-primary" type="button">Стоп</button>
+              <button
+                className="btn btn-outline-primary"
+                onClick={Search.startSearch}
+                type="button"
+              >
+                Старт
+              </button>
+              <button className="btn btn-outline-primary" type="button">
+                Стоп
+              </button>
             </div>
           </div>
         </div>

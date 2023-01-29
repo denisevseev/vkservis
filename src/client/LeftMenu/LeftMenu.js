@@ -4,7 +4,7 @@ import "./Module.LeftMenu.scss";
 import { observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
 
-const LeftMenu = () => {
+const LeftMenu = ({ cl }) => {
   const [isActive, setActive] = useState(false);
   let ChangeCheckBox = (e) => {
     // State.LeftMenuCheckboxes(e)
@@ -18,7 +18,7 @@ const LeftMenu = () => {
     setTimeout(() => setActive(false), 2000);
   };
   return (
-    <div className="leftMenu">
+    <div className={cl}>
       <input type="checkbox" id="hmt" className="hidden-menu-ticker" />
       <label className="btn-menu" htmlFor="hmt">
         <span className="first"></span>
@@ -26,8 +26,6 @@ const LeftMenu = () => {
         <span className="third"></span>
       </label>
       <div className="hidden-menu">
-
-
         <li>
           <a style={{ marginTop: "1em" }} className="dropdown-item" href="#">
             группы
@@ -49,4 +47,3 @@ const LeftMenu = () => {
 };
 
 export default observer(LeftMenu);
-

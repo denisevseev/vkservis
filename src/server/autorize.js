@@ -22,7 +22,7 @@ class autorize_class {
         .build();
       await this.driver
         .get(
-          "https://oauth.vk.com/authorize?client_id=51399251&display=page&scope=wall,posts,photos,groups,friends,video,market,email,offline&response_type=token&v=5.131"
+          "https://oauth.vk.com/authorize?client_id=51400745&display=page&scope=wall,posts,photos,groups,friends,video,market,email,offline&response_type=token&v=5.131"
         )
         .then((success, error) => {
           if (error) {

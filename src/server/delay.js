@@ -1,6 +1,6 @@
 const delay = (min, max) => {
-  if (min == "" || max == "") {
-    this.rand = 2000;
+  if (min == "" || max == "" || min == undefined || max == undefined) {
+    this.rand = 4000;
   } else {
     this.rand = Math.random() * (max * 1000 - min * 1000) + min * 1000;
   }

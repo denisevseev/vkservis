@@ -5,6 +5,27 @@
   //grid-auto-rows: minmax(50px, auto);
   gap: 0rem;
 }
+.listRenderAndLeftMenu {
+  display: grid;
+  grid-row-gap: 2rem;
+  padding-right: 10rem;
+  .one {
+    grid-column: 1/10;
+    margin-left: 20%;
+    //margin-right: 10%;
+  }
+  .WaitSecSend{
+    grid-column: 3/10;
+  }
+  .StartButtonSendMessage{
+    grid-column: 4/10;
+  }
+  //.two {
+  //  grid-column: 15/30;
+  //}
+  //.tree {
+  //}
+}
 
 @media (max-width: 550px) {
   .App-header {
@@ -13,32 +34,29 @@
     }
   }
 }
-.App-header{
+.App-header {
   grid-column: 1/12;
   background-color: #61dafb;
   text-align: center;
 }
-.filterGroup{
+.filterGroup {
   grid-column: 7/12;
-
 }
-.searchGroup{
+.searchGroup {
   grid-column: 6/7;
 }
 
-.results{
+.results {
   grid-column: 6/10;
 }
-.buttons{
+.buttons {
   grid-column: 10/12;
   background-color: #e6eaf1;
 }
 
-
 .App-link {
   color: #61dafb;
 }
-
 
 .BorderSearchGroup {
   border: solid;

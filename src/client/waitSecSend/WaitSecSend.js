@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useRef } from "react";
 import Search from "../../store/State";
-const WaitSecSend = () => {
+const WaitSecSend = ({cl}) => {
   const value = useRef();
   const value2 = useRef();
   const val = () => {
@@ -13,7 +13,7 @@ const WaitSecSend = () => {
   };
 
   return (
-    <div style={{ marginTop: "3em" }} className="inputs">
+    <div className={cl}>
       <div>Задержка в секундах для рассылки:</div>
       <div className="input-group">
         <span className="input-group-text">От</span>

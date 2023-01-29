@@ -6,6 +6,7 @@ const port = 3001;
 const ws = require("express-ws")(app);
 const WebSocket = require("ws");
 const searchGroup = require("./owner");
+const Mailing = require("./mailing");
 const search = new searchGroup();
 app.use(cors());
 app.use(
@@ -79,8 +80,8 @@ class Server {
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
-        this.sessionExist(ws, mes);
-        console.log(this.arr);
+        let data = JSON.parse(mes);
+        new Mailing().mailingToGroups(data, ws);
       });
     });
     app.listen(port, () => {
