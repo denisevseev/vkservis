@@ -13,6 +13,7 @@ import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonS
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
 import WaitSecSend from "./client/waitSecSend/WaitSecSend";
 import Modals from "./client/Modals/Modals";
+import Search from './store/State'
 import LeftMenu from "./client/LeftMenu/LeftMenu";
 import BuyAccounts from "./client/buyAccounts/BuyAccounts";
 import Filter from "./client/Filter/Filter";
@@ -35,7 +36,9 @@ function App() {
                 <ListRender cl="one" />
                 <WaitSecSend cl="WaitSecSend" />
               <InputMessageToSend />
-              <StartButtonSendMessage />
+                <div className="startStop">
+                    {!Search.startSend?<StartButtonSendMessage />:<StopButtonSendMessage/>}
+                </div>
                <SendDoneList/>
             </div>
           }
@@ -51,22 +54,10 @@ function App() {
                 <AuthModal />
                 <NothingFound />
                 <Instruction />
-                {/*<StopButtonSendMessage />*/}
                 <InputWordsToSearch />
                 <Filter />
                 <Results />
                 <Buttons />
-                {/*<div className="BorderSearchGroup">*/}
-                {/*  <div className="border1">*/}
-                {/*  </div>*/}
-                {/*</div>*/}
-
-                {/*<InputMessageToSend />*/}
-                {/*<SubscribersCount />*/}
-                {/*<SendDoneList />*/}
-                {/*<SubscribersCount />*/}
-                {/*<WaitSecSend />*/}
-                {/*<StartButtonSendMessage /> //рассылка компонента*/}
                 <Modals />
                 <LeftMenu cl="leftMenu" />
               </>
@@ -74,7 +65,6 @@ function App() {
           />
           <Route exact path="/buyAccounts" element={<BuyAccounts />} />
         </Routes>
-        {/*<ErrorFromServer/>*/}
       </div>
     </div>
   );

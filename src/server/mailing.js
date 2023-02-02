@@ -33,20 +33,22 @@ class Mailing {
   }
 
   mailingToGroups = async (data, ws) => {
-    if (data) {
+    if (data && !this.token) {
       this.groupArrMailing = data.groupArrMailing; //массив групп для рассылки по ним
       this.token = data.token;
       this.messForSend = data.messForSend;
       console.log(data, "8MAILING");
+      while (this.i < 70) {
+        this.group_post = await posts_request(this.postDataMethod());
+        console.log(this.group_post, this.i);
+        await this.isError(ws) //проверка на то есть ли ошибки в ответе
+        await delay(); //задержка
+        this.i++;
+      }
+    }else {
+      this.i=70 //тем самым останавливаем рассылку
     }
 
-    while (this.i < 70) {
-      this.group_post = await posts_request(this.postDataMethod());
-      console.log(this.group_post, this.i);
-      await this.isError(ws) //проверка на то есть ли ошибки в ответе
-      await delay(); //задержка
-      this.i++;
-    }
   };
 
   // //рассылка по группам

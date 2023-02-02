@@ -34,9 +34,10 @@ class Server {
   StopSend() {
     app.ws(`/stopsend`, (ws) => {
       ws.on("message", async (mes) => {
-        let index = this.arr.findIndex((i) => i.token === mes);
-        console.log(index, "index");
-        index != -1 ? this.arr[index].owner_i() : null;
+        // let index = this.arr.findIndex((i) => i.token === mes);
+        // console.log(index, "index");
+        // index != -1 ? this.arr[index].owner_i() : null;
+        this.mailingStop(ws, mes)
       });
     });
   }
@@ -57,25 +58,37 @@ class Server {
   startSearchMethod() {
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
-        this.sessionExist(ws, mes);
+        let data = JSON.parse(mes)
+        new searchGroup().searchGroupMethod(data, ws)
       });
     });
   }
 
-  sessionExist = (ws, mes) => {
-    this.arr = [];
-    //проверка существования активного юзера по токену
+  // sessionExist = (ws, mes) => {
+  //   this.arr = [];
+  //   //проверка существования активного юзера по токену
+  //   let data = JSON.parse(mes);
+  //   let index = this.arr.findIndex((i) => i.token === data.token);
+  //   if (index == -1) {
+  //     this.arr.push(new searchGroup());
+  //     this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
+  //   } else {
+  //     // this.arr[index].searchGroupMethod(data, ws);
+  //     this.arr.push(new searchGroup());
+  //     this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
+  //   }
+  // };
+  //
+  mailingStop = (ws, mes)=>{
     let data = JSON.parse(mes);
     let index = this.arr.findIndex((i) => i.token === data.token);
     if (index == -1) {
-      this.arr.push(new searchGroup());
-      this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
+      this.arr.push(new Mailing());
+      this.arr[this.arr.length - 1].mailingToGroups(data, ws);
     } else {
-      // this.arr[index].searchGroupMethod(data, ws);
-      this.arr.push(new searchGroup());
-      this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
+      this.arr[index].mailingToGroups(data, ws);
     }
-  };
+  }
 
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {

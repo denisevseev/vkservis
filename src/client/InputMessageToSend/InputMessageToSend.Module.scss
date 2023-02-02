@@ -1,8 +1,10 @@
 .InputWords {
-  grid-column: 3/10;
+  grid-column: 2/10;
+  margin-left: 9rem;
   > input {
     text-align: center;
     word-break: break-word;
+    height: 7rem;
     //@media (min-width: 550px) {
     //  width: 50%;
     //  margin-left: 25%;

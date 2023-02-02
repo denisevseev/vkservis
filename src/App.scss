@@ -15,11 +15,19 @@
     //margin-right: 10%;
   }
   .WaitSecSend{
-    grid-column: 3/10;
-  }
-  .StartButtonSendMessage{
     grid-column: 4/10;
+    text-align: center;
   }
+  .startStop{
+    grid-column-gap: 2rem;
+    grid-column: 5/10;
+  }
+  //.StartButtonSendMessage{
+  //  grid-column: 4/10;
+  //}
+  //.StopButtonSendMessage{
+  //  grid-column: 5/10;
+  //}
   //.two {
   //  grid-column: 15/30;
   //}

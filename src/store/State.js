@@ -21,7 +21,7 @@ class Search {
   photo = null;
   // start = false; //рассылка
   avatar = null;
-  // startSend = null; //отвечает за кнопку остановить начать рассылку
+  startSend = null; //отвечает за кнопку остановить начать рассылку
   inputValue2 = ""; //исключить сообщества со словами
   Search_CheckIsSend = false;
   errorFromServer = undefined;
@@ -54,6 +54,7 @@ class Search {
     makeAutoObservable(this, {
       groupListRender: observable,
       Group: observable,
+      startSend:observable,
       groupListMailing:observable,
       dotProgress: observable,
       nothingFound: observable,
@@ -189,6 +190,7 @@ class Search {
   }
 
   StopSend() {
+    this.startSend = false
     //рассылка
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     this.StartFalse();
@@ -305,7 +307,7 @@ class Search {
         //если с сервера пришел массив
         console.log("297");
         this.start = true;
-        this.startSend = true;
+        // this.startSend = true;
         let result = this.groupListRender.concat(dataEvent.arr)
         let finalresult = [...new Set(result)];
         console.log(finalresult);
@@ -392,6 +394,7 @@ class Search {
   };
 
   ResultGroup() {
+  this.startSend = true
     //рассылка
     // this.setLocalStorageArea();
     const connect = () => {

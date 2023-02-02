@@ -1,16 +1,16 @@
 import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
+import StopButtonSendMessage from "../StopButtonSendMessage/StopButtonSendMessage";
 
 const StartButtonSendMessage = () => {
   const ResultGroup = () => {
-    Search.startSend = true;
     Search.ResultGroup();
   };
 
   return (
     <div className="StartButtonSendMessage">
-      {2 > 1 ? (
+      {
         <button
           type="button"
           onClick={ResultGroup}
@@ -18,9 +18,7 @@ const StartButtonSendMessage = () => {
         >
           Начать рассылку
         </button>
-      ) : (
-        ""
-      )}
+      }
     </div>
   );
 };
