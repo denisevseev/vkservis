@@ -13,7 +13,7 @@ import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonS
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
 import WaitSecSend from "./client/waitSecSend/WaitSecSend";
 import Modals from "./client/Modals/Modals";
-import Search from './store/State'
+import Search from "./store/State";
 import LeftMenu from "./client/LeftMenu/LeftMenu";
 import BuyAccounts from "./client/buyAccounts/BuyAccounts";
 import Filter from "./client/Filter/Filter";
@@ -32,14 +32,18 @@ function App() {
           path="/mailingToGroups"
           element={
             <div className="listRenderAndLeftMenu">
-                <LeftMenu />
-                <ListRender cl="one" />
-                <WaitSecSend cl="WaitSecSend" />
+              <LeftMenu />
+              <ListRender cl="one" />
+              <WaitSecSend cl="WaitSecSend" />
               <InputMessageToSend />
-                <div className="startStop">
-                    {!Search.startSend?<StartButtonSendMessage />:<StopButtonSendMessage/>}
-                </div>
-               <SendDoneList/>
+              <div className="startStop">
+                {!Search.startSend ? (
+                  <StartButtonSendMessage />
+                ) : (
+                  <StopButtonSendMessage />
+                )}
+                <SendDoneList />
+              </div>
             </div>
           }
         />

@@ -14,7 +14,7 @@ const StartButtonSendMessage = () => {
         <button
           type="button"
           onClick={ResultGroup}
-          className="btn btn-outline-primary"
+          className="btn bg-info btn-outline-primary"
         >
           Начать рассылку
         </button>

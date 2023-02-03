@@ -4,11 +4,14 @@ import { Country, City, Groups, Groups2 } from "../client/options/Options";
 
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
-  groupListMailing = [] //группы по которым сделана рассылка
+  groupListMailing = []; //группы по которым сделана рассылка
   dotProgress = "...";
   nothingFound = false; //ничего не найдено
   Loader = false;
   inputValue = [];
+  from = 1; // задержка от
+  before = 1; // задержка до
+  startStop = true; // начать остановить поиск
   sendMessage = "";
   SendDone = [];
   i = 0;
@@ -54,8 +57,11 @@ class Search {
     makeAutoObservable(this, {
       groupListRender: observable,
       Group: observable,
-      startSend:observable,
-      groupListMailing:observable,
+      from: observable,
+      before: observable,
+      startSend: observable,
+      startStop: observable,
+      groupListMailing: observable,
       dotProgress: observable,
       nothingFound: observable,
       validation: observable,
@@ -190,7 +196,7 @@ class Search {
   }
 
   StopSend() {
-    this.startSend = false
+    this.startSend = false;
     //рассылка
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     this.StartFalse();
@@ -274,11 +280,11 @@ class Search {
   //   };
   // }
 
-  WsOnMessage = (event)=> {
+  WsOnMessage = (event) => {
     let dataEvent;
-    let data
-    console.log(event.data, 'event.data')
-    if(event.data){
+    let data;
+    console.log(event.data, "event.data");
+    if (event.data) {
       data = JSON.parse(event.data);
     }
 
@@ -308,14 +314,14 @@ class Search {
         console.log("297");
         this.start = true;
         // this.startSend = true;
-        let result = this.groupListRender.concat(dataEvent.arr)
+        let result = this.groupListRender.concat(dataEvent.arr);
         let finalresult = [...new Set(result)];
         console.log(finalresult);
         this.groupListRender = toJS(finalresult);
         console.log(this.groupListRender);
       }
     }
-  }
+  };
 
   SendDoneReturn() {
     return this.SendDone; //массив групп по которым сделана рассылка
@@ -383,6 +389,7 @@ class Search {
       console.log(data, "384");
       this.formValidation();
       if (!this.validation) {
+        this.startStop = false; //меняем кнопку старт на стоп
         this.validation = false;
         ws.send(data);
       }
@@ -394,7 +401,7 @@ class Search {
   };
 
   ResultGroup() {
-  this.startSend = true
+    this.startSend = true;
     //рассылка
     // this.setLocalStorageArea();
     const connect = () => {
@@ -407,16 +414,16 @@ class Search {
             token: this.istoken(),
             messForSend: this.sendMessage,
             groupArrMailing: this.groupListRenderMethod(),
-            //   Ot: this.Ot, //задержка в секундах для рассылки
-            //   Do: this.Do,
+            from: this.from, //задержка в секундах для рассылки
+            before: this.before,
           });
           ws.send(data);
           this.start = true;
         }
       };
       ws.onmessage = (event) => {
-        let data  = JSON.parse(event.data)
-        let result = this.groupListMailing.concat(data.arr)
+        let data = JSON.parse(event.data);
+        let result = this.groupListMailing.concat(data.arr);
         let finalresult = [...new Set(result)];
         this.groupListMailing = toJS(finalresult);
         console.log(this.groupListMailing);

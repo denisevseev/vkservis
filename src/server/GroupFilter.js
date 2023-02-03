@@ -13,7 +13,7 @@ const filter_type_is_closed = async (data, arr, ws) => {
         }
       } catch (e) {
         console.log(e);
-        wssend(ws,"nothing")
+        wssend(ws, "nothing");
       }
     });
   }

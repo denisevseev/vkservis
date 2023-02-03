@@ -4,7 +4,7 @@ import GroupListRender from "../results/GroupListRender";
 const ListRender = ({ cl }) => {
   console.log(cl);
   return (
-    <div  className={cl}>
+    <div className={cl}>
       <div className="border1">
         <div className="form-group">
           <div

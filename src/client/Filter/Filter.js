@@ -6,6 +6,8 @@ import "./Filter.Module.scss";
 import Search from "./../../store/State";
 import { observer } from "mobx-react";
 import Preloader from "../Preloader/Preloader";
+import StartButton from "./StartButton";
+import StopButton from "./StopButton";
 const Filter = () => {
   return (
     <div className="filterGroup">
@@ -70,16 +72,7 @@ const Filter = () => {
           </div>
           <div style={{ paddingTop: "5.3em" }} className="border1">
             <div className="d-grid gap-4 d-md-flex justify-content-md-center">
-              <button
-                className="btn btn-outline-primary"
-                onClick={Search.startSearch}
-                type="button"
-              >
-                Старт
-              </button>
-              <button className="btn btn-outline-primary" type="button">
-                Стоп
-              </button>
+              {Search.startStop ? <StartButton /> : <StopButton />}
             </div>
           </div>
         </div>

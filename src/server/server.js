@@ -37,7 +37,7 @@ class Server {
         // let index = this.arr.findIndex((i) => i.token === mes);
         // console.log(index, "index");
         // index != -1 ? this.arr[index].owner_i() : null;
-        this.mailingStop(ws, mes)
+        this.mailingStop(ws, mes);
       });
     });
   }
@@ -58,8 +58,8 @@ class Server {
   startSearchMethod() {
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
-        let data = JSON.parse(mes)
-        new searchGroup().searchGroupMethod(data, ws)
+        let data = JSON.parse(mes);
+        new searchGroup().searchGroupMethod(data, ws);
       });
     });
   }
@@ -79,7 +79,7 @@ class Server {
   //   }
   // };
   //
-  mailingStop = (ws, mes)=>{
+  mailingStop = (ws, mes) => {
     let data = JSON.parse(mes);
     let index = this.arr.findIndex((i) => i.token === data.token);
     if (index == -1) {
@@ -88,7 +88,7 @@ class Server {
     } else {
       this.arr[index].mailingToGroups(data, ws);
     }
-  }
+  };
 
   searchGroupMethod() {
     app.ws("/startSend", (ws) => {

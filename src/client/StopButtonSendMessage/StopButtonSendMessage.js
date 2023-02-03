@@ -8,7 +8,7 @@ const StopButtonSendMessage = () => {
         <button
           type="button"
           onClick={() => Search.StopSend()}
-          className="btn btn-outline-primary"
+          className="btn  bg-info btn-outline-primary"
         >
           Остановить рассылку
         </button>

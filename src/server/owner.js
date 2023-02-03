@@ -145,7 +145,6 @@ class searchGroup {
     return arr;
   };
 
-
   resetGlobVar() {
     //обнуление данных
     this.arr_str_for_search = 0;
