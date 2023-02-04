@@ -241,7 +241,7 @@ class searchGroup {
             "",
             "запускаем цикл фильтрации каждой группы на возможность оставлять комменты"
           );
-          let result = await can_Comments(this.arr, this.token);
+          let result = await can_Comments(ws,this.arr, this.token);
           this.arr = await result.arr;
           this.arr15 = result.arr15;
         }
@@ -283,7 +283,6 @@ class searchGroup {
       await wssend(ws, "", "", "фильтруем тип сообществ");
       this.arr = await filter_type(data, this.arr); //фильтр типа группы (public, event, group)
       await wssend(ws, this.arr, "", null); //отправка финального массива поиска групп
-      console.log("307");
     }
   }
 }

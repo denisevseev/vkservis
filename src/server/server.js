@@ -64,21 +64,7 @@ class Server {
     });
   }
 
-  // sessionExist = (ws, mes) => {
-  //   this.arr = [];
-  //   //проверка существования активного юзера по токену
-  //   let data = JSON.parse(mes);
-  //   let index = this.arr.findIndex((i) => i.token === data.token);
-  //   if (index == -1) {
-  //     this.arr.push(new searchGroup());
-  //     this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
-  //   } else {
-  //     // this.arr[index].searchGroupMethod(data, ws);
-  //     this.arr.push(new searchGroup());
-  //     this.arr[this.arr.length - 1].searchGroupMethod(data, ws);
-  //   }
-  // };
-  //
+
   mailingStop = (ws, mes) => {
     let data = JSON.parse(mes);
     let index = this.arr.findIndex((i) => i.token === data.token);

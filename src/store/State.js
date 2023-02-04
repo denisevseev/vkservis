@@ -5,7 +5,7 @@ import { Country, City, Groups, Groups2 } from "../client/options/Options";
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
   groupListMailing = []; //группы по которым сделана рассылка
-  dotProgress = "...";
+  dotProgress = "";
   nothingFound = false; //ничего не найдено
   Loader = false;
   inputValue = [];
@@ -103,7 +103,7 @@ class Search {
     let interval = setInterval(() => {
       //прогресс бар
       console.log("interval");
-      if (this.dotProgress === "...") {
+      if (this.dotProgress == "...") {
         this.dotProgress = "......";
       } else {
         this.dotProgress = "...";
@@ -389,19 +389,19 @@ class Search {
       console.log(data, "384");
       this.formValidation();
       if (!this.validation) {
-        this.startStop = false; //меняем кнопку старт на стоп
         this.validation = false;
         ws.send(data);
       }
     };
     ws.onmessage = (event) => {
+      this.startStop = false; //меняем кнопку старт на стоп
+      setTimeout(()=> this.startStop = true,2000)
       console.log(event.data, "404 state");
       this.WsOnMessage(event);
     };
   };
 
   ResultGroup() {
-    this.startSend = true;
     //рассылка
     // this.setLocalStorageArea();
     const connect = () => {
@@ -422,6 +422,8 @@ class Search {
         }
       };
       ws.onmessage = (event) => {
+        // this.startSend = false;
+        // this.startSend = true;
         let data = JSON.parse(event.data);
         let result = this.groupListMailing.concat(data.arr);
         let finalresult = [...new Set(result)];
