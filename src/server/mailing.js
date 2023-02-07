@@ -1,4 +1,4 @@
-const { posts_request } = require("./requests");
+const { posts_request, canComments, createComment} = require("./requests");
 const delay = require("./delay");
 const wssend = require("./wsSendData");
 class Mailing {
@@ -44,15 +44,39 @@ class Mailing {
       console.log(data, "8MAILING");
       while (this.i < 70) {
         this.group_post = await posts_request(this.postDataMethod());
-        console.log(this.group_post, this.i);
-        await this.isError(ws); //проверка на то есть ли ошибки в ответе
-        await delay(data.from, data.before); //задержка
-        this.i++;
+        if(this.group_post.response){
+          console.log(this.group_post, this.i);
+          await this.isError(ws); //проверка на то есть ли ошибки в ответе
+          await delay(data.from, data.before); //задержка
+        }else {
+          let result = await canComments(this.postDataMethod().owner_id, this.token) //получаем список постов стены группы
+          console.log(result)
+          await this.canCommentsMethod(result)
+        }
+       this.i++;
       }
     } else {
       this.i = 70; //тем самым останавливаем рассылку
     }
   };
+
+  canCommentsMethod = async (result)=>{
+    this.result = result
+    for(let i = 0; i<result.response.items.length; i++){
+      if(!result.response.items[i].can_delete){
+        console.log('its found done')
+        let data ={
+          post_id:this.result.response.items[i].id,
+          owner_id: this.result.response.items[i].owner_id,
+          message: this.messForSend,
+          token:this.token
+        }
+        let result = await createComment(data)
+        console.log(result)
+        break
+      }
+    }
+  }
 }
 
 module.exports = Mailing;
