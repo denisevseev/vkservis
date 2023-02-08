@@ -36,6 +36,8 @@ class Search {
   exclude = true; // исключить сообщества со словами
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
+  delCommentPost = false //  удалять записи со стены перед публикацией
+  spamComments = false // Рассылать в комментарии если нельзя на стену
   openMessages = false; //открытые сообщения галочка
   openComments = false; //открытые комментарии галочка
   countMembers = false; //колич участников галочка
@@ -58,7 +60,9 @@ class Search {
       groupListRender: observable,
       Group: observable,
       from: observable,
+      delCommentPost: observable,
       before: observable,
+      spamComments:observable,
       startSend: observable,
       startStop: observable,
       groupListMailing: observable,
@@ -115,6 +119,17 @@ class Search {
   };
 
   handleCheck(data, target) {
+    if(data==="delCommentPost"&& target){
+      this.delCommentPost = true
+    } else if(data == 'delCommentPost'){
+      this.delCommentPost = false
+    }
+    if(data==="spamComments" && target){
+      this.spamComments = true
+    }else if(data == "spamComments"){
+      this.spamComments = false
+      debugger
+    }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
     } else if (data == "countMembers") {
@@ -395,7 +410,7 @@ class Search {
     };
     ws.onmessage = (event) => {
       this.startStop = false; //меняем кнопку старт на стоп
-      setTimeout(()=> this.startStop = true,2000)
+      setTimeout(() => (this.startStop = true), 2000);
       console.log(event.data, "404 state");
       this.WsOnMessage(event);
     };
@@ -416,6 +431,8 @@ class Search {
             groupArrMailing: this.groupListRenderMethod(),
             from: this.from, //задержка в секундах для рассылки
             before: this.before,
+            spamComments: this.spamComments,
+            delCommentPost: this.delCommentPost
           });
           ws.send(data);
           this.start = true;

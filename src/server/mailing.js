@@ -1,6 +1,7 @@
-const { posts_request, canComments, createComment} = require("./requests");
+const { posts_request, canComments, createComment, wallDeleteComment, wallDelete } = require("./requests");
 const delay = require("./delay");
 const wssend = require("./wsSendData");
+const results = require("../client/results/Results");
 class Mailing {
   constructor() {
     this.token = null;
@@ -9,6 +10,8 @@ class Mailing {
     this.messForSend = null;
     this.from = "";
     this.before = "";
+    this.spamComments = false
+    this.delCommentPost = false
   }
   // async while_i() {
   //     this.i++;
@@ -22,6 +25,8 @@ class Mailing {
       message: this.messForSend, //сообщение для рассылки
       owner_id: this.groupArrMailing[this.i], //айди группы
       token: this.token,
+      // spamComments:this.spamComments,
+      // delCommentPost:this.delCommentPost
     };
     return postData;
   };
@@ -41,42 +46,71 @@ class Mailing {
       this.messForSend = data.messForSend;
       this.from = data.from;
       this.before = data.before;
+      this.spamComments = data.spamComments
+      this.delCommentPost = data.delCommentPost
       console.log(data, "8MAILING");
       while (this.i < 70) {
         this.group_post = await posts_request(this.postDataMethod());
-        if(this.group_post.response){
+        if(this.delCommentPost){
+          await this.deleteWall()
+          await this.deleteWall()
+        }
+        if (this.group_post.response) {
           console.log(this.group_post, this.i);
           await this.isError(ws); //проверка на то есть ли ошибки в ответе
           await delay(data.from, data.before); //задержка
-        }else {
-          let result = await canComments(this.postDataMethod().owner_id, this.token) //получаем список постов стены группы
-          console.log(result)
-          await this.canCommentsMethod(result)
+        } else if(this.spamComments) { //иначе если стоит галочка
+          let result = await canComments(
+            this.postDataMethod().owner_id,
+            this.token
+          ); //получаем список постов стены группы
+          console.log(result);
+          await this.canCommentsMethod(result);
         }
-       this.i++;
+        this.i++;
       }
     } else {
       this.i = 70; //тем самым останавливаем рассылку
     }
   };
 
-  canCommentsMethod = async (result)=>{
-    this.result = result
-    for(let i = 0; i<result.response.items.length; i++){
-      if(!result.response.items[i].can_delete){
-        console.log('its found done')
-        let data ={
-          post_id:this.result.response.items[i].id,
-          owner_id: this.result.response.items[i].owner_id,
-          message: this.messForSend,
-          token:this.token
-        }
-        let result = await createComment(data)
-        console.log(result)
-        break
+  dataFromReq = (i)=>{
+    let data  = { //готовый шаблон аргументов
+      post_id: this.result.response.items[i].id,
+      owner_id: this.result.response.items[i].owner_id,
+      message: this.messForSend,
+      token: this.token,
+    }
+    return data
+  }
+
+  deleteComment = async (result)=>{ //удаление комментария
+    await result.response.items.map(async (key, i)=>{
+      if(key.can_delete){
+        let result = await wallDeleteComment(this.dataFromReq(i))
+      }
+    })
+  }
+
+  deleteWall = async (result)=>{ //удаление записи
+    await result.response.items.map(async (key, i)=>{
+      if(key.can_delete){
+        let result = await wallDelete(this.dataFromReq(i))
+      }
+    })
+  }
+
+  canCommentsMethod = async (result) => {
+    this.result = result;
+    for (let i = 0; i < result.response.items.length; i++) {
+      if (!result.response.items[i].can_delete) {
+        console.log("its found done");
+        let result = await createComment(this.dataFromReq());
+        console.log(result);
+        break;
       }
     }
-  }
+  };
 }
 
 module.exports = Mailing;

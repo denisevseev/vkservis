@@ -63,7 +63,7 @@ const filter_type = (data, arr) => {
   }
 };
 
-const can_Comments = async (ws,arr, token) => {
+const can_Comments = async (ws, arr, token) => {
   this.arr = [];
   this.arr15 = [];
   let count = 0;
@@ -71,9 +71,14 @@ const can_Comments = async (ws,arr, token) => {
     try {
       let result = await canComments(arr[count].id, token);
       if (result.response.items[1].comments.can_post == 1) {
-       this.arr.push(arr[count]);
-       console.log('обработано сообществ')
-       await wssend(ws,"", '',`обработано сообществ ${count} из  ${arr.length}`) //прогресс
+        this.arr.push(arr[count]);
+        console.log("обработано сообществ");
+        await wssend(
+          ws,
+          "",
+          "",
+          `обработано сообществ ${count} из  ${arr.length}`
+        ); //прогресс
       }
     } catch (e) {
       try {

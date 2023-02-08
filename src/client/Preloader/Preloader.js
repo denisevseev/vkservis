@@ -4,7 +4,7 @@ import Search from "../../store/State";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 const Preloader = () => {
-  console.log(Search.progress)
+  console.log(Search.progress);
   return (
     <div>
       <Modal show={Search.progress ? true : false}>

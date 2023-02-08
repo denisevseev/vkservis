@@ -25,19 +25,17 @@ const LeftMenu = ({ cl }) => {
         <span className="second"></span>
         <span className="third"></span>
       </label>
-      <div  className="hidden-menu">
-        <NavLink to='/'>
+      <div className="hidden-menu">
+        <NavLink to="/">
           <li>
             <a style={{ marginTop: "1em" }} className="dropdown-item" href="#">
               группы
             </a>
           </li>
         </NavLink>
-        <NavLink to='/mailingToGroups'>
+        <NavLink to="/mailingToGroups">
           <li>
-            <a className="dropdown-item">
-              рассылка
-            </a>
+            <a className="dropdown-item">рассылка</a>
           </li>
         </NavLink>
 

@@ -1,6 +1,6 @@
 import "./App.scss";
 import { observer } from "mobx-react";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import InputWordsToSearch from "./client/InputWordsToSearch/InputWordsToSearch";
 import InputMessageToSend from "./client/InputMessageToSend/InputMessageToSend";
 import SendMessageToGroup from "./client/mailing/SendDoneList/SendDoneList";

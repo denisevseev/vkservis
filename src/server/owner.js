@@ -241,7 +241,7 @@ class searchGroup {
             "",
             "запускаем цикл фильтрации каждой группы на возможность оставлять комменты"
           );
-          let result = await can_Comments(ws,this.arr, this.token);
+          let result = await can_Comments(ws, this.arr, this.token);
           this.arr = await result.arr;
           this.arr15 = result.arr15;
         }

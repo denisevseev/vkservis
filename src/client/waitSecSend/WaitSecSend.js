@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
+import Form from "react-bootstrap/Form";
 const WaitSecSend = ({ cl }) => {
   let [color1, setColor1] = useState("");
   let [color2, setColor2] = useState("");

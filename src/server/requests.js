@@ -10,10 +10,20 @@ const posts_request = async (data) => {
   return response.data;
 };
 
+const wallDelete = async (data)=>{ //запрос на удаление записи со стены
+  let response = await  axios.get(`${url}wall.delete?owner_id=${data.owner_id}&post_id=${data.post_id}&v=5.131`)
+  return response.data
+}
+
+const wallDeleteComment = async (data)=>{ //запрос на удаление комментария со стены
+  let response = await  axios.get(`${url}wall.delete?owner_id=${data.owner_id}&comment_id=${data.comment_id}&v=5.131`)
+  return response.data
+}
+
 const createComment = async (data) => {
   let response = await axios.get(
     // оставление комментария на стене группы с известным айди группы и айди поста
-    `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${data.message}&&access_token=${data.token}&v=5.131`
+    `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${data.message}&access_token=${data.token}&v=5.131`
   );
   return response.data;
 };
@@ -43,13 +53,15 @@ const canComments = async (owner_id, token) => {
   let response = await axios.get(
     `${url}wall.get?&owner_id=-${owner_id}&extended=1&fields=can_post,is_closed&access_token=${token}&v=5.131`
   );
-  console.log(response.data)
+  console.log(response.data);
   return response.data;
 };
 
 module.exports = {
   posts_request,
   createComment,
+  wallDelete,
+  wallDeleteComment,
   search,
   Filter_group,
   canComments,

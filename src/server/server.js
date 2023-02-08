@@ -64,7 +64,6 @@ class Server {
     });
   }
 
-
   mailingStop = (ws, mes) => {
     let data = JSON.parse(mes);
     let index = this.arr.findIndex((i) => i.token === data.token);

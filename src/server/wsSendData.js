@@ -7,7 +7,7 @@ const wssend = (ws, arr, userData, progress) => {
   });
   try {
     ws.send(data);
-      console.log(data.progress)
+    console.log(data.progress);
   } catch (e) {
     console.log(e);
   }
