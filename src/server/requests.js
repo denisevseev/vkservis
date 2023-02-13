@@ -10,17 +10,33 @@ const posts_request = async (data) => {
   return response.data;
 };
 
-const wallDelete = async (data)=>{ //запрос на удаление записи со стены
-  let response = await  axios.get(`${url}wall.delete?owner_id=${data.owner_id}&post_id=${data.post_id}&v=5.131`)
-  return response.data
-}
+const wallDelete = async (data) => {
+  //запрос на удаление записи со стены
+  let response = await axios.get(
+    `${url}wall.delete?owner_id=${data.owner_id}&post_id=${data.post_id}&access_token=${data.token}&v=5.131`
+  );
+  console.log(response.data);
+  return response.data;
+};
 
-const wallDeleteComment = async (data)=>{ //запрос на удаление комментария со стены
-  let response = await  axios.get(`${url}wall.delete?owner_id=${data.owner_id}&comment_id=${data.comment_id}&v=5.131`)
-  return response.data
-}
+const wallDeleteComment = async (data) => {
+  //запрос на удаление комментария со стены
+  let response = await axios.get(
+    `${url}wall.deleteComment?owner_id=${data.owner_id}&comment_id=${data.comment_id}&access_token=${data.token}&v=5.131`
+  );
+  return response.data;
+};
 
-const createComment = async (data) => {
+const wallGetComments = async (data) => {
+  //запрос получение ид комментво к записи на стене
+  let response = await axios.get(
+    `${url}wall.getComments?owner_id=-${data.owner_id}&post_id=${data.post_id}&access_token=${data.token}&v=5.131`
+  );
+  return response.data;
+};
+
+const createComment = async (data1) => {
+  let data = encodeURI(data1);
   let response = await axios.get(
     // оставление комментария на стене группы с известным айди группы и айди поста
     `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${data.message}&access_token=${data.token}&v=5.131`
@@ -62,6 +78,7 @@ module.exports = {
   createComment,
   wallDelete,
   wallDeleteComment,
+  wallGetComments,
   search,
   Filter_group,
   canComments,

@@ -36,8 +36,8 @@ class Search {
   exclude = true; // исключить сообщества со словами
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
-  delCommentPost = false //  удалять записи со стены перед публикацией
-  spamComments = false // Рассылать в комментарии если нельзя на стену
+  delCommentPost = false; //  удалять записи со стены перед публикацией
+  spamComments = false; // Рассылать в комментарии если нельзя на стену
   openMessages = false; //открытые сообщения галочка
   openComments = false; //открытые комментарии галочка
   countMembers = false; //колич участников галочка
@@ -62,7 +62,7 @@ class Search {
       from: observable,
       delCommentPost: observable,
       before: observable,
-      spamComments:observable,
+      spamComments: observable,
       startSend: observable,
       startStop: observable,
       groupListMailing: observable,
@@ -119,16 +119,16 @@ class Search {
   };
 
   handleCheck(data, target) {
-    if(data==="delCommentPost"&& target){
-      this.delCommentPost = true
-    } else if(data == 'delCommentPost'){
-      this.delCommentPost = false
+    if (data === "delCommentPost" && target) {
+      this.delCommentPost = true;
+    } else if (data == "delCommentPost") {
+      this.delCommentPost = false;
     }
-    if(data==="spamComments" && target){
-      this.spamComments = true
-    }else if(data == "spamComments"){
-      this.spamComments = false
-      debugger
+    if (data === "spamComments" && target) {
+      this.spamComments = true;
+    } else if (data == "spamComments") {
+      this.spamComments = false;
+      debugger;
     }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
@@ -432,7 +432,7 @@ class Search {
             from: this.from, //задержка в секундах для рассылки
             before: this.before,
             spamComments: this.spamComments,
-            delCommentPost: this.delCommentPost
+            delCommentPost: this.delCommentPost,
           });
           ws.send(data);
           this.start = true;
