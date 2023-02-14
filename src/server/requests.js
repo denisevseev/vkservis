@@ -22,7 +22,7 @@ const wallDelete = async (data) => {
 const wallDeleteComment = async (data) => {
   //запрос на удаление комментария со стены
   let response = await axios.get(
-    `${url}wall.deleteComment?owner_id=${data.owner_id}&comment_id=${data.comment_id}&access_token=${data.token}&v=5.131`
+    `${url}wall.deleteComment?owner_id=-${data.owner_id}&comment_id=${data.comment_id}&access_token=${data.token}&v=5.131`
   );
   return response.data;
 };

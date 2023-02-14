@@ -3,7 +3,8 @@ const {
   canComments,
   createComment,
   wallDeleteComment,
-  wallDelete, wallGetComments,
+  wallDelete,
+  wallGetComments,
 } = require("./requests");
 const delay = require("./delay");
 const wssend = require("./wsSendData");
@@ -57,9 +58,9 @@ class Mailing {
       while (this.i < 70) {
         if (this.delCommentPost) {
           //если стоит галочка "Удалять записи и комменты со стены перед публикацией поста или коммента"
-          let  comments = await this.getComments();
-          await this.deleteWall(await this.getPosts()); //удаление постов
-          await this.deleteComment(await this.getPosts()); //удаелние комментов
+          let comments = await this.getComments();
+          // await this.deleteWall(await this.getPosts()); //удаление постов
+          await this.deleteComment(comments); //удаелние комментов
         }
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
 
@@ -85,7 +86,7 @@ class Mailing {
       //готовый шаблон аргументов
       post_id: result[i].id,
       owner_id: result[i].owner_id,
-      comment_id:result[i].comment_id,
+      comment_id: result[i].comment_id,
       message: this.messForSend,
       token: this.token,
     };
@@ -96,7 +97,7 @@ class Mailing {
     //получение айди комментов к записи на стене//
     let i = 0;
     let arr = [];
-    let comments = []
+    let comments = [];
     let posts = await this.getPosts(); //получили список постов
     posts.map((k) => (k.comments.count > 0 ? arr.push(k) : "")); //фильтр постов с комменатми
     while (i < arr.length) {
@@ -105,20 +106,24 @@ class Mailing {
         post_id: arr[i].id,
         token: this.token,
       };
-      let getComments = await wallGetComments(data)
-      await getComments.response.items.map((key)=>comments.push(key.id))
-      i++
+      let getComments = await wallGetComments(data);
+      await getComments.response.items.map((key) => comments.push(key.id));
+      i++;
     }
-    return comments
+    return comments;
   };
 
   deleteComment = async (result) => {
+    let i = 0;
     //удаление комментария
-    for (let i = 0; i < result.length; i++) {
-      if (result[i].can_delete) {
-        let result2 = await wallDeleteComment(this.dataFromReq(i, result));
-        break;
-      }
+    while (i <= result.length) {
+      let data = {
+        owner_id: this.postDataMethod().owner_id,
+        comment_id: result[i],
+        token: this.token,
+      };
+      let result2 = await wallDeleteComment(data);
+      i++;
     }
   };
 
