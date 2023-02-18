@@ -4,7 +4,7 @@ const {
   createComment,
   wallDeleteComment,
   wallDelete,
-  wallGetComments,
+  wallGetComments, joinGroups,
 } = require("./requests");
 const delay = require("./delay");
 const wssend = require("./wsSendData");
@@ -42,7 +42,7 @@ class Mailing {
   getPosts = async () => {
     //получение списка постов со стены группы
     let result = await canComments(this.postDataMethod().owner_id, this.token);
-    return result.response.items;
+    return result;
   };
 
   mailingToGroups = async (data, ws) => {
@@ -54,26 +54,44 @@ class Mailing {
       this.before = data.before;
       this.spamComments = data.spamComments;
       this.delCommentPost = data.delCommentPost;
+      this.joinGroups = data.joinGroups
       console.log(data, "8MAILING");
       while (this.i < 70) {
-        if (this.delCommentPost) {
-          //если стоит галочка "Удалять записи и комменты со стены перед публикацией поста или коммента"
+        if (this.delCommentPost) { //если стоит галочка "Удалять записи и комменты"
           let comments = await this.getComments();
-          // await this.deleteWall(await this.getPosts()); //удаление постов
+          await this.deleteWall(await this.getPosts()); //удаление постов
           await this.deleteComment(comments); //удаелние комментов
         }
+
+        if(this.joinGroups){
+          let result= await joinGroups(this.postDataMethod().owner_id, this.postDataMethod().token)
+          if(this.isErr(result)!='error'){
+            console.log(`вступили в сообщество ${this.postDataMethod().owner_id}`)
+          }
+        }
+
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
+        if(this.group_post.response){
+          console.log('пост опубликован')
+        }else{
+          if (this.spamComments) {//иначе если стоит галочка
+            let result = await this.getPosts(); //получаем список постов стены группы
+            try{
+              if(result.error){
+                console.log(result.error)
+              }else{
+                await this.canCommentsMethod(result.response.items); //ищем пост на стене под которым можно оставить коммент и оставляем
+              }
+            }catch (e){
+              console.log(e)
+            }
+          }
+        }
 
         if (this.group_post.error) {
           await this.isError(ws); //проверка на то есть ли ошибки в ответе
         }
         await delay(data.from, data.before); //задержка
-        if (this.spamComments) {
-          //иначе если стоит галочка
-          let result = await this.getPosts(); //получаем список постов стены группы
-          console.log(result);
-          await this.canCommentsMethod(result); //ищем пост на стене под которым можно оставить коммент и оставляем
-        }
         this.i++;
       }
     } else {
@@ -93,13 +111,17 @@ class Mailing {
     return data;
   };
 
+
+
   getComments = async () => {
     //получение айди комментов к записи на стене//
     let i = 0;
     let arr = [];
     let comments = [];
     let posts = await this.getPosts(); //получили список постов
-    posts.map((k) => (k.comments.count > 0 ? arr.push(k) : "")); //фильтр постов с комменатми
+    if(await this.isErr(posts)!='error'){
+      posts.response.items.map((k) => (k.comments.count > 0 ? arr.push(k) : "")); //фильтр постов с комменатми
+    }
     while (i < arr.length) {
       let data = {
         owner_id: this.postDataMethod().owner_id,
@@ -107,11 +129,25 @@ class Mailing {
         token: this.token,
       };
       let getComments = await wallGetComments(data);
-      await getComments.response.items.map((key) => comments.push(key.id));
+      if(await this.isErr(getComments)!='error'){
+        await getComments.response.items.map((key) => comments.push(key.id));
+      }
       i++;
     }
     return comments;
   };
+
+  isErr = (data)=>{
+    try{
+      if(data.error){
+        return "error"
+      }else {
+        return data
+      }
+    }catch (e) {
+      console.log(e)
+    }
+  }
 
   deleteComment = async (result) => {
     let i = 0;
@@ -140,13 +176,16 @@ class Mailing {
   };
 
   canCommentsMethod = async (result) => {
-    this.result = result;
-    for (let i = 0; i < result.response.items.length; i++) {
-      if (!result.response.items[i].can_delete) {
-        console.log("its found done");
-        let result = await createComment(this.dataFromReq(i));
-        console.log(result);
-        break;
+    let i = 0
+    while (i<=result.length){
+      if (result[i].comments.can_post) {
+        let result2 = await createComment(this.dataFromReq(i, result));
+        if(await this.isErr(result2)!='error'){
+          console.log('коммент опубликован')
+          return result2.response.comment_id
+        }
+      }else{
+        i++
       }
     }
   };

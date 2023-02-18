@@ -1,5 +1,5 @@
-const wssend = (ws, arr, userData, progress) => {
-  let arr2 = arr instanceof Array ? arr.filter((el) => el != null) : arr; //если массив то исключить нулевые элементы
+const wssend = (ws, arrForClient, userData, progress) => {
+  let arr2 = arrForClient instanceof Array ? arrForClient.filter((el) => el != null) : arrForClient; //если массив то исключить нулевые элементы
   let data = JSON.stringify({
     arr: arr2, //массив групп или слово 'nothing'
     userData: userData ? userData : "", //ошибки

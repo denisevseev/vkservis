@@ -35,11 +35,19 @@ const wallGetComments = async (data) => {
   return response.data;
 };
 
-const createComment = async (data1) => {
-  let data = encodeURI(data1);
+const createComment = async (data) => {
+  let message = encodeURI(data.message)
   let response = await axios.get(
     // оставление комментария на стене группы с известным айди группы и айди поста
-    `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${data.message}&access_token=${data.token}&v=5.131`
+    `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${message}&access_token=${data.token}&v=5.131`
+  );
+  return response.data;
+};
+
+const joinGroups = async (owner_id, token) => {
+  let response = await axios.get(
+      // вступление в группу
+      `${url}groups.join?&owner_id=${owner_id}&access_token=${token}&v=5.131`
   );
   return response.data;
 };
@@ -79,6 +87,7 @@ module.exports = {
   wallDelete,
   wallDeleteComment,
   wallGetComments,
+  joinGroups,
   search,
   Filter_group,
   canComments,
