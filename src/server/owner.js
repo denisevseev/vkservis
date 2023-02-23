@@ -170,25 +170,25 @@ class searchGroup {
     return arr;
   }
 
-  i_res_arr() {
-    this.arrForsend = this.group_post.arrForsend;
-    this.result = this.group_post.result;
-  }
+  // i_res_arr() {
+  //   this.arrForsend = this.group_post.arrForsend;
+  //   this.result = this.group_post.result;
+  // }
+  //
+  // async if_err_send_err() {
+  //   //если ошибка то отправляем ее
+  //   await wssend(ws, this.arrForsend, this.error_msg);
+  //   if (this.error_msg) {
+  //     this.VariblesNull(); //и обнуляем данные
+  //   }
+  // }
 
-  async if_err_send_err() {
-    //если ошибка то отправляем ее
-    await wssend(ws, this.arrForsend, this.error_msg);
-    if (this.error_msg) {
-      this.VariblesNull(); //и обнуляем данные
-    }
-  }
-
-  async if_arr() {
-    console.log(this.arrForsend.length, "arr forsend leng");
-    if (this.arrForsend.length > 0) {
-      await this.if_err_send_err();
-    }
-  }
+  // async if_arr() {
+  //   console.log(this.arrForsend.length, "arr forsend leng");
+  //   if (this.arrForsend.length > 0) {
+  //     await this.if_err_send_err();
+  //   }
+  // }
 
   nothingFound = (ws) => {
     wssend(ws, "nothing", "", "");

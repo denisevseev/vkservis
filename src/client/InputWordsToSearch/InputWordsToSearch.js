@@ -82,14 +82,14 @@ const InputWordsToSearch = () => {
                   onChange={(e) => {
                     Search.Country = e.value;
                   }}
-                  placeholder={Search.Country}
+                  placeholder="Любая страна"
                   options={Country}
                 />
               </div>
               <div style={{ width: "50%" }}>
                 <Select
                   onChange={(e) => (Search.City = e.value)}
-                  placeholder={Search.City}
+                  placeholder="Любой город"
                   options={City}
                 />
               </div>

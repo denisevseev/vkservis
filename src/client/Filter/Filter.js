@@ -9,7 +9,7 @@ import Preloader from "../Preloader/Preloader";
 import StartButton from "./StartButton";
 import StopButton from "./StopButton";
 const Filter = () => {
-  console.log(Search.openWalls, 'openWalls')
+  console.log(Search.countMemTo, 'openWalls')
   return (
     <div className="filterGroup">
       Фильтрация собществ
@@ -19,11 +19,11 @@ const Filter = () => {
             Search.is_closed = e.value;
             console.log(Search.is_closed);
           }}
-          placeholder={Search.is_closed.label}
+          placeholder="Открытые и закрытые сообщества"
           options={Groups}
         />
         <Select
-          placeholder={Search.allGroups2.label}
+          placeholder="Все типы сообществ"
           onChange={(e) => (Search.allGroups2 = e.value)}
           options={Groups2}
         />

@@ -60,6 +60,8 @@ const filter_type = (data, arr) => {
     } else {
       return arr;
     }
+  }else {
+    return  arr
   }
 };
 

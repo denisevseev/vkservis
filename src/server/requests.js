@@ -47,7 +47,7 @@ const createComment = async (data) => {
 const joinGroups = async (owner_id, token) => {
   let response = await axios.get(
       // вступление в группу
-      `${url}groups.join?&owner_id=${owner_id}&access_token=${token}&v=5.131`
+      `${url}groups.join?&group_id=${owner_id}&access_token=${token}&v=5.131`
   );
   return response.data;
 };
@@ -55,7 +55,7 @@ const joinGroups = async (owner_id, token) => {
 const search = async (data) => {
   console.log(data.inputValue[data.arr_str_for_search], "req!!!");
   let search = await axios.get(
-    `${url}groups.search?&${
+    `${url}groups.search?${
       data.city ? `city_id=${data.city}` : ""
     }&count=1000&q=${encodeURI(
       data.inputValue[data.arr_str_for_search] // поиск групп запрос со счетчиком

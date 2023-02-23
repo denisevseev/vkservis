@@ -1,7 +1,6 @@
 ﻿import { makeAutoObservable, observable, toJS } from "mobx";
 import { configure } from "mobx";
 import { Country, City, Groups, Groups2 } from "../client/options/Options";
-import {json} from "react-router-dom";
 
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
@@ -46,6 +45,7 @@ class Search {
   fromToMembersBoolean = true; //от до галка колич участников вклчает возможность ввода текстовых полей
   //страны и города
   Country = Country[0].label;
+  countryPlaceholder = Country[0].label
   City = City[0].label;
   is_closed = Groups[0];
   allGroups2 = Groups2[0];
@@ -140,6 +140,8 @@ class Search {
     }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
+      this.countMemTo = null
+      this.countMemFrom = null
     } else if (data == "countMembers") {
       this.fromToMembersBoolean = true;
     }
@@ -196,8 +198,8 @@ class Search {
       this.openComments = data.openComments
       this.openMessages = data.openMessages
       this.countMembers = data.countMembers
-      this.countMemTo = data.contMemTo
-      this.countMemFrom = data.countMemFrom
+      // this.countMemTo = data.contMemTo
+      // this.countMemFrom = data.countMemFrom
       this.fromToMembersBoolean = data.fromToMembersBoolean
     }
   }
@@ -326,7 +328,6 @@ class Search {
 
   // CheckIsSend() {
   //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
-  //
   //   ws.onopen = () => {
   //     console.log(this.token);
   //     ws.send(this.token);

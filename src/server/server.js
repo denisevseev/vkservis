@@ -55,9 +55,13 @@ class Server {
     });
   }
 
-  startSearchMethod() {
+  startSearchMethod() { // поиск
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
+        let index = this.arr.findIndex((i) => i.token === mes);
+        if(index ==-1){
+
+        }
         let data = JSON.parse(mes);
         new searchGroup().searchGroupMethod(data, ws);
       });
@@ -75,7 +79,8 @@ class Server {
     }
   };
 
-  searchGroupMethod() {
+
+  searchGroupMethod() { //рассылка
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
         let data = JSON.parse(mes);
