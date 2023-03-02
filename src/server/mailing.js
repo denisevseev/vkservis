@@ -74,13 +74,14 @@ class Mailing {
         if(this.group_post.response){
           console.log('пост опубликован')
         }else{
-          if (this.spamComments) {//иначе если стоит галочка
+          if (this.spamComments) {
             let result = await this.getPosts(); //получаем список постов стены группы
             try{
               if(result.error){
                 console.log(result.error)
               }else{
                 await this.canCommentsMethod(result.response.items); //ищем пост на стене под которым можно оставить коммент и оставляем
+                // await delay(12,25)
               }
             }catch (e){
               console.log(e)

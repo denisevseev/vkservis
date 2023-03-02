@@ -144,6 +144,8 @@ class Search {
       this.countMemFrom = null
     } else if (data == "countMembers") {
       this.fromToMembersBoolean = true;
+      this.countMemTo = null
+      this.countMemFrom = null
     }
     if (data === "openComments" && target) {
       this.openComments = true;

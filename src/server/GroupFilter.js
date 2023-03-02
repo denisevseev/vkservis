@@ -1,4 +1,5 @@
 const { canComments, Filter_group } = require("./requests");
+const delay =require("./delay")
 const wssend = require("./wsSendData");
 const filter_type_is_closed = async (data, arr, ws) => {
   this.arr = [];
@@ -73,6 +74,7 @@ const can_Comments = async (ws, arr, token) => {
     try {
       let result = await canComments(arr[count].id, token);
       if (result.response.items[1].comments.can_post == 1) {
+        await delay(1,1)
         this.arr.push(arr[count]);
         console.log("обработано сообществ");
         await wssend(
