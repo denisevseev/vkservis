@@ -36,7 +36,7 @@ const wallGetComments = async (data) => {
 };
 
 const createComment = async (data) => {
-  let message = encodeURI(data.message)
+  let message = encodeURI(data.message);
   let response = await axios.get(
     // оставление комментария на стене группы с известным айди группы и айди поста
     `${url}wall.createComment?&owner_id=${data.owner_id}&post_id=${data.post_id}&message=${message}&access_token=${data.token}&v=5.131`
@@ -46,8 +46,8 @@ const createComment = async (data) => {
 
 const joinGroups = async (owner_id, token) => {
   let response = await axios.get(
-      // вступление в группу
-      `${url}groups.join?&group_id=${owner_id}&access_token=${token}&v=5.131`
+    // вступление в группу
+    `${url}groups.join?&group_id=${owner_id}&access_token=${token}&v=5.131`
   );
   return response.data;
 };

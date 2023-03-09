@@ -55,13 +55,15 @@ class Server {
     });
   }
 
-  startSearchMethod() { // поиск
+  startSearchMethod() {
+    // поиск
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
         let index = this.arr.findIndex((i) => i.token === mes);
-        if(index ==-1){
-
-        }
+        // if (index == -1) {
+        //   this.arr.push(new Mailing());
+        //   this.arr[this.arr.length - 1].mailingToGroups(data, ws);
+        // }
         let data = JSON.parse(mes);
         new searchGroup().searchGroupMethod(data, ws);
       });
@@ -79,11 +81,12 @@ class Server {
     }
   };
 
-
-  searchGroupMethod() { //рассылка
+  searchGroupMethod() {
+    //рассылка
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
         let data = JSON.parse(mes);
+        this.arr.push(new Mailing())
         new Mailing().mailingToGroups(data, ws);
       });
     });

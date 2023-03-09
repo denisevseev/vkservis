@@ -1,5 +1,5 @@
 const { canComments, Filter_group } = require("./requests");
-const delay =require("./delay")
+const delay = require("./delay");
 const wssend = require("./wsSendData");
 const filter_type_is_closed = async (data, arr, ws) => {
   this.arr = [];
@@ -61,8 +61,8 @@ const filter_type = (data, arr) => {
     } else {
       return arr;
     }
-  }else {
-    return  arr
+  } else {
+    return arr;
   }
 };
 
@@ -74,7 +74,7 @@ const can_Comments = async (ws, arr, token) => {
     try {
       let result = await canComments(arr[count].id, token);
       if (result.response.items[1].comments.can_post == 1) {
-        await delay(1,1)
+        await delay(1, 1);
         this.arr.push(arr[count]);
         console.log("обработано сообществ");
         await wssend(
@@ -133,23 +133,27 @@ const openWalls = async (arr, token, count) => {
   }
   let arr2 = [];
 
-  if (count) {
+
+  if(arrForOwn.length>0){
+    if (count) { //если колич участников
+      arrForOwn.map((key1) => {
+        key1.response.map((key2) => {
+       arr2.push(key2);
+        });
+      });
+      return arr2
+    }
     arrForOwn.map((key1) => {
       key1.response.map((key2) => {
-        arr2.push(key2);
-      }); //дублирование кода
+        if (key2.can_post === 1) {
+          arr2.push(key2);
+        }
+      });
     });
     return arr2;
+  };
   }
-  arrForOwn.map((key1) => {
-    key1.response.map((key2) => {
-      if (key2.can_post === 1) {
-        arr2.push(key2);
-      }
-    });
-  });
-  return arr2;
-};
+
 
 module.exports = {
   filter_type_is_closed,

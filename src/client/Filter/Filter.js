@@ -9,7 +9,7 @@ import Preloader from "../Preloader/Preloader";
 import StartButton from "./StartButton";
 import StopButton from "./StopButton";
 const Filter = () => {
-  console.log(Search.countMemTo, 'openWalls')
+  console.log(Search.countMemTo, "openWalls");
   return (
     <div className="filterGroup">
       Фильтрация собществ
@@ -28,7 +28,7 @@ const Filter = () => {
           options={Groups2}
         />
         <Form.Check
-            checked={Search.openWalls}
+          checked={Search.openWalls}
           onChange={(e) => Search.handleCheck("openWalls", e.target.checked)}
           label="Открытые стены"
           style={{ textAlign: "left" }}
@@ -59,7 +59,7 @@ const Filter = () => {
               <Form.Control
                 disabled={Search.fromToMembersBoolean}
                 onChange={(e) => (Search.countMemFrom = e.target.value)}
-                placeholder={Search.countMemFrom?Search.countMemFrom:''}
+                placeholder={Search.countMemFrom ? Search.countMemFrom : ""}
               />
             </Form.Group>
             -
@@ -67,7 +67,7 @@ const Filter = () => {
               <Form.Control
                 disabled={Search.fromToMembersBoolean}
                 onChange={(e) => (Search.countMemTo = e.target.value)}
-                placeholder={Search.countMemTo?Search.countMemTo:''}
+                placeholder={Search.countMemTo ? Search.countMemTo : ""}
               />
             </Form.Group>
           </div>

@@ -37,7 +37,7 @@ class Search {
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
   delCommentPost = false; //  удалять записи со стены перед публикацией
-  joinGroups = false // вступать в группы
+  joinGroups = false; // вступать в группы
   spamComments = false; // Рассылать в комментарии если нельзя на стену
   openMessages = false; //открытые сообщения галочка
   openComments = false; //открытые комментарии галочка
@@ -45,7 +45,7 @@ class Search {
   fromToMembersBoolean = true; //от до галка колич участников вклчает возможность ввода текстовых полей
   //страны и города
   Country = Country[0].label;
-  countryPlaceholder = Country[0].label
+  countryPlaceholder = Country[0].label;
   City = City[0].label;
   is_closed = Groups[0];
   allGroups2 = Groups2[0];
@@ -61,7 +61,7 @@ class Search {
     makeAutoObservable(this, {
       groupListRender: observable,
       Group: observable,
-      joinGroups:observable,
+      joinGroups: observable,
       from: observable,
       delCommentPost: observable,
       before: observable,
@@ -122,10 +122,10 @@ class Search {
   };
 
   handleCheck(data, target) {
-    if(data==='joinGroups'&& target){
-      this.joinGroups = true
-    }else if(data=='joinGroups'){
-      this.joinGroups = false
+    if (data === "joinGroups" && target) {
+      this.joinGroups = true;
+    } else if (data == "joinGroups") {
+      this.joinGroups = false;
     }
     if (data === "delCommentPost" && target) {
       this.delCommentPost = true;
@@ -140,12 +140,12 @@ class Search {
     }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
-      this.countMemTo = null
-      this.countMemFrom = null
+      this.countMemTo = null;
+      this.countMemFrom = null;
     } else if (data == "countMembers") {
       this.fromToMembersBoolean = true;
-      this.countMemTo = null
-      this.countMemFrom = null
+      this.countMemTo = null;
+      this.countMemFrom = null;
     }
     if (data === "openComments" && target) {
       this.openComments = true;
@@ -186,45 +186,47 @@ class Search {
     }
   };
 
-  ownPageLocalStorage = ()=>{ //метод проверки есть ли данные в локал
-    let data  = JSON.parse(localStorage.getItem('ownPageLocalStorage'))
-    if(data){
-      this.inputValue = data.inputValue
-      this.inputValue2 = data.inputValue2
-      this.exclude = data.exclude
-      this.Country = data.country
-      this.City = data.city
-      this.is_closed = data.is_closed
-      this.allGroups2 = data.allGroups2
-      this.openWalls = data.openWalls
-      this.openComments = data.openComments
-      this.openMessages = data.openMessages
-      this.countMembers = data.countMembers
+  ownPageLocalStorage = () => {
+    //метод проверки есть ли данные в локал
+    let data = JSON.parse(localStorage.getItem("ownPageLocalStorage"));
+    if (data) {
+      this.inputValue = data.inputValue;
+      this.inputValue2 = data.inputValue2;
+      this.exclude = data.exclude;
+      this.Country = data.country;
+      this.City = data.city;
+      this.is_closed = data.is_closed;
+      this.allGroups2 = data.allGroups2;
+      this.openWalls = data.openWalls;
+      this.openComments = data.openComments;
+      this.openMessages = data.openMessages;
+      this.countMembers = data.countMembers;
       // this.countMemTo = data.contMemTo
       // this.countMemFrom = data.countMemFrom
-      this.fromToMembersBoolean = data.fromToMembersBoolean
+      this.fromToMembersBoolean = data.fromToMembersBoolean;
     }
-  }
+  };
 
-  setOwnPageLocalStorage = ()=>{ //метод записи данных в локал
-    let data  = {
-      inputValue:this.inputValue,
-      inputValue2:this.inputValue2,
-      exclude:this.exclude, //галочка
-      country:this.Country,
-      city:this.City,
+  setOwnPageLocalStorage = () => {
+    //метод записи данных в локал
+    let data = {
+      inputValue: this.inputValue,
+      inputValue2: this.inputValue2,
+      exclude: this.exclude, //галочка
+      country: this.Country,
+      city: this.City,
       is_closed: this.is_closed,
-      allGroups2:this.allGroups2,
+      allGroups2: this.allGroups2,
       openWalls: this.openWalls,
-      openComments:this.openComments,
-      openMessages:this.openMessages,
-      countMembers:this.countMembers, //галочка
-      contMemTo:this.countMemTo,
-      countMemFrom:this.countMemFrom,
-      fromToMembersBoolean: this.fromToMembersBoolean
-    }
-    localStorage.setItem('ownPageLocalStorage', JSON.stringify(data))
-  }
+      openComments: this.openComments,
+      openMessages: this.openMessages,
+      countMembers: this.countMembers, //галочка
+      contMemTo: this.countMemTo,
+      countMemFrom: this.countMemFrom,
+      fromToMembersBoolean: this.fromToMembersBoolean,
+    };
+    localStorage.setItem("ownPageLocalStorage", JSON.stringify(data));
+  };
 
   Logout() {
     localStorage.removeItem("user");
@@ -233,7 +235,7 @@ class Search {
     ws.onopen = async () => {
       console.log(ws, "58");
       console.log("61 satte");
-      await ws.send(null);
+      await ws.send(this.token);
       await window.location.reload();
       ws.close();
     };
@@ -258,13 +260,18 @@ class Search {
     this.SendDone = [];
   }
 
-  StopSend() {
-    this.startSend = false;
+  StopSend=()=> {
+    // this.startSend = false;
+    console.log( this.token, 'clicked stopsend')
     //рассылка
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
-    this.StartFalse();
+    // this.StartFalse();
     ws.onopen = () => {
-      ws.send(this.token);
+      let data = {
+        token: this.token,
+        stopMailing: 'stop'
+      }
+      ws.send(data);
     };
   }
 
@@ -441,8 +448,6 @@ class Search {
     return arr;
   };
 
-
-
   startSearch = () => {
     const ws = new WebSocket(`ws://localhost:3001/startSearch`);
     ws.onopen = () => {
@@ -453,7 +458,7 @@ class Search {
         this.validation = false;
         ws.send(data);
       }
-      this.setOwnPageLocalStorage()
+      this.setOwnPageLocalStorage();
     };
     ws.onmessage = (event) => {
       this.startStop = false; //меняем кнопку старт на стоп
@@ -480,7 +485,7 @@ class Search {
             before: this.before,
             spamComments: this.spamComments,
             delCommentPost: this.delCommentPost,
-            joinGroups: this.joinGroups
+            joinGroups: this.joinGroups,
           });
           ws.send(data);
           this.start = true;

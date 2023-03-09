@@ -24,7 +24,7 @@ import GroupListRender from "./client/results/GroupListRender";
 import ListRender from "./client/mailing/ListRender";
 import SendDoneList from "./client/mailing/SendDoneList/SendDoneList";
 function App() {
-    useEffect(()=>Search.ownPageLocalStorage())
+  useEffect(() => Search.ownPageLocalStorage());
   return (
     <div>
       <Routes>

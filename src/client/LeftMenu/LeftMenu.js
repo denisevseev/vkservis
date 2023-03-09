@@ -3,6 +3,7 @@ import "./Module.LeftMenu.scss";
 // import State from "../store/State";
 import { observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
+import Search from './../../store/State'
 
 const LeftMenu = ({ cl }) => {
   const [isActive, setActive] = useState(false);
@@ -44,6 +45,8 @@ const LeftMenu = ({ cl }) => {
             <a className="dropdown-item">Аккаунты</a>
           </li>
         </NavLink>
+        <button onClick={Search.StopSend}>sdfsdf</button>
+
       </div>
     </div>
   );

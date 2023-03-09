@@ -21,11 +21,11 @@ const StartButtonSendMessage = () => {
         onChange={(e) => Search.handleCheck("delCommentPost", e.target.checked)}
         label="Удалять записи и комменты со стены перед публикацией поста или коммента"
       />
-        <Form.Check
-            defaultChecked={Search.joinGroups}
-            onChange={(e) => Search.handleCheck("joinGroups", e.target.checked)}
-            label="Вступать в группы"
-        />
+      <Form.Check
+        defaultChecked={Search.joinGroups}
+        onChange={(e) => Search.handleCheck("joinGroups", e.target.checked)}
+        label="Вступать в группы"
+      />
       {
         <button
           type="button"
