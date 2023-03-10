@@ -7,8 +7,9 @@ const {
   wallGetComments,
   joinGroups,
 } = require("./requests");
+const tryCatch = require("./logs/tryCatch");
+const writeFileLog = require("./logs/writeFileLog");
 const delay = require("./delay");
-const fs = require("fs")
 const wssend = require("./wsSendData");
 class Mailing {
   constructor() {
@@ -20,11 +21,6 @@ class Mailing {
     this.before = "";
     this.spamComments = false;
     this.delCommentPost = false;
-  }
-
-  writeFileLog = async (data)=>{
-    let date = new Date()
-    fs.appendFileSync('log.txt', `${data} ${date} \n`)
   }
 
   postDataMethod = () => {
@@ -66,9 +62,9 @@ class Mailing {
         if (this.delCommentPost) {
           //если стоит галочка "Удалять записи и комменты"
           let comments = await this.getComments();
-          await  delay(1,1)
+          await delay(1, 1);
           await this.deleteWall(await this.getPosts()); //удаление постов
-          await delay(1,1)
+          await delay(1, 1);
           await this.deleteComment(comments); //удаелние комментов
         }
 
@@ -77,27 +73,29 @@ class Mailing {
             this.postDataMethod().owner_id,
             this.postDataMethod().token
           );
-          await delay(1,1)
+          await delay(1, 1);
           if (this.isErr(result) != "error") {
-           await this.writeFileLog(`вступили в сообщество ${this.postDataMethod().owner_id}`)
+            await writeFileLog(
+              `вступили в сообщество ${this.postDataMethod().owner_id}`
+            );
           }
         }
 
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
         if (this.group_post.response) {
-          await this.writeFileLog(`пост опубликован`)
+          await writeFileLog(`пост опубликован`);
         } else {
           if (this.spamComments) {
             let result = await this.getPosts(); //получаем список постов стены группы
             try {
               if (result.error) {
-                await this.writeFileLog(`${result.error}`)
+                await writeFileLog(`${result.error}`);
               } else {
                 await this.canCommentsMethod(result.response.items); //ищем пост на стене под которым можно оставить коммент и оставляем
                 // await delay(12,25)
               }
             } catch (e) {
-              await this.writeFileLog(e)
+              await writeFileLog(e);
             }
           }
         }
@@ -160,7 +158,7 @@ class Mailing {
       }
     } catch (e) {
       console.log(e);
-      await this.writeFileLog(e)
+      await writeFileLog(e);
     }
   };
 
@@ -179,13 +177,14 @@ class Mailing {
   };
 
   deleteWall = async (result) => {
-    let resultResponse = result.response.items
-    //удаление записи
-    for (let i = 0; i < resultResponse.length; i++) {
-      if (resultResponse[i].can_delete) {
-        let result3 = this.dataFromReq(i, resultResponse);
-        let result2 = await wallDelete(result3);
-        await this.writeFileLog(result2)
+    let resultResponse = await tryCatch(result.response.items); //удаление записи
+    if (resultResponse) {
+      for (let i = 0; i < resultResponse.length; i++) {
+        if (resultResponse[i].can_delete) {
+          let result3 = this.dataFromReq(i, resultResponse);
+          let result2 = await wallDelete(result3);
+          await writeFileLog(result2);
+        }
       }
     }
   };
@@ -196,7 +195,7 @@ class Mailing {
       if (result[i].comments.can_post) {
         let result2 = await createComment(this.dataFromReq(i, result));
         if ((await this.isErr(result2)) != "error") {
-          await this.writeFileLog(`коммент опубликован`)
+          await writeFileLog(`коммент опубликован`);
           console.log("коммент опубликован");
           return result2.response.comment_id;
         }

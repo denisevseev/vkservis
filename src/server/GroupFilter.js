@@ -133,15 +133,15 @@ const openWalls = async (arr, token, count) => {
   }
   let arr2 = [];
 
-
-  if(arrForOwn.length>0){
-    if (count) { //если колич участников
+  if (arrForOwn.length > 0) {
+    if (count) {
+      //если колич участников
       arrForOwn.map((key1) => {
         key1.response.map((key2) => {
-       arr2.push(key2);
+          arr2.push(key2);
         });
       });
-      return arr2
+      return arr2;
     }
     arrForOwn.map((key1) => {
       key1.response.map((key2) => {
@@ -151,9 +151,8 @@ const openWalls = async (arr, token, count) => {
       });
     });
     return arr2;
-  };
   }
-
+};
 
 module.exports = {
   filter_type_is_closed,

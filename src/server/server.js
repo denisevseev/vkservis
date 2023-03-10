@@ -86,7 +86,7 @@ class Server {
     app.ws("/startSend", (ws) => {
       ws.on("message", async (mes) => {
         let data = JSON.parse(mes);
-        this.arr.push(new Mailing())
+        this.arr.push(new Mailing());
         new Mailing().mailingToGroups(data, ws);
       });
     });

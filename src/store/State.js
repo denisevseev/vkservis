@@ -260,20 +260,20 @@ class Search {
     this.SendDone = [];
   }
 
-  StopSend=()=> {
+  StopSend = () => {
     // this.startSend = false;
-    console.log( this.token, 'clicked stopsend')
+    console.log(this.token, "clicked stopsend");
     //рассылка
     let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     // this.StartFalse();
     ws.onopen = () => {
       let data = {
         token: this.token,
-        stopMailing: 'stop'
-      }
+        stopMailing: "stop",
+      };
       ws.send(data);
     };
-  }
+  };
 
   istoken() {
     let data = JSON.parse(localStorage.getItem("user"));
