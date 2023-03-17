@@ -3,10 +3,9 @@ const fs = require("fs");
 const cors = require("cors");
 const app = express();
 const ws = require("express-ws")(app);
-const Group_post = require("./posts");
 const splitToken = require("./token");
 const autorize_class = require("./autorize");
-const wssend = require("./wsSendData");
+const wsSend = require("./wsSendData");
 const getUserInfo = require("./getUserInfo");
 const { Filter_group, canComments } = require("./requests");
 const { groups_search } = require("./GroupSearch");
@@ -78,7 +77,7 @@ class searchGroup {
 
     const gettoken = await this.autorizeconst.autorizeMethod(data);
     if (gettoken.indexOf("captcha") > -1) {
-      await wssend(ws, gettoken); //если капча то отправляем ее кленту
+      await wsSend(ws, gettoken); //если капча то отправляем ее кленту
     } else {
       this.token = await splitToken(gettoken); //вычленение токена из строки
 
@@ -86,7 +85,7 @@ class searchGroup {
       await userInfo.getUser();
       const user = await userInfo.returnUserinfo();
       console.log(this.token);
-      await wssend(ws, this.token, JSON.stringify(user));
+      await wsSend(ws, this.token, JSON.stringify(user));
       await ws.close();
       return;
     }
@@ -98,7 +97,7 @@ class searchGroup {
 
   owner_i() {
     this.mailing = "70";
-    wssend(ws, null, null);
+    wsSend(ws, null, null);
     this.VariblesNull();
     console.log(this.i, this.mailing);
   }
@@ -116,13 +115,13 @@ class searchGroup {
         clearInterval(interval);
       }
       if (this.arrForsend) {
-        this.arrForsend.length > 0 ? wssend(ws, this.arrForsend) : "";
+        this.arrForsend.length > 0 ? wsSend(ws, this.arrForsend) : "";
       }
     }, 2000);
   }
 
   async searchGr() {
-    await wssend(ws, "", "", "идет поиск групп");
+    await wsSend(ws, "", "", "идет поиск групп");
     let result = await groups_search(this.searchParams()); //поиск групп
     this.arr = this.arr.concat(result.arr); //в this.arr собираем массив с каждого поискового запроса со счетчиком
   }
@@ -154,7 +153,7 @@ class searchGroup {
 
   async whileMethod(data, ws) {
     let lengthInputValue = this.inputValue.length;
-    await wssend(ws, "", "", "идет поиск сообществ"); //отсылаем прогресс клиенту
+    await wsSend(ws, "", "", "идет поиск сообществ"); //отсылаем прогресс клиенту
     while (this.arr_str_for_search < lengthInputValue - 1) {
       if (lengthInputValue > 1) {
         this.arr_str_for_search++; //увеличиваем счетчик если поисковых запросов больше одного
@@ -170,28 +169,8 @@ class searchGroup {
     return arr;
   }
 
-  // i_res_arr() {
-  //   this.arrForsend = this.group_post.arrForsend;
-  //   this.result = this.group_post.result;
-  // }
-  //
-  // async if_err_send_err() {
-  //   //если ошибка то отправляем ее
-  //   await wssend(ws, this.arrForsend, this.error_msg);
-  //   if (this.error_msg) {
-  //     this.VariblesNull(); //и обнуляем данные
-  //   }
-  // }
-
-  // async if_arr() {
-  //   console.log(this.arrForsend.length, "arr forsend leng");
-  //   if (this.arrForsend.length > 0) {
-  //     await this.if_err_send_err();
-  //   }
-  // }
-
   nothingFound = (ws) => {
-    wssend(ws, "nothing", "", "");
+    wsSend(ws, "nothing", "", "");
   };
 
   async searchGroupMethod(data, ws) {
@@ -235,7 +214,7 @@ class searchGroup {
       } else {
         if (this.openComments) {
           //тут запускаем цикл фильтрации каждой группы на возможность оставлять комменты
-          await wssend(
+          await wsSend(
             ws,
             "",
             "",
@@ -254,37 +233,60 @@ class searchGroup {
 
       //если есть галочка открытая стена
       if (this.openWalls) {
-        await wssend(ws, "", "", "фильтруем открытые стены");
+        await wsSend(ws, "", "", "фильтруем открытые стены");
         let result = await openWalls(this.arr, this.token);
         this.arr = result;
+        if(!this.arr){
+          await this.nothingFound(ws)
+          return
+        }
       }
 
       //фильтр количества подписчиков
       if (this.countMemTo || this.countMemFrom) {
-        await wssend(ws, "", "", "фильтр количества подписчиков");
-        let arrCount = [];
-        let result = await openWalls(this.arr, this.token, "count");
-        this.arr = result;
-        this.arr.map((key) => {
-          let g;
-          try {
-            if (
-              key.members_count >= this.countMemFrom ||
-              key.members_count <= this.countMemTo
-            ) {
-              arrCount.push(key);
-            }
-          } catch (e) {
-            console.log(e);
-          }
-        });
-        this.arr = arrCount;
+        this.arr = await this.contMembers(ws);
+        if(!this.arr){
+          await this.nothingFound(ws)
+          return
+        }
       }
-      await wssend(ws, "", "", "фильтруем тип сообществ");
+      await wsSend(ws, "", "", "фильтруем тип сообществ");
       this.arr = await filter_type(data, this.arr); //фильтр типа группы (public, event, group)
-      await wssend(ws, this.arr, "", null); //отправка финального массива поиска групп
+      await wsSend(ws, this.arr, "", null); //отправка финального массива поиска групп
     }
   }
+
+  nothing = async (ws)=>{
+    await wsSend(ws, null, null)
+  }
+
+  contMembers = async (ws) => {
+    await wsSend(ws, "", "", "фильтр количества подписчиков");
+    let arrCount = [];
+    let result = await openWalls(this.arr, this.token, "count");
+    this.arr = result;
+    this.arr.map((key) => {
+      try {
+        if (
+          (key.members_count >= this.countMemFrom ||
+            key.members_count <= this.countMemTo) &&
+          (!this.countMemTo || !this.countMemFrom)
+        ) {
+          arrCount.push(key);
+        } else {
+          if (
+            key.members_count >= this.countMemFrom &&
+            key.members_count <= this.countMemTo
+          ) {
+            arrCount.push(key);
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return arrCount;
+  };
 }
 
 module.exports = searchGroup;

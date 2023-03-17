@@ -62,13 +62,6 @@ class autorize_class {
       console.log("captcha not found");
     }
 
-    // this.driver.takeScreenshot("c:\\selenium_local_map\\out1.png");
-    // this.driver.takeScreenshot().then(function (image, err) {
-    //   require("fs").writeFile("out.png", image, "base64", function (err) {
-    //     console.log(err);
-    //   });
-    // });
-
     if (this.captcha) {
       console.log(this.captcha);
       await this.driver.quit();

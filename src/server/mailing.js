@@ -10,7 +10,7 @@ const {
 const tryCatch = require("./logs/tryCatch");
 const writeFileLog = require("./logs/writeFileLog");
 const delay = require("./delay");
-const wssend = require("./wsSendData");
+const wsSend = require("./wsSendData");
 class Mailing {
   constructor() {
     this.token = null;
@@ -36,9 +36,9 @@ class Mailing {
 
   isError = async (ws) => {
     if (this.group_post.error.error_code != 15) {
-      await wssend(ws, this.group_post.error_msg);
+      await wsSend(ws, this.group_post.error_msg);
     } else {
-      wssend(ws, this.postDataMethod().owner_id);
+      wsSend(ws, this.postDataMethod().owner_id);
     }
   };
 
@@ -84,6 +84,7 @@ class Mailing {
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
         if (this.group_post.response) {
           await writeFileLog(`пост опубликован`);
+          await wsSend(ws, this.postDataMethod().owner_id, "", ""); //отправка данных клиенту
         } else {
           if (this.spamComments) {
             let result = await this.getPosts(); //получаем список постов стены группы
@@ -177,15 +178,20 @@ class Mailing {
   };
 
   deleteWall = async (result) => {
-    let resultResponse = await tryCatch(result.response.items); //удаление записи
-    if (resultResponse) {
-      for (let i = 0; i < resultResponse.length; i++) {
-        if (resultResponse[i].can_delete) {
-          let result3 = this.dataFromReq(i, resultResponse);
-          let result2 = await wallDelete(result3);
-          await writeFileLog(result2);
+    // let resultResponse = await tryCatch(result.response.items); //удаление записи
+    try {
+      if (result.response.items) {
+        let resultResponse = result.response.items;
+        for (let i = 0; i < resultResponse.length; i++) {
+          if (resultResponse[i].can_delete) {
+            let result3 = this.dataFromReq(i, resultResponse);
+            let result2 = await wallDelete(result3);
+            await writeFileLog(result2);
+          }
         }
       }
+    } catch (e) {
+      console.log(e.message);
     }
   };
 

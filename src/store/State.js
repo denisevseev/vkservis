@@ -34,6 +34,7 @@ class Search {
   progress = null;
   //чекбоксы
   exclude = true; // исключить сообщества со словами
+  groupsWithName = false
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
   delCommentPost = false; //  удалять записи со стены перед публикацией
@@ -60,6 +61,7 @@ class Search {
     });
     makeAutoObservable(this, {
       groupListRender: observable,
+      groupsWithName: observable,
       Group: observable,
       joinGroups: observable,
       from: observable,
@@ -122,6 +124,11 @@ class Search {
   };
 
   handleCheck(data, target) {
+    if(data==='groupsWithName'&&target){
+      this.groupsWithName = true
+    }else if(data=='groupsWithName'){
+      this.groupsWithName = false
+    }
     if (data === "joinGroups" && target) {
       this.joinGroups = true;
     } else if (data == "joinGroups") {
@@ -475,21 +482,18 @@ class Search {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
-        console.log("client open", this.Loader);
-        if (2 > 1) {
-          let data = JSON.stringify({
-            token: this.istoken(),
-            messForSend: this.sendMessage,
-            groupArrMailing: this.groupListRenderMethod(),
-            from: this.from, //задержка в секундах для рассылки
-            before: this.before,
-            spamComments: this.spamComments,
-            delCommentPost: this.delCommentPost,
-            joinGroups: this.joinGroups,
-          });
-          ws.send(data);
-          this.start = true;
-        }
+        let data = JSON.stringify({
+          token: this.istoken(),
+          messForSend: this.sendMessage,
+          groupArrMailing: this.groupListRenderMethod(),
+          from: this.from, //задержка в секундах для рассылки
+          before: this.before,
+          spamComments: this.spamComments,
+          delCommentPost: this.delCommentPost,
+          joinGroups: this.joinGroups,
+        });
+        ws.send(data);
+        this.start = true;
       };
       ws.onmessage = (event) => {
         // this.startSend = false;
@@ -498,6 +502,7 @@ class Search {
         let result = this.groupListMailing.concat(data.arr);
         let finalresult = [...new Set(result)];
         this.groupListMailing = toJS(finalresult);
+        debugger;
         console.log(this.groupListMailing);
       };
 

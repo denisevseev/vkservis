@@ -1,4 +1,4 @@
-const wssend = (ws, arrForClient, userData, progress) => {
+const wsSend = (ws, arrForClient, userData, progress) => {
   let arr2 =
     arrForClient instanceof Array
       ? arrForClient.filter((el) => el != null)
@@ -15,4 +15,4 @@ const wssend = (ws, arrForClient, userData, progress) => {
     console.log(e);
   }
 };
-module.exports = wssend;
+module.exports = wsSend;
