@@ -5,5 +5,4 @@ const splitToken = (t) => {
   const token2 = data2.filter((k) => k.indexOf("vk1.a.") > -1);
   return token2;
 };
-
 module.exports = splitToken;

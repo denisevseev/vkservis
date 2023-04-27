@@ -136,11 +136,11 @@ const openWalls = async (arr, token, count) => {
   if (arrForOwn.length > 0) {
     if (count) {
       //если колич участников
-      for(let i = 0; i<arrForOwn.length; i++){
-        try{
-          arr2.push(arrForOwn[i].response)
-        }catch (e) {
-          console.log(e)
+      for (let i = 0; i < arrForOwn.length; i++) {
+        try {
+          arr2.push(arrForOwn[i].response);
+        } catch (e) {
+          console.log(e);
         }
       }
       return arr2;

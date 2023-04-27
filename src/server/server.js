@@ -30,6 +30,14 @@ class Server {
       });
     });
   }
+  getOwnAuthTokenServ = ()=>{
+    app.ws("/getOwnAuthTokenServ", (ws) => {
+      ws.on("message", async (mes) => {
+        let data = JSON.parse(mes);
+        new searchGroup().getOwnAuthTokenServ(data, ws);
+      });
+    });
+  }
 
   StopSend() {
     app.ws(`/stopsend`, (ws) => {
@@ -100,5 +108,6 @@ let server = new Server();
 server.AutorizeOwnMethod();
 server.searchGroupMethod();
 server.StopSend();
+server.getOwnAuthTokenServ()
 server.CheckIsSend();
 server.startSearchMethod();

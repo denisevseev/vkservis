@@ -1,78 +1,69 @@
-import React, { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import Login from "../Login";
-import Pass from "../Pass";
-import Search from "../../../store/State";
-import { observer } from "mobx-react";
-import Captcha from "../../captcha/Captcha";
+import React, {useEffect, useRef} from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Search from "./../../../store/State"
+import {observer} from "mobx-react";
 
-const AuthModal = () => {
-  const name = Search.last_name;
-  let [state, setState] = useState(name);
-  useEffect(() => {
-    Search.istoken();
-    if (state === null) setState(name);
-  });
-
-  const [show, setShow] = useState(false);
-  const [preload, setPreload] = useState("Войти");
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const handlePreload = () => {};
-  if (Search.token !== null) {
-    return handleClose;
-  }
-
-  const preloader = (
-    <img
-      style={{ width: "1em", height: "1em", borderRadius: "2em" }}
-      src="https://i.ibb.co/ZSHVv2v/1488.gif"
-      alt=""
-    />
-  );
-  return (
-    <div style={{ marginLeft: "12rem" }}>
-      {state === null ? (
-        <button
-          type="button"
-          onClick={() => {
-            handleShow();
-            Search.GetLoginData();
-          }}
-          className="btn btn-outline-primary"
-        >
-          Войти с помщью VK
-        </button>
-      ) : (
-        ""
-      )}
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title></Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Captcha />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            style={{ width: "10em" }}
-            onClick={() => {
-              Search.AutorizeOwnMethod();
-              setPreload(preloader);
-            }}
-            className="btn btn-outline-primary"
-          >
-            {preload}
-          </Button>
-          <span className="btn btn-outline-primary" onClick={handleClose}>
-            Закрыть
-          </span>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
+const handleClose = () => {
+    // Search.start = false
+    // Search.startSend = true
+    Search.getOwnAuthToken() //request for a master token from the server
+    Search.setLoginLocal() // write login and password in localStorage
+    Search.setMainTokenInLocal()  // write main token in localStorage
+    Search.ResultGroup() //start send
+    Search.authModal = false
 };
 
-export default observer(AuthModal);
+
+ const AuthModal=()=> {
+    const handleChancel = ()=>{
+        Search.start = false
+    }
+
+    return (
+        <div>
+            <Dialog open={Search.authModal} onClose={()=>Search.start = false} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Из-за ограничений VK мы не можем сделать рассылку с текущим токеном, вам придеться ввести логин и пароль от VK чтобы сгенерировать новый токен и сделать рассылку!</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Телефон или почта VK"
+                        type="email"
+                        value={Search.login}
+                        fullWidth
+                        onChange={(e)=>Search.login = e.target.value}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Пароль VK"
+                        value={Search.pass}
+                        type="password"
+                        fullWidth
+                        onChange={(e)=>Search.pass = e.target.value}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Войти
+                    </Button>
+                    <Button onClick={handleChancel} color="primary">
+                        Отмена
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+export default observer(AuthModal)
+
+
+

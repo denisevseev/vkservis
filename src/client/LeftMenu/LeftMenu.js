@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Module.LeftMenu.scss";
-// import State from "../store/State";
 import { observer } from "mobx-react";
 import { NavLink } from "react-router-dom";
 import Search from "./../../store/State";
@@ -45,7 +44,7 @@ const LeftMenu = ({ cl }) => {
             <a className="dropdown-item">Аккаунты</a>
           </li>
         </NavLink>
-        <button onClick={Search.StopSend}>sdfsdf</button>
+        <button onClick={Search.StopSend}>Остановить рассылку</button>
       </div>
     </div>
   );

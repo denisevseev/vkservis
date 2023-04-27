@@ -3,12 +3,11 @@ import { observer } from "mobx-react";
 import Search from "../../store/State";
 import StopButtonSendMessage from "../StopButtonSendMessage/StopButtonSendMessage";
 import Form from "react-bootstrap/Form";
+import AuthModal from "../autorize/authModal/AuthModal";
+import Preloader from "../Preloader/Preloader";
+import Button from "@mui/material/Button";
 
 const StartButtonSendMessage = () => {
-  const ResultGroup = () => {
-    Search.ResultGroup();
-  };
-
   return (
     <div className="StartButtonSendMessage">
       <Form.Check
@@ -27,14 +26,15 @@ const StartButtonSendMessage = () => {
         label="Вступать в группы"
       />
       {
-        <button
+        <Button
           type="button"
-          onClick={ResultGroup}
+          onClick={Search.getMainTokenInLocal}
           className="btn bg-info btn-outline-primary"
         >
-          Начать рассылку
-        </button>
+            {Search.startSend?<Preloader/>:<div>Начать рассылку</div>}
+        </Button>
       }
+        {Search.authModal?<AuthModal/>:""}
     </div>
   );
 };

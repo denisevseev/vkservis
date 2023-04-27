@@ -73,22 +73,21 @@ class searchGroup {
   async AutorizeOwnMethod(data, ws) {
     console.log(data, "71");
     this.startAuto = true;
-    this.autorizeconst = new autorize_class(data.login, data.pass);
-
-    const gettoken = await this.autorizeconst.autorizeMethod(data);
-    if (gettoken.indexOf("captcha") > -1) {
-      await wsSend(ws, gettoken); //если капча то отправляем ее кленту
-    } else {
-      this.token = await splitToken(gettoken); //вычленение токена из строки
-
-      const userInfo = new getUserInfo(this.token[0]);
-      await userInfo.getUser();
-      const user = await userInfo.returnUserinfo();
-      console.log(this.token);
-      await wsSend(ws, this.token, JSON.stringify(user));
-      await ws.close();
-      return;
-    }
+    const userInfo = new getUserInfo(data.token);
+    await userInfo.getUser();
+    const user = await userInfo.returnUserinfo();
+    await wsSend(ws, data.token, JSON.stringify(user));
+    await ws.close();
+    return;
+  }
+  getOwnAuthTokenServ = async (data,ws)=>{
+    console.log('we starting autorization')
+    let result = await  new autorize_class(data.login, data.pass).autorizeMethod()
+    this.token = await splitToken(result)
+    let resultForSend = this.token[0]
+    console.log('token', resultForSend)
+    await wsSend(ws, resultForSend)
+    console.log('its done')
   }
 
   returnToken() {
@@ -120,7 +119,7 @@ class searchGroup {
     }, 2000);
   }
 
-  async searchGr() {
+  async searchGr(ws) {
     await wsSend(ws, "", "", "идет поиск групп");
     let result = await groups_search(this.searchParams()); //поиск групп
     this.arr = this.arr.concat(result.arr); //в this.arr собираем массив с каждого поискового запроса со счетчиком
@@ -153,13 +152,14 @@ class searchGroup {
 
   async whileMethod(data, ws) {
     let lengthInputValue = this.inputValue.length;
-    await wsSend(ws, "", "", "идет поиск сообществ"); //отсылаем прогресс клиенту
+    await wsSend(ws, "", "", "идет поиск сообществ");
     while (this.arr_str_for_search < lengthInputValue - 1) {
       if (lengthInputValue > 1) {
         this.arr_str_for_search++; //увеличиваем счетчик если поисковых запросов больше одного
-        await this.searchGr();
+        console.log(this.arr_str_for_search, 'счетчик запросов')
+        await this.searchGr(ws);
       } else {
-        break; //иначе завершаем поиск групп
+        break;
       }
     }
   }
@@ -193,7 +193,7 @@ class searchGroup {
     if (this.token && data) {
       this.start = true;
       //поиск групп
-      await this.searchGr();
+      await this.searchGr(ws);
 
       await this.whileMethod(data, ws);
       console.log(this.arr.length);
@@ -236,18 +236,18 @@ class searchGroup {
         await wsSend(ws, "", "", "фильтруем открытые стены");
         let result = await openWalls(this.arr, this.token);
         this.arr = result;
-        if(!this.arr){
-          await this.nothingFound(ws)
-          return
+        if (!this.arr) {
+          await this.nothingFound(ws);
+          return;
         }
       }
 
       //фильтр количества подписчиков
       if (this.countMemTo || this.countMemFrom) {
         this.arr = await this.contMembers(ws);
-        if(!this.arr){
-          await this.nothingFound(ws)
-          return
+        if (!this.arr) {
+          await this.nothingFound(ws);
+          return;
         }
       }
       await wsSend(ws, "", "", "фильтруем тип сообществ");
@@ -256,17 +256,18 @@ class searchGroup {
     }
   }
 
-  nothing = async (ws)=>{
-    await wsSend(ws, null, null)
-  }
+  nothing = async (ws) => {
+    await wsSend(ws, null, null);
+  };
 
   contMembers = async (ws) => {
     await wsSend(ws, "", "", "фильтр количества подписчиков");
     let arrCount = [];
-    let result = await openWalls(this.arr, this.token, "count");
-    this.arr = result;
-    this.arr.map((key) => {
-      try {
+    // let result = await openWalls(this.arr, this.token, "count");
+    // this.arr = result;
+    try {
+      this.arr.map((key) => {
+        console.log(key.members_count);
         if (
           (key.members_count >= this.countMemFrom ||
             key.members_count <= this.countMemTo) &&
@@ -281,10 +282,10 @@ class searchGroup {
             arrCount.push(key);
           }
         }
-      } catch (e) {
-        console.log(e);
-      }
-    });
+      });
+    } catch (e) {
+      console.log(e);
+    }
     return arrCount;
   };
 }

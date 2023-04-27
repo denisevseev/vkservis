@@ -11,7 +11,6 @@ const groups_search = async (data) => {
 
     let resultData = {
       arr: this.arr,
-      // count: result.response.count,
     };
     return resultData;
   } else {

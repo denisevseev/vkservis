@@ -3,11 +3,7 @@ import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import InputWordsToSearch from "./client/InputWordsToSearch/InputWordsToSearch";
 import InputMessageToSend from "./client/InputMessageToSend/InputMessageToSend";
-import SendMessageToGroup from "./client/mailing/SendDoneList/SendDoneList";
-import Avatar from "./client/UserProfile/Avatar";
 import AuthModal from "./client/autorize/authModal/AuthModal";
-import Preloader from "./client/Preloader/Preloader";
-import Instruction from "./client/Instruction/Instruction";
 import { Routes, Route } from "react-router-dom";
 import StartButtonSendMessage from "./client/StartButtonSendMessage/StartButtonSendMessage";
 import StopButtonSendMessage from "./client/StopButtonSendMessage/StopButtonSendMessage";
@@ -20,11 +16,16 @@ import Filter from "./client/Filter/Filter";
 import Results from "./client/results/Results";
 import NothingFound from "./client/Modals/NothingFound";
 import Buttons from "./client/results/buttons/Buttons";
-import GroupListRender from "./client/results/GroupListRender";
 import ListRender from "./client/mailing/ListRender";
+import Head from "./client/Head/Head";
 import SendDoneList from "./client/mailing/SendDoneList/SendDoneList";
+import ButtonAppBar from "./client/Head/Head";
+import BasicModal from "./client/autorize/authModal/AuthModal";
 function App() {
-  useEffect(() => Search.ownPageLocalStorage());
+  useEffect(() => {
+    Search.ownPageLocalStorage();
+    Search.getToken();
+  });
   return (
     <div>
       <Routes>
@@ -56,9 +57,8 @@ function App() {
             path="/"
             element={
               <>
-                <AuthModal />
                 <NothingFound />
-                <Instruction />
+                <ButtonAppBar />
                 <InputWordsToSearch />
                 <Filter />
                 <Results />

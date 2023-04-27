@@ -11,7 +11,7 @@ const GroupListRender = () => {
                   <a href={`https://vk.com/club${k.id}`} target="_blank">
                     {`https://vk.com/club${k.id}`}{" "}
                     <span style={{ visibility: "hidden" }}>.....</span>
-                    {Search.groupsWithName?<span style={{ color: "black" }}>{k.name}</span>:''}
+                    <span style={{ color: "black" }}>{k.name}</span>
                   </a>
                 }
               </div>

@@ -8,7 +8,7 @@ import Pass from "../autorize/Pass";
 
 const InputToken = () => {
   let search = Search.istoken();
-  if (search === null) {
+  if (search !== null) {
     return (
       <div>
         <Login />

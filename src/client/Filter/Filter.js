@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import "./Filter.Module.scss";
 import Search from "./../../store/State";
 import { observer } from "mobx-react";
-import Preloader from "../Preloader/Preloader";
+import Preloader from "../Preloader/Progress";
 import StartButton from "./StartButton";
 import StopButton from "./StopButton";
 const Filter = () => {

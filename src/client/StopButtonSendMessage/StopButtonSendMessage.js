@@ -1,17 +1,16 @@
 import React from "react";
 import { observer } from "mobx-react";
 import Search from "../../store/State";
+import Preloader from "../Preloader/Preloader";
+import Button from "@mui/material/Button";
 const StopButtonSendMessage = () => {
   return (
     <div className="StopButtonSendMessage">
       {
-        <button
-          type="button"
-          onClick={() => Search.StopSend()}
-          className="btn  bg-info btn-outline-primary"
-        >
+        <Button onClick={()=>Search.StopSend()} variant="outlined">
           Остановить рассылку
-        </button>
+          <Preloader/>
+        </Button>
       }
     </div>
   );

@@ -1,7 +1,7 @@
 ﻿import { makeAutoObservable, observable, toJS } from "mobx";
 import { configure } from "mobx";
 import { Country, City, Groups, Groups2 } from "../client/options/Options";
-
+import axios from "axios";
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
   groupListMailing = []; //группы по которым сделана рассылка
@@ -17,12 +17,13 @@ class Search {
   i = 0;
   token = null;
   validation = false;
+  authModal = false;
   login = null;
   pass = null;
   last_name = null;
   first_name = null;
   photo = null;
-  // start = false; //рассылка
+  start = false; //рассылка
   avatar = null;
   startSend = null; //отвечает за кнопку остановить начать рассылку
   inputValue2 = ""; //исключить сообщества со словами
@@ -34,7 +35,7 @@ class Search {
   progress = null;
   //чекбоксы
   exclude = true; // исключить сообщества со словами
-  groupsWithName = false
+  groupsWithName = false;
   reqMustTitle = false; //запрос обязан быть в названии галочка
   openWalls = false; // открытые стены галочка
   delCommentPost = false; //  удалять записи со стены перед публикацией
@@ -61,6 +62,7 @@ class Search {
     });
     makeAutoObservable(this, {
       groupListRender: observable,
+      authModal:observable,
       groupsWithName: observable,
       Group: observable,
       joinGroups: observable,
@@ -124,10 +126,10 @@ class Search {
   };
 
   handleCheck(data, target) {
-    if(data==='groupsWithName'&&target){
-      this.groupsWithName = true
-    }else if(data=='groupsWithName'){
-      this.groupsWithName = false
+    if (data === "groupsWithName" && target) {
+      this.groupsWithName = true;
+    } else if (data == "groupsWithName") {
+      this.groupsWithName = false;
     }
     if (data === "joinGroups" && target) {
       this.joinGroups = true;
@@ -208,10 +210,23 @@ class Search {
       this.openComments = data.openComments;
       this.openMessages = data.openMessages;
       this.countMembers = data.countMembers;
-      // this.countMemTo = data.contMemTo
-      // this.countMemFrom = data.countMemFrom
       this.fromToMembersBoolean = data.fromToMembersBoolean;
     }
+  };
+
+  getToken = async () => {
+    this.token = this.splitToken(window.location.href);
+    this.token = encodeURI(this.token);
+    console.log(this.token, "ITS TOKEN");
+    this.AutorizeOwnMethod();
+  };
+
+  splitToken = (t) => {
+    const data = encodeURI(t).split("=");
+    const token = data.filter((data) => data.indexOf("vk1.a.") > -1);
+    const data2 = encodeURI(token).split("&");
+    const token2 = data2.filter((k) => k.indexOf("vk1.a.") > -1);
+    return token2;
   };
 
   setOwnPageLocalStorage = () => {
@@ -234,6 +249,39 @@ class Search {
     };
     localStorage.setItem("ownPageLocalStorage", JSON.stringify(data));
   };
+
+  getLoginLocal = ()=>{ //метод получения логина пароля из локал стораж
+    let data = localStorage.getItem("LoginLocal")
+    if(data){
+      this.login = data.login
+      this.pass = data.pass
+      return data
+    }
+  }
+
+  setLoginLocal = ()=>{ //метод записи в локалстораж логина и пароля
+    let data  = {
+      login: this.login,
+      pass: this.pass
+    }
+    localStorage.setItem("LoginLocal", JSON.stringify(data))
+  }
+
+  setMainTokenInLocal= ()=>{
+    localStorage.setItem("mainToken", JSON.stringify(this.token))
+  }
+
+  getMainTokenInLocal =()=>{
+    let token = localStorage.getItem("mainToken")
+    if(token){
+      this.token = JSON.parse(token)
+      debugger
+      this.authModal = false
+      this.ResultGroup()
+    }else{
+      this.authModal = true //show modal auth
+    }
+  }
 
   Logout() {
     localStorage.removeItem("user");
@@ -282,63 +330,48 @@ class Search {
     };
   };
 
-  istoken() {
-    let data = JSON.parse(localStorage.getItem("user"));
-    if (data) {
-      this.token = data.token;
-      this.first_name = data.first_name;
-      this.last_name = data.last_name;
-      this.photo = data.photo;
-      return this.token;
-    } else {
-      return null;
+
+  getOwnAuthToken = async ()=>{
+    let ws = new WebSocket(`ws://localhost:3001/getOwnAuthTokenServ`)
+    ws.onopen = ()=>{
+      let data  = JSON.stringify({
+        login: this.login,
+        pass: this.pass
+      })
+      ws.send(data)
+    }
+    ws.onmessage = (event)=>{
+      console.log('its response')
+      let data  = JSON.parse(event.data)
+      this.token = data.arr
+      ws.close()
     }
   }
 
-  GetLoginData() {
-    let data = JSON.parse(localStorage.getItem("loginData"));
-    if (data) {
-      this.login = data.login;
-      this.pass = data.pass;
-    }
-  }
-
-  AutorizeOwnMethod() {
+  AutorizeOwnMethod = ()=> {
     let ws = new WebSocket(`ws://localhost:3001/autorize`);
     ws.onopen = () => {
       let data = JSON.stringify({
-        login: this.login,
-        pass: this.pass,
-        captchaValue: this.captchaValue,
+        token: this.token,
       });
-      localStorage.setItem("loginData", data);
       ws.send(data);
     };
 
+
     ws.onmessage = (event) => {
       let dataEvetn = JSON.parse(event.data);
-      if (this.token === null && localStorage.getItem("token") === null) {
-        if (dataEvetn.arr[0].length > 50) {
-          this.token = dataEvetn.arr[0];
-          let data = JSON.parse(dataEvetn.userData); //получаем аватарку с сервера
-          this.first_name = data[0].first_name;
-          this.last_name = data[0].last_name;
-          console.log(this.last_name, "lastname");
-          this.photo = data[0].photo_50;
-          let user = {
-            token: this.token,
-            first_name: this.first_name, //данные для аватарки
-            last_name: this.last_name,
-            photo: this.photo,
-          };
-          localStorage.setItem("user", JSON.stringify(user));
-        }
-      }
-      if (dataEvetn.arr.indexOf("captcha") > -1) {
-        this.captcha = dataEvetn.arr;
-      } else {
-        ws.close();
-      }
+      let data = JSON.parse(dataEvetn.userData); //получаем аватарку с сервера
+      this.first_name = data[0].first_name;
+      this.last_name = data[0].last_name;
+      console.log(this.last_name, "lastname");
+      this.photo = data[0].photo_50;
+      let user = {
+        token: this.token,
+        first_name: this.first_name, //данные для аватарки
+        last_name: this.last_name,
+        photo: this.photo,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
     };
   }
 
@@ -477,13 +510,13 @@ class Search {
 
   ResultGroup() {
     //рассылка
-    // this.setLocalStorageArea();
+    // this.setLocalStorageArea();енс
     const connect = () => {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
         let data = JSON.stringify({
-          token: this.istoken(),
+          token: this.token,
           messForSend: this.sendMessage,
           groupArrMailing: this.groupListRenderMethod(),
           from: this.from, //задержка в секундах для рассылки
@@ -494,6 +527,7 @@ class Search {
         });
         ws.send(data);
         this.start = true;
+        this.startSend = true
       };
       ws.onmessage = (event) => {
         // this.startSend = false;
@@ -502,7 +536,6 @@ class Search {
         let result = this.groupListMailing.concat(data.arr);
         let finalresult = [...new Set(result)];
         this.groupListMailing = toJS(finalresult);
-        debugger;
         console.log(this.groupListMailing);
       };
 
@@ -522,5 +555,5 @@ class Search {
 
 export default new Search();
 let search = new Search();
-search.GetLoginData();
+search.getLoginLocal()
 search.getUser();

@@ -3,7 +3,6 @@ import Search from "../../store/State";
 import { observer } from "mobx-react";
 import "./../InputWordsToSearch/InputWordsToSearch.Module.scss";
 import GroupListRender from "./GroupListRender";
-import Form from "react-bootstrap/Form";
 const Results = () => {
   const foundGroups = () => {
     if (Search.groupListRender.length > 0) {
@@ -18,13 +17,6 @@ const Results = () => {
         Результаты: {foundGroups()}
       </label>
       <div className="border1">
-          <Form.Check
-              defaultChecked={Search.groupsWithName}
-              onChange={(e) =>
-                  Search.handleCheck("groupsWithName", e.target.checked)
-              }
-              label="Выводить группы с именами"
-          />
         <div className="form-group">
           <div
             className="overflow-auto"
