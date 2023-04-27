@@ -82,6 +82,11 @@ class Mailing {
         }
 
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
+        if(this.group_post.error){
+          wsSend(ws, "", this.group_post.error.error_msg, '')
+          return
+          break
+        }
         if (this.group_post.response) {
           await writeFileLog(`пост опубликован`);
           await wsSend(ws, this.postDataMethod().owner_id, "", ""); //отправка данных клиенту
