@@ -344,6 +344,10 @@ class Search {
       console.log('its response')
       let data  = JSON.parse(event.data)
       this.token = data.arr
+      this.setLoginLocal() // write login and password in localStorage
+      this.setMainTokenInLocal()  // write main token in localStorage
+      this.ResultGroup() //start send
+      this.authModal = false
       ws.close()
     }
   }
@@ -434,11 +438,13 @@ class Search {
   }
 
   getUser() {
-    let data = localStorage.getItem("user");
+    let data = JSON.parse(localStorage.getItem("user"));
     if (data) {
+      debugger
       this.first_name = data.first_name;
       this.last_name = data.last_name;
       this.photo = data.photo;
+      this.token = data.token
     }
   }
 
@@ -556,4 +562,3 @@ class Search {
 export default new Search();
 let search = new Search();
 search.getLoginLocal()
-search.getUser();
