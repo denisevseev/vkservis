@@ -8,6 +8,7 @@ class Search {
   dotProgress = "";
   nothingFound = false; //ничего не найдено
   Loader = false;
+  loginMain = false //preloader
   inputValue = [];
   from = 1; // задержка от
   before = 1; // задержка до
@@ -62,6 +63,7 @@ class Search {
     });
     makeAutoObservable(this, {
       groupListRender: observable,
+      loginMain: observable,
       authModal:observable,
       groupsWithName: observable,
       Group: observable,
@@ -145,7 +147,7 @@ class Search {
       this.spamComments = true;
     } else if (data == "spamComments") {
       this.spamComments = false;
-      debugger;
+      ;
     }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
@@ -215,10 +217,11 @@ class Search {
   };
 
   getToken = async () => {
-    this.token = this.splitToken(window.location.href);
-    this.token = encodeURI(this.token);
-    console.log(this.token, "ITS TOKEN");
-    this.AutorizeOwnMethod();
+    let result  = this.splitToken(window.location.href);
+    if(!this.token&&result){
+      this.token = encodeURI(result);
+      this.AutorizeOwnMethod();
+    }
   };
 
   splitToken = (t) => {
@@ -275,7 +278,6 @@ class Search {
     let token = localStorage.getItem("mainToken")
     if(token){
       this.token = JSON.parse(token)
-      debugger
       this.authModal = false
       this.ResultGroup()
     }else{
@@ -440,7 +442,6 @@ class Search {
   getUser() {
     let data = JSON.parse(localStorage.getItem("user"));
     if (data) {
-      debugger
       this.first_name = data.first_name;
       this.last_name = data.last_name;
       this.photo = data.photo;

@@ -8,15 +8,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Search from "./../../../store/State"
 import {observer} from "mobx-react";
+import Preloader from "../../Preloader/Preloader";
 
-const handleClose = () => {
-    // Search.start = false
-    // Search.startSend = true
-    Search.getOwnAuthToken() //request for a master token from the server
-    Search.setLoginLocal() // write login and password in localStorage
-    Search.setMainTokenInLocal()  // write main token in localStorage
-    Search.ResultGroup() //start send
-    Search.authModal = false
+const handleClose = async () => {
+    Search.loginMain = true
+   await Search.getOwnAuthToken() //request for a master token from the server
+
 };
 
 
@@ -53,7 +50,7 @@ const handleClose = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
-                        Войти
+                        {Search.loginMain?<Preloader/>:<div>Войти</div>}
                     </Button>
                     <Button onClick={handleChancel} color="primary">
                         Отмена
