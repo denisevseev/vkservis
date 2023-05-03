@@ -24,7 +24,8 @@ const posts_request = async (data) => {
       `${url}wall.post?&owner_id=-${encodeURI(data.owner_id)}&message=${encodeURI(
           data.message
       )}&access_token=${data.token}&v=5.131`
-  );
+  )
+  .catch(err=>console.log(err, 'BAN VK!!!!!!!!!'))
   return response.data;
 };
 

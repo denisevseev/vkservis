@@ -20,6 +20,7 @@ const handleClose = async () => {
  const AuthModal=()=> {
     const handleChancel = ()=>{
         Search.start = false
+        Search.loginMain = false
     }
 
     return (

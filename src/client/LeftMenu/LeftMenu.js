@@ -44,7 +44,7 @@ const LeftMenu = ({ cl }) => {
             <a className="dropdown-item">Аккаунты</a>
           </li>
         </NavLink>
-        <button onClick={Search.StopSend}>Остановить рассылку</button>
+        {/*<button onClick={Search.StopSend}></button>*/}
       </div>
     </div>
   );
