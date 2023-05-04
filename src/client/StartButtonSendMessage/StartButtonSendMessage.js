@@ -31,10 +31,10 @@ const StartButtonSendMessage = () => {
           onClick={Search.getMainTokenInLocal}
           className="btn bg-info btn-outline-primary"
         >
-            {Search.startSend?<Preloader/>:<div>Начать рассылку</div>}
+          {Search.startSend ? <Preloader /> : <div>Начать рассылку</div>}
         </Button>
       }
-        {Search.authModal?<AuthModal/>:""}
+      {Search.authModal ? <AuthModal /> : ""}
     </div>
   );
 };

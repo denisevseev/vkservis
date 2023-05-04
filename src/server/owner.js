@@ -80,15 +80,18 @@ class searchGroup {
     await ws.close();
     return;
   }
-  getOwnAuthTokenServ = async (data,ws)=>{
-    console.log('we starting autorization')
-    let result = await  new autorize_class(data.login, data.pass).autorizeMethod()
-    this.token = await splitToken(result)
-    let resultForSend = this.token[0]
-    console.log('token', resultForSend)
-    await wsSend(ws, resultForSend)
-    console.log('its done')
-  }
+  getOwnAuthTokenServ = async (data, ws) => {
+    console.log("we starting autorization");
+    let result = await new autorize_class(
+      data.login,
+      data.pass
+    ).autorizeMethod();
+    this.token = await splitToken(result);
+    let resultForSend = this.token[0];
+    console.log("token", resultForSend);
+    await wsSend(ws, resultForSend);
+    console.log("its done");
+  };
 
   returnToken() {
     return this.token;
@@ -156,7 +159,7 @@ class searchGroup {
     while (this.arr_str_for_search < lengthInputValue - 1) {
       if (lengthInputValue > 1) {
         this.arr_str_for_search++; //увеличиваем счетчик если поисковых запросов больше одного
-        console.log(this.arr_str_for_search, 'счетчик запросов')
+        console.log(this.arr_str_for_search, "счетчик запросов");
         await this.searchGr(ws);
       } else {
         break;

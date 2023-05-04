@@ -10,7 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import ResponsiveAppBar from "../UserProfile/Avatar";
 const Head = () => {
-  console.log(Search.token, 'ITS TOKEN')
+  console.log(Search.token, "ITS TOKEN");
   return (
     <Box className="App-header" sx={{ flexGrow: 1 }}>
       <AppBar style={{ backgroundColor: "#61dafb" }} position="static">

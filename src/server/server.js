@@ -30,14 +30,14 @@ class Server {
       });
     });
   }
-  getOwnAuthTokenServ = ()=>{
+  getOwnAuthTokenServ = () => {
     app.ws("/getOwnAuthTokenServ", (ws) => {
       ws.on("message", async (mes) => {
         let data = JSON.parse(mes);
         new searchGroup().getOwnAuthTokenServ(data, ws);
       });
     });
-  }
+  };
 
   StopSend() {
     app.ws(`/stopsend`, (ws) => {
@@ -67,12 +67,12 @@ class Server {
     // поиск
     app.ws("/startSearch", (ws) => {
       ws.on("message", async (mes) => {
+        let data = JSON.parse(mes);
         let index = this.arr.findIndex((i) => i.token === mes);
         // if (index == -1) {
         //   this.arr.push(new Mailing());
         //   this.arr[this.arr.length - 1].mailingToGroups(data, ws);
         // }
-        let data = JSON.parse(mes);
         new searchGroup().searchGroupMethod(data, ws);
       });
     });
@@ -108,6 +108,6 @@ let server = new Server();
 server.AutorizeOwnMethod();
 server.searchGroupMethod();
 server.StopSend();
-server.getOwnAuthTokenServ()
+server.getOwnAuthTokenServ();
 server.CheckIsSend();
 server.startSearchMethod();

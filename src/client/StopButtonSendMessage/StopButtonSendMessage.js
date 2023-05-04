@@ -7,9 +7,9 @@ const StopButtonSendMessage = () => {
   return (
     <div className="StopButtonSendMessage">
       {
-        <Button onClick={()=>Search.StopSend()} variant="outlined">
+        <Button onClick={() => Search.StopSend()} variant="outlined">
           Остановить рассылку
-          <Preloader/>
+          <Preloader />
         </Button>
       }
     </div>

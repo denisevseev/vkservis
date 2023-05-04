@@ -24,8 +24,8 @@ import BasicModal from "./client/autorize/authModal/AuthModal";
 function App() {
   useEffect(() => {
     Search.ownPageLocalStorage();
-      Search.getUser();
-      Search.getToken();
+    Search.getUser();
+    Search.getToken();
   });
   return (
     <div>

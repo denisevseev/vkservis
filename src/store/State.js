@@ -8,7 +8,7 @@ class Search {
   dotProgress = "";
   nothingFound = false; //ничего не найдено
   Loader = false;
-  loginMain = false //preloader
+  loginMain = false; //preloader
   inputValue = [];
   from = 1; // задержка от
   before = 1; // задержка до
@@ -64,7 +64,7 @@ class Search {
     makeAutoObservable(this, {
       groupListRender: observable,
       loginMain: observable,
-      authModal:observable,
+      authModal: observable,
       groupsWithName: observable,
       Group: observable,
       joinGroups: observable,
@@ -147,7 +147,6 @@ class Search {
       this.spamComments = true;
     } else if (data == "spamComments") {
       this.spamComments = false;
-      ;
     }
     if (data === "countMembers" && target) {
       this.fromToMembersBoolean = false;
@@ -217,8 +216,8 @@ class Search {
   };
 
   getToken = async () => {
-    let result  = this.splitToken(window.location.href);
-    if(!this.token&&result){
+    let result = this.splitToken(window.location.href);
+    if (!this.token && result) {
       this.token = encodeURI(result);
       this.AutorizeOwnMethod();
     }
@@ -253,37 +252,39 @@ class Search {
     localStorage.setItem("ownPageLocalStorage", JSON.stringify(data));
   };
 
-  getLoginLocal = ()=>{ //метод получения логина пароля из локал стораж
-    let data = localStorage.getItem("LoginLocal")
-    if(data){
-      this.login = data.login
-      this.pass = data.pass
-      return data
+  getLoginLocal = () => {
+    //метод получения логина пароля из локал стораж
+    let data = localStorage.getItem("LoginLocal");
+    if (data) {
+      this.login = data.login;
+      this.pass = data.pass;
+      return data;
     }
-  }
+  };
 
-  setLoginLocal = ()=>{ //метод записи в локалстораж логина и пароля
-    let data  = {
+  setLoginLocal = () => {
+    //метод записи в локалстораж логина и пароля
+    let data = {
       login: this.login,
-      pass: this.pass
-    }
-    localStorage.setItem("LoginLocal", JSON.stringify(data))
-  }
+      pass: this.pass,
+    };
+    localStorage.setItem("LoginLocal", JSON.stringify(data));
+  };
 
-  setMainTokenInLocal= ()=>{
-    localStorage.setItem("mainToken", JSON.stringify(this.token))
-  }
+  setMainTokenInLocal = () => {
+    localStorage.setItem("mainToken", JSON.stringify(this.token));
+  };
 
-  getMainTokenInLocal =()=>{
-    let token = localStorage.getItem("mainToken")
-    if(token){
-      this.token = JSON.parse(token)
-      this.authModal = false
-      this.ResultGroup()
-    }else{
-      this.authModal = true //show modal auth
+  getMainTokenInLocal = () => {
+    let token = localStorage.getItem("mainToken");
+    if (token) {
+      this.token = JSON.parse(token);
+      this.authModal = false;
+      this.ResultGroup();
+    } else {
+      this.authModal = true; //show modal auth
     }
-  }
+  };
 
   Logout() {
     localStorage.removeItem("user");
@@ -321,40 +322,39 @@ class Search {
     // this.startSend = false;
     console.log(this.token, "clicked stopsend");
     //рассылка
-    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
-    // this.StartFalse();
+    // let ws = new WebSocket(`ws://localhost:3001/stopsend`);
+    // // this.StartFalse();
+    // ws.onopen = () => {
+    //   let data = JSON.stringify( {
+    //     token: this.token,
+    //     stopMailing: "stop",
+    //   })
+    //   ws.send(data);
+    // };
+  };
+
+  getOwnAuthToken = async () => {
+    let ws = new WebSocket(`ws://localhost:3001/getOwnAuthTokenServ`);
     ws.onopen = () => {
-      let data = {
-        token: this.token,
-        stopMailing: "stop",
-      };
+      let data = JSON.stringify({
+        login: this.login,
+        pass: this.pass,
+      });
       ws.send(data);
+    };
+    ws.onmessage = (event) => {
+      console.log("its response");
+      let data = JSON.parse(event.data);
+      this.token = data.arr;
+      this.setLoginLocal(); // write login and password in localStorage
+      this.setMainTokenInLocal(); // write main token in localStorage
+      this.ResultGroup(); //start send
+      this.authModal = false;
+      ws.close();
     };
   };
 
-
-  getOwnAuthToken = async ()=>{
-    let ws = new WebSocket(`ws://localhost:3001/getOwnAuthTokenServ`)
-    ws.onopen = ()=>{
-      let data  = JSON.stringify({
-        login: this.login,
-        pass: this.pass
-      })
-      ws.send(data)
-    }
-    ws.onmessage = (event)=>{
-      console.log('its response')
-      let data  = JSON.parse(event.data)
-      this.token = data.arr
-      this.setLoginLocal() // write login and password in localStorage
-      this.setMainTokenInLocal()  // write main token in localStorage
-      this.ResultGroup() //start send
-      this.authModal = false
-      ws.close()
-    }
-  }
-
-  AutorizeOwnMethod = ()=> {
+  AutorizeOwnMethod = () => {
     let ws = new WebSocket(`ws://localhost:3001/autorize`);
     ws.onopen = () => {
       let data = JSON.stringify({
@@ -362,7 +362,6 @@ class Search {
       });
       ws.send(data);
     };
-
 
     ws.onmessage = (event) => {
       let dataEvetn = JSON.parse(event.data);
@@ -379,7 +378,7 @@ class Search {
       };
       localStorage.setItem("user", JSON.stringify(user));
     };
-  }
+  };
 
   // CheckIsSend() {
   //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
@@ -445,7 +444,7 @@ class Search {
       this.first_name = data.first_name;
       this.last_name = data.last_name;
       this.photo = data.photo;
-      this.token = data.token
+      this.token = data.token;
     }
   }
 
@@ -534,7 +533,7 @@ class Search {
         });
         ws.send(data);
         this.start = true;
-        this.startSend = true
+        this.startSend = true;
       };
       ws.onmessage = (event) => {
         // this.startSend = false;
@@ -562,4 +561,4 @@ class Search {
 
 export default new Search();
 let search = new Search();
-search.getLoginLocal()
+search.getLoginLocal();
