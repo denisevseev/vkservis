@@ -33,7 +33,7 @@ const filter_exclude = (data, arr) => {
     //если поле от клиента исключить сообщества со словами не пустое
     arr.map((key) => {
       this.inputValue2.map((valKey) => {
-        if (key.name.toLowerCase().indexOf(valKey.toLowerCase()) === -1) {
+        if (key?.name.toLowerCase().indexOf(valKey.toLowerCase()) === -1) {
           this.arr.push(key);
           // console.log(key.name);
         }
@@ -78,10 +78,10 @@ const can_Comments = async (ws, arr, token) => {
         this.arr.push(arr[count]);
         console.log("обработано сообществ");
         await wsSend(
-          ws,
-          "",
-          "",
-          `обработано сообществ ${count} из  ${arr.length}`
+            ws,
+            "",
+            "",
+            `обработано сообществ ${count} из  ${arr.length}`
         ); //прогресс
       }
     } catch (e) {
@@ -146,7 +146,7 @@ const openWalls = async (arr, token, count) => {
       return arr2;
     }
     arrForOwn.map((key1) => {
-      key1.response.map((key2) => {
+      key1.response?.map((key2) => {
         if (key2.can_post === 1) {
           arr2.push(key2);
         }

@@ -21,6 +21,9 @@ import Head from "./client/Head/Head";
 import SendDoneList from "./client/mailing/SendDoneList/SendDoneList";
 import ButtonAppBar from "./client/Head/Head";
 import BasicModal from "./client/autorize/authModal/AuthModal";
+import MiniDrawer from "./client/LeftMenu/MenuLeft";
+import MenuLeft from "./client/LeftMenu/MenuLeft";
+import CustomNavBar from "./client/LeftMenu/MenuLeft";
 function App() {
   useEffect(() => {
     Search.ownPageLocalStorage();
@@ -60,6 +63,7 @@ function App() {
               <>
                 <NothingFound />
                 <ButtonAppBar />
+                <CustomNavBar/>
                 <InputWordsToSearch />
                 <Filter />
                 <Results />

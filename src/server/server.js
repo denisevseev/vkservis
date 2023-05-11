@@ -7,14 +7,16 @@ const ws = require("express-ws")(app);
 const WebSocket = require("ws");
 const searchGroup = require("./owner");
 const Mailing = require("./mailing");
+const own = require("./../../replace")
 const search = new searchGroup();
 app.use(cors());
 app.use(
-  express.urlencoded({
-    extended: true,
-  })
+    express.urlencoded({
+      extended: true,
+    })
 );
 app.use(express.json());
+own()
 
 class Server {
   constructor() {
@@ -56,8 +58,8 @@ class Server {
         if (this.arr.length > 0) {
           let index = this.arr.findIndex((i) => i.token === mes);
           index != -1
-            ? this.arr[index].CheckIsSend(ws)
-            : console.log("error 50 server");
+              ? this.arr[index].CheckIsSend(ws)
+              : console.log("error 50 server");
         }
       });
     });
