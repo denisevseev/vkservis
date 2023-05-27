@@ -78,10 +78,10 @@ const can_Comments = async (ws, arr, token) => {
         this.arr.push(arr[count]);
         console.log("обработано сообществ");
         await wsSend(
-            ws,
-            "",
-            "",
-            `обработано сообществ ${count} из  ${arr.length}`
+          ws,
+          "",
+          "",
+          `обработано сообществ ${count} из  ${arr.length}`
         ); //прогресс
       }
     } catch (e) {

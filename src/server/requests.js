@@ -24,7 +24,8 @@ const posts_request = async (data) => {
     .get(
       `${url}wall.post?&owner_id=-${encodeURI(
         data.owner_id
-      )}&message=${encodeURI(data.message)}&access_token=${data.token}&v=5.131`
+      )}&message=${encodeURI(data.message)}&access_token=${data.token}&v=5.131`,
+      { timeout: 5000 }
     )
     .catch((err) => console.log(err, "BAN VK!!!!!!!!!"));
   return response.data;
@@ -95,8 +96,9 @@ const Filter_group = async (arr, token) => {
 const canComments = async (owner_id, token) => {
   // запрос на возможность оставления комментария на стене
   let response = await instance.get(
-    `${url}wall.get?&owner_id=-${owner_id}&extended=1&fields=can_post,is_closed&access_token=${token}&v=5.131`
-  );
+    `${url}wall.get?&owner_id=-${owner_id}&extended=1&fields=can_post,is_closed&access_token=${token}&v=5.131`, { timeout: 5000 }
+  )
+.catch((err) => console.log(err, "err wall.get!!!"));
   console.log(response.data);
   return response.data;
 };

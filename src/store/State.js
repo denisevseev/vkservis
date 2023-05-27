@@ -272,7 +272,9 @@ class Search {
   };
 
   setMainTokenInLocal = () => {
-    localStorage.setItem("mainToken", JSON.stringify(this.token));
+    if(this.token){
+      localStorage.setItem("mainToken", JSON.stringify(this.token));
+    }
   };
 
   getMainTokenInLocal = () => {
@@ -321,6 +323,9 @@ class Search {
   StopSend = () => {
     // this.startSend = false;
     console.log(this.token, "clicked stopsend");
+    this.startSend = false
+    this.start = false
+
     //рассылка
     // let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     // // this.StartFalse();

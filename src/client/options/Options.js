@@ -12,6 +12,7 @@ const City = [
   { value: "99", label: "Новосибирск" },
   { value: "49", label: "Екатиринбург" },
   { value: "60", label: "Казань" },
+  { value: "141", label: "Тверь" },
 ];
 const Groups = [
   { value: "", label: "Открытые и закрытые сообщества" },
