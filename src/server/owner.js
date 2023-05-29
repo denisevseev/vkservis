@@ -98,7 +98,7 @@ class searchGroup {
   }
 
   owner_i() {
-    this.mailing = "70";
+    this.mailing = "78";
     wsSend(ws, null, null);
     this.VariblesNull();
     console.log(this.i, this.mailing);
@@ -106,7 +106,7 @@ class searchGroup {
 
   async StopSend(mes) {
     let data = JSON.parse(mes);
-    if (data == "70" || !data || data === null) {
+    if (data == "78" || !data || data === null) {
       this.VariblesNull();
     }
   }
@@ -168,7 +168,7 @@ class searchGroup {
   }
 
   isArr70() {
-    let arr = this.arr.length > 70 ? 70 : this.arr.length;
+    let arr = this.arr.length > 78 ? 78 : this.arr.length;
     return arr;
   }
 

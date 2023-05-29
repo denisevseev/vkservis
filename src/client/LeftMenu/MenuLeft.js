@@ -22,6 +22,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import Search from "../../store/State";
 import ResponsiveAppBar from "../UserProfile/Avatar";
 import ButtonAppBar from "../Head/ButtonAppBar";
+import {Container} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -123,11 +124,24 @@ export default function MiniDrawer() {
             Mini variant drawer
           </Typography>
         </Toolbar>
-          <Box
-              display='flex'
-              justifyContent="flex-end">
-            {Search.token ? <ResponsiveAppBar /> : <ButtonAppBar />}
-          </Box>
+
+        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Button style={{backgroundColor: 'red'}}>sdf</Button>
+        </Box>
+          {/*<Toolbar*/}
+          {/*    // mr={-190}*/}
+          {/*    // mt={-22}*/}
+          {/*    sx={{ justifyContent: "flex-end" }}*/}
+
+          {/*>*/}
+          {/*  {Search.token ? <ResponsiveAppBar /> : <ButtonAppBar />}*/}
+          {/*</Toolbar>*/}
+        <Box sx={{ zIndex: 'toolti' }}>
+
+
+        </Box>
+
+
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>

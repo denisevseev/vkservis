@@ -58,7 +58,7 @@ class Mailing {
       this.spamComments = data.spamComments;
       this.delCommentPost = data.delCommentPost;
       this.joinGroups = data.joinGroups;
-      while (this.i < 70) {
+      while (this.i < 78) {
         if (this.delCommentPost) {
           //если стоит галочка "Удалять записи и комменты"
           let comments = await this.getComments();
@@ -113,7 +113,7 @@ class Mailing {
         this.i++;
       }
     } else {
-      this.i = 70; //тем самым останавливаем рассылку
+      this.i = 78; //тем самым останавливаем рассылку
     }
   };
 
