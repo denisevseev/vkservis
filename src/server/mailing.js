@@ -43,7 +43,6 @@ class Mailing {
   };
 
   getPosts = async () => {
-    //получение списка постов со стены группы
     let result = await canComments(this.postDataMethod().owner_id, this.token);
     return result;
   };
@@ -82,12 +81,17 @@ class Mailing {
         }
 
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
-        // if(this.group_post.error){
-        //   wsSend(ws, "", this.group_post.error.error_msg, '')
-        //   return
-        //   break
-        // }
-        if (this.group_post.response) {
+        if(this.group_post==undefined){
+          console.log('вероятно вк вернул ошибку и пост не выполнен')
+          return
+          break
+        }
+        if(this.group_post?.error){
+          wsSend(ws, "", this.group_post.error.error_msg, '')
+          return
+          break
+        }
+        if (this.group_post?.response) {
           await writeFileLog(`пост опубликован`);
           await wsSend(ws, this.postDataMethod().owner_id, "", ""); //отправка данных клиенту
         } else {
@@ -97,7 +101,7 @@ class Mailing {
               if (result.error) {
                 await writeFileLog(`${result.error}`);
               } else {
-                await this.canCommentsMethod(result.response.items); //ищем пост на стене под которым можно оставить коммент и оставляем
+                await this.canCommentsMethod(result?.response?.items); //ищем пост на стене под которым можно оставить коммент и оставляем
                 // await delay(12,25)
               }
             } catch (e) {

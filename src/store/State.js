@@ -1,7 +1,7 @@
 ﻿import { makeAutoObservable, observable, toJS } from "mobx";
 import { configure } from "mobx";
 import { Country, City, Groups, Groups2 } from "../client/options/Options";
-import axios from "axios";
+
 class Search {
   groupListRender = []; //список групп с сервера для рендера в результатах
   groupListMailing = []; //группы по которым сделана рассылка
@@ -351,8 +351,8 @@ class Search {
       console.log("its response");
       let data = JSON.parse(event.data);
       this.token = data.arr;
-      this.setLoginLocal(); // write login and password in localStorage
-      this.setMainTokenInLocal(); // write main token in localStorage
+      this.setLoginLocal();
+      this.setMainTokenInLocal();
       this.ResultGroup(); //start send
       this.authModal = false;
       ws.close();
@@ -370,20 +370,21 @@ class Search {
 
     ws.onmessage = (event) => {
       let dataEvetn = JSON.parse(event.data);
-      let data = JSON.parse(dataEvetn.userData); //получаем аватарку с сервера
+      let data = JSON.parse(dataEvetn.userData);
       this.first_name = data[0].first_name;
       this.last_name = data[0].last_name;
       console.log(this.last_name, "lastname");
       this.photo = data[0].photo_50;
       let user = {
         token: this.token,
-        first_name: this.first_name, //данные для аватарки
+        first_name: this.first_name,
         last_name: this.last_name,
         photo: this.photo,
       };
       localStorage.setItem("user", JSON.stringify(user));
     };
   };
+
 
   // CheckIsSend() {
   //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
@@ -407,9 +408,11 @@ class Search {
       data = JSON.parse(event.data);
     }
 
+    //если ничего не найдено
     if (data.arr == "nothing") {
-      this.nothingFound = true; //если ничего не найдено
+      this.nothingFound = true;
     }
+
     if (data.progress) {
       this.progress = data.progress;
       this.dot("stopInterval");
@@ -421,15 +424,18 @@ class Search {
     // if(data.progress=='null'){
     //   this.progress = null //убераем модальное окно
     // }
+
+
+    //если не не прогресс и дата не пусто
     if (event && !data.progress) {
-      //если не не прогресс и дата не пусто
       dataEvent = JSON.parse(event.data);
       if (dataEvent.userData) {
         this.errorFromServer = dataEvent.userData;
         console.log(this.errorFromServer);
       }
+
+      //если с сервера пришел массив
       if (toString(dataEvent.arr).length > 0) {
-        //если с сервера пришел массив
         console.log("297");
         this.start = true;
         let result = this.groupListRender.concat(dataEvent.arr);
@@ -496,7 +502,8 @@ class Search {
   groupListRenderMethod = () => {
     let arr = [];
     this.groupListRender.map((k) => arr.push(k.id)); //массив айди групп для рассылки для посыла их на сервер
-    return arr;
+    let result = new Set(arr)
+    return result;
   };
 
   startSearch = () => {

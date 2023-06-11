@@ -31,7 +31,7 @@ class autorize_class {
           }
         });
 
-      await this.driver.findElement({ name: "email" }).sendKeys(this.login);
+      await this.driver.findElement({ name: "email" })?.sendKeys(this.login)
       this.tumbler = true;
     }
 

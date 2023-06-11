@@ -38,8 +38,11 @@ const posts_request = async (data) => {
 
       }
     )
-    .catch((err) => console.log(err, "BAN VK!!!!!!!!!"));
-  return response.data;
+    .catch((err) => {
+      console.log(err, "BAN VK!!!!!!!!!")
+      return
+    });
+  return response?.data;
 };
 
 const wallDelete = async (data) => {
