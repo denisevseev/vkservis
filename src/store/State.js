@@ -272,7 +272,7 @@ class Search {
   };
 
   setMainTokenInLocal = () => {
-    if(this.token){
+    if (this.token) {
       localStorage.setItem("mainToken", JSON.stringify(this.token));
     }
   };
@@ -323,8 +323,8 @@ class Search {
   StopSend = () => {
     // this.startSend = false;
     console.log(this.token, "clicked stopsend");
-    this.startSend = false
-    this.start = false
+    this.startSend = false;
+    this.start = false;
 
     //рассылка
     // let ws = new WebSocket(`ws://localhost:3001/stopsend`);
@@ -385,7 +385,6 @@ class Search {
     };
   };
 
-
   // CheckIsSend() {
   //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
   //   ws.onopen = () => {
@@ -424,7 +423,6 @@ class Search {
     // if(data.progress=='null'){
     //   this.progress = null //убераем модальное окно
     // }
-
 
     //если не не прогресс и дата не пусто
     if (event && !data.progress) {
@@ -502,7 +500,7 @@ class Search {
   groupListRenderMethod = () => {
     let arr = [];
     this.groupListRender.map((k) => arr.push(k.id)); //массив айди групп для рассылки для посыла их на сервер
-    let result = new Set(arr)
+    let result = new Set(arr);
     return result;
   };
 
@@ -533,20 +531,22 @@ class Search {
       const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
+        let context = this;
         let data = JSON.stringify({
-          token: this.token,
-          messForSend: this.sendMessage,
-          groupArrMailing: this.groupListRenderMethod(),
-          from: this.from, //задержка в секундах для рассылки
-          before: this.before,
-          spamComments: this.spamComments,
-          delCommentPost: this.delCommentPost,
-          joinGroups: this.joinGroups,
+          token: context.token,
+          messForSend: context.sendMessage,
+          groupArrMailing: Array.from(context.groupListRenderMethod()),
+          from: context.from,
+          before: context.before,
+          spamComments: context.spamComments,
+          delCommentPost: context.delCommentPost,
+          joinGroups: context.joinGroups,
         });
         ws.send(data);
-        this.start = true;
-        this.startSend = true;
+        context.start = true;
+        context.startSend = true;
       };
+
       ws.onmessage = (event) => {
         // this.startSend = false;
         // this.startSend = true;

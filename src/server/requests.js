@@ -4,22 +4,21 @@ const authUsername = "dastinm234_mail_ru";
 const authPassword = "45bd960300";
 const axios = require("axios-https-proxy-fix");
 
-const instance = axios.create({
-  proxy: {
-    protocol: "http",
-    host: proxyUrl,
-    port: 30009,
-    auth: {
-      username: authUsername,
-      password: authPassword,
-    },
-  },
-});
+// const instance = axios.create({
+//   proxy: {
+//     protocol: "http",
+//     host: proxyUrl,
+//     port: 30009,
+//     auth: {
+//       username: authUsername,
+//       password: authPassword,
+//     },
+//   },
+// });
+const instance  = axios
 
 // const randomValue = Math.random() < 0.5 ? "axios" : "instance";
 // console.log(randomValue);
-
-
 
 // const httpsAgent = new https.Agent({ keepAlive: true });
 const url = `https://api.vk.com/method/`;
@@ -30,18 +29,20 @@ const posts_request = async (data) => {
       `${url}wall.post?&owner_id=-${encodeURI(
         data.owner_id
       )}&message=${encodeURI(data.message)}&access_token=${data.token}&v=5.131`,
-      { timeout: 5000,
-        headers:{
-          'Content-Type': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 YaBrowser/23.3.3.721 Yowser/2.5 Safari/537.36'
-        }
-
-      }
+      // {
+      //   timeout: 5000,
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "User-Agent":
+      //       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 YaBrowser/23.3.3.721 Yowser/2.5 Safari/537.36",
+      //   },
+      // }
     )
     .catch((err) => {
-      console.log(err, "BAN VK!!!!!!!!!")
-      return
+      console.log(err, "BAN VK!!!!!!!!!");
+      return;
     });
+  console.log(response?.data, 'response?.data')
   return response?.data;
 };
 
@@ -109,10 +110,12 @@ const Filter_group = async (arr, token) => {
 
 const canComments = async (owner_id, token) => {
   // запрос на возможность оставления комментария на стене
-  let response = await axios.get(
-    `${url}wall.get?&owner_id=-${owner_id}&extended=1&fields=can_post,is_closed&access_token=${token}&v=5.131`, { timeout: 5000 }
-  )
-.catch((err) => console.log(err, "err wall.get!!!"));
+  let response = await axios
+    .get(
+      `${url}wall.get?&owner_id=-${owner_id}&extended=1&fields=can_post,is_closed&access_token=${token}&v=5.131`,
+      { timeout: 5000 }
+    )
+    .catch((err) => console.log(err, "err wall.get!!!"));
   console.log(response.data);
   return response.data;
 };

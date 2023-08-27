@@ -82,10 +82,12 @@ class searchGroup {
   }
   getOwnAuthTokenServ = async (data, ws) => {
     console.log("we starting autorization");
-    let result = await new autorize_class(
-      data.login,
-      data.pass
-    ).autorizeMethod();
+    // let result = await new autorize_class(
+    //   data.login,
+    //   data.pass
+    // ).autorizeMethod();
+    let result =
+      "https://oauth.vk.com/blank.html#access_token=vk1.a.NKZsEwyBYdYTEMC8dd3fc1Kntp8yyFrrc9IUZUdEgyPRa_04xcYgyK_EujGWHPFq4xZBu3kJpea5R5A4k_nAvTflgr_CFPO5knMAXnCnsQSvCzTzs8pPW4VTo3U8tgZRcglkmTajpkASFvLKrbKjdiUSQ7AUbG_mv4AHR3A6R77X65qPTSu2oNJfdoiIh1-sWo3U_Pq2BmLJNjeiTAWNog&expires_in=0&user_id=561062604";
     this.token = await splitToken(result);
     let resultForSend = this.token[0];
     console.log("token", resultForSend);

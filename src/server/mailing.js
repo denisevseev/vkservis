@@ -81,15 +81,14 @@ class Mailing {
         }
 
         this.group_post = await posts_request(this.postDataMethod()); //постинг на стену
-        if(this.group_post==undefined){
-          console.log('вероятно вк вернул ошибку и пост не выполнен')
-          return
-          break
+        if (this.group_post == undefined) {
+          console.log("вероятно вк вернул ошибку и пост не выполнен");
+          return;
+          break;
         }
-        if(this.group_post?.error){
-          wsSend(ws, "", this.group_post.error.error_msg, '')
-          return
-          break
+        if (this.group_post?.error) {
+          wsSend(ws, "", this.group_post.error.error_msg, "");
+         console.log(this.group_post.error.error_msg)
         }
         if (this.group_post?.response) {
           await writeFileLog(`пост опубликован`);
@@ -189,8 +188,8 @@ class Mailing {
   deleteWall = async (result) => {
     // let resultResponse = await tryCatch(result.response.items); //удаление записи
     try {
-      if (result.response.items) {
-        let resultResponse = result.response.items;
+      if (result.response?.items) {
+        let resultResponse = result.response?.items;
         for (let i = 0; i < resultResponse.length; i++) {
           if (resultResponse[i].can_delete) {
             let result3 = this.dataFromReq(i, resultResponse);
