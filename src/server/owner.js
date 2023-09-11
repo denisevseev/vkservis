@@ -82,12 +82,12 @@ class searchGroup {
   }
   getOwnAuthTokenServ = async (data, ws) => {
     console.log("we starting autorization");
-    // let result = await new autorize_class(
-    //   data.login,
-    //   data.pass
-    // ).autorizeMethod();
-    let result =
-      "https://oauth.vk.com/blank.html#access_token=vk1.a.NKZsEwyBYdYTEMC8dd3fc1Kntp8yyFrrc9IUZUdEgyPRa_04xcYgyK_EujGWHPFq4xZBu3kJpea5R5A4k_nAvTflgr_CFPO5knMAXnCnsQSvCzTzs8pPW4VTo3U8tgZRcglkmTajpkASFvLKrbKjdiUSQ7AUbG_mv4AHR3A6R77X65qPTSu2oNJfdoiIh1-sWo3U_Pq2BmLJNjeiTAWNog&expires_in=0&user_id=561062604";
+    let result = await new autorize_class(
+      data.login,
+      data.pass
+    ).autorizeMethod();
+    // let result =
+    //   "https://oauth.vk.com/blank.html#access_token=vk1.a.K1D_9Tmxnb8_X_AfK6XvK_N80UvtSxvIbLwTlr06WjFdgX1F2mAVWVHpClvMc3xbTnkllhLdxnxcaEhJ6I-6d_FXiYcF7ZX0OQoxXTbF6QDmo5CklOHBE8Xu0k708MJC18aD_D1HJSSAc3HMl_grs6iAPPD9k_OqgouN_EtqqJ8YuuRyAypB0mpKKO0Euf-7rQJlSxO2rin5Q-0w6gBegw&expires_in=0&user_id=819596987";
     this.token = await splitToken(result);
     let resultForSend = this.token[0];
     console.log("token", resultForSend);

@@ -19,12 +19,14 @@
     "bootstrap": "^5.2.2",
     "cors": "^2.8.5",
     "cypress": "^10.8.0",
+    "easyvk": "^2.8.2",
     "express-ws": "^5.0.2",
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
     "gh-pages": "^4.0.0",
     "http-proxy-middleware": "^2.0.6",
     "mobx-react": "^7.5.2",
+    "node-fetch": "^2.7.0",
     "nodemon": "^2.0.20",
     "nohup": "^0.1.0",
     "ps-list": "^8.1.0",
@@ -40,7 +42,9 @@
     "selenium-webdriver": "^4.4.0",
     "socket.io": "^4.5.4",
     "styled-components": "^5.3.9",
-    "web-vitals": "^2.1.4"
+    "vk-io": "^4.8.3",
+    "web-vitals": "^2.1.4",
+    "webdriver-manager": "^12.1.9"
   },
   "scripts": {
     "start": "set PORT=80 && react-scripts start",

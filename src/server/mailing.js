@@ -140,7 +140,7 @@ class Mailing {
     let posts = await this.getPosts(); //получили список постов
     if ((await this.isErr(posts)) != "error") {
       posts.response.items.map((k) =>
-        k.comments.count > 0 ? arr.push(k) : ""
+        k.comments?.count > 0 ? arr.push(k) : ""
       ); //фильтр постов с комменатми
     }
     while (i < arr.length) {

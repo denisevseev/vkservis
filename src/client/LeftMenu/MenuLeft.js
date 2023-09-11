@@ -123,6 +123,7 @@ export default function MiniDrawer() {
           <Typography variant="h7" noWrap component="div">
             Mini variant drawer
           </Typography>
+          <div style={{ flexGrow: 1 }} />
           <Toolbar sx={{ justifyContent: "flex-end" }}>
             {Search.token ? <ResponsiveAppBar /> : <ButtonAppBar />}
           </Toolbar>
