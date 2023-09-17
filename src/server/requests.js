@@ -116,8 +116,8 @@ const canComments = async (owner_id, token) => {
       { timeout: 5000 }
     )
     .catch((err) => console.log(err, "err wall.get!!!"));
-  console.log(response.data);
-  return response.data;
+  console.log(response?.data);
+  return response?.data;
 };
 
 module.exports = {
