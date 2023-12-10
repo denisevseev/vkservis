@@ -13,7 +13,7 @@ const ins = axios.create({
   },
 });
 
-const ins  = axios
+// const ins  = axios
 
 // const randomValue = Math.random() < 0.5 ? "axios" : "ins";
 // console.log(randomValue);
