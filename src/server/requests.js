@@ -1,7 +1,7 @@
 const http = require("http");
 const axios = require("axios-https-proxy-fix");
 
-const instance = axios.create({
+const ins = axios.create({
   proxy: {
     protocol: "http",
     host: '95.165.14.53',
@@ -13,16 +13,16 @@ const instance = axios.create({
   },
 });
 
-const instance  = axios
+const ins  = axios
 
-// const randomValue = Math.random() < 0.5 ? "axios" : "instance";
+// const randomValue = Math.random() < 0.5 ? "axios" : "ins";
 // console.log(randomValue);
 
 // const httpsAgent = new https.Agent({ keepAlive: true });
 const url = `https://api.vk.com/method/`;
 const posts_request = async (data) => {
   console.log(data.owner_id, "data owner id");
-  const response = await instance
+  const response = await ins
     .get(
       `${url}wall.post?&owner_id=-${encodeURI(
         data.owner_id
