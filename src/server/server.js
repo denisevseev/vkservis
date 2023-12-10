@@ -16,7 +16,7 @@ app.use(
   })
 );
 app.use(express.json());
-own();
+// own();
 
 class Server {
   constructor() {
