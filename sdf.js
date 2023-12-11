@@ -39,11 +39,35 @@ async function changeProxyIP() {
 
 
 async function solveCaptcha(captchaImg) {
-    const client = new Rucaptcha('7d6172ce4b21ca313b6b4f9a843b0c21');
+    const apiKey = '7d6172ce4b21ca313b6b4f9a843b0c21';
 
     try {
-        const answer = await client.solve(captchaImg);
-        return answer;
+        const response = await axios.post('http://rucaptcha.com/in.php', {
+            key: apiKey,
+            method: 'base64',
+            body: captchaImg.toString('base64'),
+        });
+
+        if (response.data.status === 1) {
+            // Капча успешно отправлена, ожидаем ее решения
+            const captchaId = response.data.request;
+
+            // Дождитесь решения капчи (вам нужно будет добавить логику ожидания)
+            await new Promise(resolve => setTimeout(resolve, 15000)); // Пауза 15 секунд (может потребоваться больше времени)
+
+            // Теперь проверьте результат
+            const resultResponse = await axios.get(`http://rucaptcha.com/res.php?key=${apiKey}&action=get&id=${captchaId}`);
+
+            if (resultResponse.data.status === 1) {
+                return resultResponse.data.request;
+            } else {
+                console.error('Ошибка при получении решения капчи:', resultResponse.data.request);
+                return null;
+            }
+        } else {
+            console.error('Ошибка при отправке капчи:', response.data.request);
+            return null;
+        }
     } catch (error) {
         console.error('Ошибка при решении капчи:', error);
         return null;
@@ -73,10 +97,10 @@ async function fetchVkUsers(token, offset, proxyConfig) {
     });
 
     const response = await vk.call('users.search', {
-        city: 133, // ID города Сочи
+        city: 1, // ID города Сочи
         sex: 1, // Женский пол
-        age_from: 25,
-        age_to: 25,
+        age_from: 18,
+        age_to: 18,
         count: 20, // Порция из 20 пользователей
         fields: 'id', // Получение ID пользователей
         offset: offset // Смещение для поиска следующих пользователей
@@ -106,7 +130,7 @@ async function sendMessageAndSave(vk, users) {
         try {
             await vk.call('messages.send', {
                 user_id: user.id,
-                message: 'Привет, меня знакомый попросил найти ему девушку .. он ищет спутницу для постоянных встреч, готов платить 20к за встречу. он хорошо зарабатывает но занятой напиши ему https://vk.com/id561062604',
+                message: 'Привет, меня знакомый попросил найти ему девушку .. он ищет спутницу для постоянных встреч, готов платить 20к за встречу. он хорошо зарабатывает но занятой напиши ему в тг magiclife67',
                 random_id: easyvk.randomId()
             });
 
@@ -119,8 +143,17 @@ async function sendMessageAndSave(vk, users) {
                 await delay(1000)
             }
             if (error.error_code != 902 && error.error_code != 9) {
-                let errorData = JSON.parse(error?.message);
-                if (errorData?.error?.error_code === 14) {
+                function isJSON(obj) {
+                    try {
+                        JSON.parse(JSON.stringify(obj));
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+
+                let errorData = isJSON(error.message)
+                if (errorData) {
                     const captchaKey = await solveCaptcha(error.captcha_img);
                     if (captchaKey) {
                         // Повторите запрос с ключом капчи
@@ -156,7 +189,6 @@ async function main() {
     };
     await changeProxyIP();
     await checkAndCleanAccounts(proxyConfig);
-    return
 
     const accounts = fs.readFileSync('acc.txt', 'utf8').trim().split('\n');
 

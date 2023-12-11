@@ -68,7 +68,7 @@ export default function CustomizedMenus() {
     // Search.token = null
     localStorage.removeItem("user");
     localStorage.removeItem("loginData");
-    window.location.href = "http://159.253.22.76:81/";
+    window.location.href = "http://localhost:81/";
   };
 
   return (

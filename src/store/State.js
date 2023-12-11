@@ -290,7 +290,7 @@ class Search {
 
   Logout() {
     localStorage.removeItem("user");
-    let ws = new WebSocket(`ws://159.253.22.76:3001/stopsend`);
+    let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     console.log(ws);
     ws.onopen = async () => {
       console.log(ws, "58");
@@ -327,7 +327,7 @@ class Search {
     this.start = false;
 
     //рассылка
-    // let ws = new WebSocket(`ws://159.253.22.76:3001/stopsend`);
+    // let ws = new WebSocket(`ws://localhost:3001/stopsend`);
     // // this.StartFalse();
     // ws.onopen = () => {
     //   let data = JSON.stringify( {
@@ -339,7 +339,7 @@ class Search {
   };
 
   getOwnAuthToken = async () => {
-    let ws = new WebSocket(`ws://159.253.22.76:3001/getOwnAuthTokenServ`);
+    let ws = new WebSocket(`ws://localhost:3001/getOwnAuthTokenServ`);
     ws.onopen = () => {
       let data = JSON.stringify({
         login: this.login,
@@ -360,7 +360,7 @@ class Search {
   };
 
   AutorizeOwnMethod = () => {
-    let ws = new WebSocket(`ws://159.253.22.76:3001/autorize`);
+    let ws = new WebSocket(`ws://localhost:3001/autorize`);
     ws.onopen = () => {
       let data = JSON.stringify({
         token: this.token,
@@ -386,7 +386,7 @@ class Search {
   };
 
   // CheckIsSend() {
-  //   let ws = new WebSocket(`ws://159.253.22.76:3001/CheckIsSend`);
+  //   let ws = new WebSocket(`ws://localhost:3001/CheckIsSend`);
   //   ws.onopen = () => {
   //     console.log(this.token);
   //     ws.send(this.token);
@@ -505,7 +505,7 @@ class Search {
   };
 
   startSearch = () => {
-    const ws = new WebSocket(`ws://159.253.22.76:3001/startSearch`);
+    const ws = new WebSocket(`ws://localhost:3001/startSearch`);
     ws.onopen = () => {
       let data = this.groupLookUpValues();
       console.log(data, "384");
@@ -528,7 +528,7 @@ class Search {
     //рассылка
     // this.setLocalStorageArea();енс
     const connect = () => {
-      const ws = new WebSocket(`ws://159.253.22.76:3001/startSend`);
+      const ws = new WebSocket(`ws://localhost:3001/startSend`);
       console.log("client start");
       ws.onopen = () => {
         let context = this;

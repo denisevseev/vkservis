@@ -86,8 +86,6 @@ class searchGroup {
       data.login,
       data.pass
     ).autorizeMethod();
-    // let result =
-    //   "https://oauth.vk.com/blank.html#access_token=vk1.a.K1D_9Tmxnb8_X_AfK6XvK_N80UvtSxvIbLwTlr06WjFdgX1F2mAVWVHpClvMc3xbTnkllhLdxnxcaEhJ6I-6d_FXiYcF7ZX0OQoxXTbF6QDmo5CklOHBE8Xu0k708MJC18aD_D1HJSSAc3HMl_grs6iAPPD9k_OqgouN_EtqqJ8YuuRyAypB0mpKKO0Euf-7rQJlSxO2rin5Q-0w6gBegw&expires_in=0&user_id=819596987";
     this.token = await splitToken(result);
     let resultForSend = this.token[0];
     console.log("token", resultForSend);
@@ -139,7 +137,7 @@ class searchGroup {
       openComments: this.openComments,
       countMemTo: this.countMemTo,
       countMemFrom: this.countMemFrom,
-      city: this.city,
+      city: this.city=='any'?null:this.city,
       country: this.country,
       token: this.token,
       //счетчик не клиентские данные

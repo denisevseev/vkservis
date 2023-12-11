@@ -7,15 +7,10 @@ const filter_type_is_closed = async (data, arr, ws) => {
     await wsSend(ws, "", "", "Фильтруем группы на закрытость");
     //фильтр на открытые закрытые
     arr.map((key) => {
-      try {
-        if (key.is_closed == data.is_closed) {
+        if (key?.is_closed == data?.is_closed) {
           this.arr.push(key);
-          console.log(key.is_closed);
+          console.log(key?.is_closed);
         }
-      } catch (e) {
-        console.log(e);
-        wsSend(ws, "nothing");
-      }
     });
   }
   if (this.arr.length > 0) {
