@@ -98,7 +98,7 @@ class searchGroup {
   }
 
   owner_i() {
-    this.mailing = "88";
+    this.mailing = "78";
     wsSend(ws, null, null);
     this.VariblesNull();
     console.log(this.i, this.mailing);
@@ -106,7 +106,7 @@ class searchGroup {
 
   async StopSend(mes) {
     let data = JSON.parse(mes);
-    if (data == "88" || !data || data === null) {
+    if (data == "78" || !data || data === null) {
       this.VariblesNull();
     }
   }
@@ -168,7 +168,7 @@ class searchGroup {
   }
 
   isArr70() {
-    let arr = this.arr.length > 88 ? 88 : this.arr.length;
+    let arr = this.arr.length > 78 ? 78 : this.arr.length;
     return arr;
   }
 
@@ -248,8 +248,8 @@ class searchGroup {
       //фильтр количества подписчиков
       if (this.countMemTo || this.countMemFrom) {
         this.arr = await this.contMembers(ws);
-        if (!this.arr) {
-          await this.nothingFound(ws);
+        if (!this.arr||this.arr.length<1) {
+          await this.nothingFound(ws, '', this.arr);
           return;
         }
       }
@@ -270,7 +270,7 @@ class searchGroup {
     // this.arr = result;
     try {
       this.arr.map((key) => {
-        console.log(key.members_count);
+        console.log(key.is_member);
         if (
           (key.members_count >= this.countMemFrom ||
             key.members_count <= this.countMemTo) &&
