@@ -13,7 +13,7 @@
 /.txt
 /requests.js
 /replace.js
-/test.html
+/test.js
 
 # misc
 .DS_Store
